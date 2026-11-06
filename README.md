@@ -15,14 +15,10 @@ lenses, rather than two separate systems. Built for the BIT Capital AI Engineer 
 
 ## Live demo
 
-| URL | What it is |
-|---|---|
-| https://63-186-176-99.sslip.io | AWS (EC2, Postgres). Persistent: labels and alert acks are saved |
-| https://frontier-lab-intel.vercel.app | Vercel. Read-only copy of the same data (labelling switched off) |
-
-The login is in the submission email. Both serve the real data collected from 1 Aug to 4 Nov 2026.
-Collection is paused, so a banner on every page dates the snapshot and the "last 7 days" views count
-back from the newest data.
+**https://63-186-176-99.sslip.io** (the login is in the submission email): the production deployment
+on AWS (EC2, Postgres, Docker Compose, Caddy TLS), where labels and alert acks are saved. It serves the
+real data collected from 1 Aug to 4 Nov 2026. Collection is paused, so the line under the header dates
+the snapshot and the "last 7 days" views count back from the newest data.
 
 ## A five-minute tour
 
