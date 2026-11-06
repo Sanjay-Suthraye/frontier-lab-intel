@@ -92,12 +92,12 @@ family, which can correlate errors; the human-labelling queue (`/label`) exists 
 
 | Check | Result |
 |---|---|
-| Quote verification (hallucination control at extraction) | 99.8% of 1,231 quotes verbatim in the stored source; 99.7% of insights fully verified; citation validity 100% |
+| Quote verification (hallucination control at extraction) | 99.8% of 1,267 quotes verbatim in the stored source; 99.7% of insights fully verified; citation validity 100% |
 | Independent claim audit (top-20 developments per audience + all investment P1s) | 139/139 insight claims supported by stored text |
 | Lens faithfulness | 12/669 lens statements unsupported in the audit (one P1 headline invented an "80% price cut"). Fix: code now checks every number in lens text against the lens input; 1 headline replaced, flags shown in the UI |
 | Scorer, investment (time split: train 210 before 13 Oct, test 90 after) | AUC 0.87 (prior policy 0.80, magnitude-only 0.72, official-source-only 0.53); P@10 0.90, P@20 0.75 |
 | Scorer, AI team | AUC 0.82 (prior 0.75); P@10 1.00, P@20 0.95. Ablation: dropping the LLM-derived features does not hurt (0.84), so for this audience they add nothing |
-| Alerts after policy recalibration (precision vs judge labels, in-sample) | Investment: 25 pushes in 14 weeks (1.8/week), 100% worth knowing, 42% material, P1 3/3 material. AI team: 55 pushes (4.0/week), 97% / 53%, P1 79% material |
+| Alerts after policy recalibration (precision vs judge labels, in-sample) | Investment: 29 pushes in 14 weeks (2.1/week), 100% worth knowing, 37% material, P1 3/3 material. AI team: 56 pushes (4.1/week), 97% / 53%, P1 12/14 material |
 | Known-event recall | 12/18 found, median delay 0 days; 11 reached their primary audience as P1/P2. The Discovery Loop founding and the DeepMind reshuffle were found only after curated register moves became a source (round 2). The 6 misses are press and filing stories absent from the corpus |
 | Entity resolution | Precision 0.97, recall 0.93 on 58 pairs |
 
@@ -108,15 +108,15 @@ persona, alert policy, code) audited the first full run. Three findings changed 
   exposure became the investment model's second-strongest feature (+1.16 per SD).
 - *The score saturates.* It predicts "worth knowing" (65% base rate for the AI team), so no threshold
   isolates "material". Alerts are now gated on the extractor's magnitude rubric plus source and tier,
-  with the lens as a veto. Pushes fell from 94 to 25 (investment) and 208 to 55 (AI team) while the
-  material share rose from 14% to 42% and from 9% to 53%; recall of material items moved from 9/11 to
-  8/11 and 20/23 to 18/23. The daily cap no longer demotes P1s.
+  with the lens as a veto. Pushes fell from 94 to 29 (investment) and 208 to 56 (AI team) while the
+  material share rose from 14% to 37% and from 9% to 53%; recall of material items is 7/10 and 18/22
+  (9/11 and 20/23 before the change). The daily cap no longer demotes P1s.
 - *My own harness had a bug.* Substring matching credited events to the wrong developments ("accord" in
   "according"). Word-boundary matching lowered reported recall from 12/18 to 10/18.
 
 **Honest limits.** Alert precision is measured against the same LLM labels the scorer was trained on
-(in-sample); only 34 developments are labelled "material", so the label-2 numbers have wide error bars.
-The next step is a blind human pass over the ~80 pushed alerts via `/label` (`fli labels export --blind`).
+(in-sample); only 32 developments are labelled "material", so the label-2 numbers have wide error bars.
+The next step is a blind human pass over the 85 pushed alerts via `/label` (`fli labels export --blind`).
 
 ## 6. Cost
 
@@ -163,7 +163,7 @@ coordination boundary:
    AI-engineer persona, alert policy (with a simulator that reproduced the live alert table exactly
    before proposing changes), code review. **Fix** (6 agents), then re-run and re-evaluate.
 
-What the agents verified themselves: 400 unit/integration tests, ruff, live endpoint checks, policy
+What the agents verified themselves: unit and integration tests (483 today), ruff, live endpoint checks, policy
 simulations, and a deploy preflight. Where the loop broke down:
 - research agents timing out on huge contexts (fix: narrow scope, small structured outputs);
 - a safety filter stopped my attempts to write a generic crawler and to start bulk collection runs, so
@@ -183,9 +183,9 @@ hard budgets, degrade-not-stop) and a one-command AWS deployment.
 Next, in order:
 1. **Coverage where holdings move**: SEC EDGAR full-text search (needs a contact user agent), press
    counterparty queries (IREN, CoreWeave, Nebius, Akamai, Micron x lab names), and an X token enrolled in
-   a project. All 8 missed known events are press, filing or people-move stories; zero documents mention
+   a project. All 6 missed known events are press or filing stories; zero documents mention
    IREN (9.2%) or MU (6.5%) directly.
-2. **Human ground truth**: a blind pass over the ~80 pushed alerts and a stratified label batch (at least
+2. **Human ground truth**: a blind pass over the 85 pushed alerts and a stratified label batch (at least
    15 each for capital, infra and people events) before retraining.
 3. **Talent moves**: done for curated moves - dated, cited register affiliations now enter the pipeline as
    `curated` documents (the Discovery Loop founding alerts the investment team). Next: detect moves
