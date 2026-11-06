@@ -1,0 +1,25 @@
+{
+ "data": [
+  {
+   "id": "1975000000000000004",
+   "edit_history_tweet_ids": [
+    "1975000000000000004"
+   ],
+   "created_at": "2026-09-02T08:00:00.000Z",
+   "text": "Fixture post from early September.",
+   "public_metrics": {
+    "retweet_count": 5,
+    "reply_count": 1,
+    "like_count": 80,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "impression_count": 9000
+   }
+  }
+ ],
+ "meta": {
+  "result_count": 1,
+  "newest_id": "1975000000000000004",
+  "oldest_id": "1975000000000000004"
+ }
+}

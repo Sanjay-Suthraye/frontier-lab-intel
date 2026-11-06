@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Labs{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Register: labs</h1>
+  <p class="muted">Labs are first-class entities: most high-value signal is published by the lab itself. Tier 1 = official moves are material by default; tier 3 = alumni startups (low volume, high signal). Edit <code>config/labs.yaml</code> to change what is tracked.</p>
+</div>
+<section class="card">
+<div class="scroll"><table class="tbl">
+  <thead><tr><th>Lab</th><th>Tier</th><th>Kind</th><th>People</th><th>Sources</th><th title="developments in the last 30 days / all">Devs 30d / all</th><th>Latest</th><th>Public exposure</th></tr></thead>
+  <tbody>
+  {% for lab in labs %}
+    <tr>
+      <td><a href="/register/labs/{{ lab.id }}"><b>{{ lab.name }}</b></a>{% if lab.parent %} <span class="small muted">({{ lab.parent }})</span>{% endif %}
+        {% if lab.description %}<div class="small muted">{{ lab.description|truncate(110) }}</div>{% endif %}</td>
+      <td><span class="tier t{{ lab.tier }}">T{{ lab.tier }}</span></td>
+      <td class="small">{{ lab.kind|replace('_', ' ') }}</td>
+      <td class="num">{{ lab.people }}</td>
+      <td class="nowrap">{% for st, n in lab.sources|dictsort %}<span class="st st-{{ st }}" title="{{ st }}">{{ n }} {{ st }}</span> {% else %}–{% endfor %}</td>
+      <td class="num">{{ lab.developments_30d }} / {{ lab.developments }}</td>
+      <td class="nowrap small">{{ lab.last_development|date }}</td>
+      <td>{% for t in lab.exposure[:6] %}{{ m.ticker(t) }}{% endfor %}{% if lab.exposure|length > 6 %} <span class="small muted">+{{ lab.exposure|length - 6 }}</span>{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8" class="empty">No labs registered. Run <code>fli register</code>.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</section>
+{% endblock %}

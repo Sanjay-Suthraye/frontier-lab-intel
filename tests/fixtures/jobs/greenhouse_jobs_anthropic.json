@@ -1,0 +1,146 @@
+{
+ "jobs": [
+  {
+   "absolute_url": "https://job-boards.greenhouse.io/anthropic/jobs/5432020008",
+   "internal_job_id": 4552057008,
+   "location": {
+    "name": "Remote-Friendly, United States"
+   },
+   "metadata": [
+    {
+     "id": 4036944008,
+     "name": "Location Type",
+     "value": "On-Site",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 5432020008,
+   "updated_at": "2026-09-22T19:49:20-04:00",
+   "requisition_id": "267694",
+   "title": "Capacity Deployment Lead - Data Center Operations",
+   "company_name": "Anthropic",
+   "first_published": "2026-09-22T19:48:42-04:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;h2&gt;&lt;strong&gt;About Anthropic&lt;/strong&gt;&lt;/h2&gt;\n&lt;p&gt;An",
+   "departments": [
+    {
+     "id": 4050632008,
+     "name": "Compute",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 4008537008,
+     "name": "Remote-Friendly US (Travel Required)",
+     "location": null,
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  },
+  {
+   "absolute_url": "https://job-boards.greenhouse.io/anthropic/jobs/5385546008",
+   "internal_job_id": 4530203008,
+   "location": {
+    "name": "Remote-Friendly (Travel Required) | Canada"
+   },
+   "metadata": [
+    {
+     "id": 4036944008,
+     "name": "Location Type",
+     "value": "On-Site",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 5385546008,
+   "updated_at": "2026-08-28T14:42:38-04:00",
+   "requisition_id": "266523",
+   "title": "Compute Country Lead, Canada",
+   "company_name": "Anthropic",
+   "first_published": "2026-08-11T13:07:49-04:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;h2&gt;&lt;strong&gt;About Anthropic&lt;/strong&gt;&lt;/h2&gt;\n&lt;p&gt;An",
+   "departments": [
+    {
+     "id": 4050632008,
+     "name": "Compute",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 4011066008,
+     "name": "British Columbia, CA",
+     "location": "British Columbia, Canada",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  },
+  {
+   "absolute_url": "https://job-boards.greenhouse.io/anthropic/jobs/4461450008",
+   "internal_job_id": 4147866008,
+   "location": {
+    "name": "New York City, NY; San Francisco, CA | New York City, NY"
+   },
+   "metadata": [
+    {
+     "id": 4036944008,
+     "name": "Location Type",
+     "value": "On-Site",
+     "value_type": "single_select"
+    }
+   ],
+   "id": 4461450008,
+   "updated_at": "2026-08-21T21:32:54-04:00",
+   "requisition_id": "3356",
+   "title": "Account Executive, AI Native",
+   "company_name": "Anthropic",
+   "first_published": "2024-12-20T13:53:38-05:00",
+   "language": "en",
+   "application_deadline": null,
+   "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;h2&gt;&lt;strong&gt;About Anthropic&lt;/strong&gt;&lt;/h2&gt;\n&lt;p&gt;An",
+   "departments": [
+    {
+     "id": 4002062008,
+     "name": "Sales",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "offices": [
+    {
+     "id": 4001219008,
+     "name": "New York City, NY",
+     "location": "New York, New York, United States",
+     "child_ids": [],
+     "parent_id": null
+    },
+    {
+     "id": 4001218008,
+     "name": "San Francisco, CA",
+     "location": "San Francisco, California, United States",
+     "child_ids": [],
+     "parent_id": null
+    }
+   ],
+   "ai_disclaimer": null,
+   "include_ai_disclaimer": null,
+   "ai_opt_out_request_url": null
+  }
+ ],
+ "meta": {
+  "total": 3
+ }
+}

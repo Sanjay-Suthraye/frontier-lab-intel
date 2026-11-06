@@ -1,0 +1,33 @@
+<!doctype html><html><head><title>Release Notes | xAI</title></head><body><nav><div>Docs</div></nav><main><h1>Release Notes</h1><h2>November</h2>
+<div class="badge"><div>November 2</div></div>
+<h3>grok-imagine-image-quality retired</h3>
+<p>Requests to <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-imagine-image-quality</code></span> and <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-imagine-image-pro</code></span> are now served by <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-imagine-image-2.0-low</code></span>: <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-imagine-image-2.0</code></span> with <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">quality</code></span> set to <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">low</code></span>, at a lower per-image price. No request changes are needed. <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">usage.cost_in_usd_ticks</code></span> on each response reflects the lower price, and gRPC responses (xAI SDK) report <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-imagine-image-2.0-low</code></span> as the <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">model</code></span>. See the <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/migration/imagine-image-quality-nov-2">migration guide</a>.</p>
+<h2>October</h2>
+<div class="badge"><div>October 27</div></div>
+<h3>Custom moderation controls</h3>
+<p>You can now set content guidelines on text API requests. Add a <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">guidelines</code></span> array to a Chat Completions or Responses API request to set how Grok handles content in the <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">nsfw</code></span>, <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">violence</code></span>, and <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">profanity</code></span> categories. Grok follows the guidelines as it writes its response. See <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/advanced-api-usage/custom-moderation-controls">Custom Moderation Controls</a>.</p>
+<div class="badge"><div>October 14</div></div>
+<h3>Grok Voice 3.0 is available</h3>
+<p><span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-3.0</code></span> is now available with Speech to Speech, at the same price as Grok Voice 2.0. <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-latest</code></span> now points to <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-3.0</code></span>, so sessions that use the alias are upgraded automatically. The API is unchanged. To get started, see the <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/model-capabilities/audio/speech-to-speech">Speech to Speech docs</a>.</p>
+<div class="badge"><div>October 14</div></div>
+<h3>Grok Voice 2.0 deprecation</h3>
+<p><span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-2.0</code></span> is deprecated. To upgrade, set <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">model</code></span> to <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-3.0</code></span> or <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-latest</code></span>, at the same price. See <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/model-capabilities/audio/speech-to-speech#upgrading-from-grok-voice-20">Upgrading from Grok Voice 2.0</a>.</p>
+<div class="badge"><div>October 2</div></div>
+<h3>grok-voice-transcribe-1.0 end of life</h3>
+<p><span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-transcribe-1.0</code></span> is deprecated and reaches end of life on October 2, 2026. All requests to that slug are routed to <span class="not-prose"><code class="font-mono text-[0.95em] text-solar">grok-voice-transcribe-2.0</code></span> at the same price, with higher accuracy. See the <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/model-capabilities/audio/speech-to-text">Speech to Text docs</a>.</p>
+<h2>December 2025</h2>
+<div class="badge"><div>Dec 16</div></div>
+<h3>Grok Speech to Speech API is released</h3>
+<p>Grok Speech to Speech API is generally available. Visit <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="/developers/model-capabilities/audio/voice">Grok Speech to Speech API</a> for guidance on using the API.</p>
+<h2>November 2024</h2>
+<div class="badge"><div>Nov 19</div></div>
+<h3>LangChain & SpaceXSI</h3>
+<p>Our API is now available through LangChain!</p>
+<p>What are you going to build?</p>
+<div class="badge"><div>Nov 4</div></div>
+<h3>API Public Beta</h3>
+<p>We are happy to announce the immediate availability of our API, which
+gives developers programmatic access to our Grok series of foundation models. To get started, head
+to <a class="text-primary underline has-[code]:decoration-solar has-[code]:decoration-dotted has-[code]:underline-offset-2" href="https://console.x.ai/?utm_source=docs&amp;utm_medium=referral&amp;utm_campaign=developers-release-notes&amp;utm_content=console-home" rel="noopener" target="_blank">console.x.ai</a> and sign up to create an account. We are excited to see
+what developers build using Grok.</p>
+<p class="text-muted-foreground text-sm">Last updated: <!-- -->November 2, 2026</p></main></body></html>

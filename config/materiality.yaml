@@ -1,0 +1,261 @@
+# Materiality policy: what is material, for whom, and how loudly.
+#
+# Evaluated by fli.deliver.materiality on one development at a time, using its latest score for the
+# audience, its lens, exposure links, lab tier, person tiers and sources. Deterministic on purpose:
+# an alert that pages a PM must say exactly which rule fired and on which facts.
+#
+# Severities
+#   P1  pushed now (in-app + Slack): landmark items only. Never demoted by the daily cap, but it
+#       uses up the day's push budget.
+#   P2  pushed now (in-app + Slack): alert-worthy today. At most `daily_cap` P1+P2 per audience per
+#       UTC day; a P2 beyond that becomes P3.
+#   P3  digest only (listed in-app, never pushed): cap overflow, uncorroborated rumors.
+#       "Worth knowing" items are not alerts: the weekly digest (digest.min_p) carries them.
+#
+# Calibration (2026-11-04, 462 developments, 300 LLM-judge labels per audience): p_material is
+# P(label >= 1) and saturates (32 investment developments have p >= 0.9, only 8 are label 2), so p is
+# only a floor here. P1/P2 are separated by the extractor's magnitude rubric (prompts/extract.md:
+# 4 = major, 5 = landmark), lab tier, official source and corroboration.
+#
+# The lens can veto, never promote: every P1/P2 rule carries a `not: {lens_action: [...]}` gate, so an
+# item the audience lens dismissed is not pushed (investment P1: not no_action/watch; investment P2:
+# not no_action; ai_team: not hold). The gate passes while no lens exists yet; alerts re-evaluate
+# after generating the missing lenses, so the verdict normally applies before anything is pushed.
+# Dismissed items stay in the feed, and alerted or high-p ones in the weekly digest.
+#
+# Holding exposure (held_exposure / held_tickers) is event-specific: a lab's curated relations
+# (exposure method 'lab', e.g. "OpenAI -> MSFT") do not count, nor do links below
+# exposure_min_confidence, nor lens tickers without a direction or from a lens that abstained.
+#
+# Condition syntax (fli.deliver.materiality.FACTS):
+#   key: value        equality (booleans, strings)
+#   key: [a, b]       membership, or overlap for list-valued facts (person_tiers, held_tickers ...)
+#   <fact>_min: x     fact >= x; an unknown value fails      (e.g. p_min: 0.6)
+#   <fact>_max: x     fact <= x; an unknown value fails
+#   <fact>_floor: x   fact >= x, but an unknown value passes (sanity floor that still lets
+#                     hard rules fire when the scorer has not run)
+#   any / all / not   combine nested conditions (`not` passes when the fact is unknown, e.g. no lens)
+# The strongest firing rule sets the severity; the guards below then cap or suppress it.
+
+version: 2
+
+daily_cap: 2              # max P1+P2 pushes per audience per UTC day (P1 counts, but is never demoted)
+live_horizon_hours: 48    # newest evidence younger than this => live alert (pushed, dated now);
+                          # older => historical backfill (dated at first sighting, never pushed)
+lookback_days: 14         # run_alerts() without backfill evaluates developments touched this recently
+exposure_min_confidence: 0.6   # weaker links (keyword-only themes, 'verify' relations) are not exposure
+
+guards:
+  require_verified: true          # never alert without at least one insight with verified quotes
+  rumor_cap: P3                   # rumor-only developments are capped here ...
+  min_corroborating_classes: 2    # ... unless corroborated by this many independent source classes
+  # personal-post-only developments keep their severity but are marked "Unconfirmed"
+
+digest:
+  top_n: 12        # developments per weekly digest and audience (P1/P2-alerted ones are always included)
+  min_p: 0.3       # minimum p_material for the rest (verified developments only)
+
+audiences:
+  investment:
+    # ---- P1: landmark. Hard rules; the scorer can only veto when clearly negative (floor), the lens
+    #      when it says no_action or watch.
+    - id: inv.p1.tier1_capital_markets
+      severity: P1
+      description: IPO filing, large round, valuation or M&A at a tier-1 lab, rated major (magnitude >= 4)
+      when:                       # no p gate: the scorer has seen 2 capital-markets labels
+        event_type: [funding_ipo]
+        lab_tier: [1]
+        verified: true
+        magnitude_min: 4
+        not: {lens_action: [no_action, watch]}
+
+    - id: inv.p1.flagship_release
+      severity: P1
+      description: New frontier generation (magnitude 5) from a tier-1 lab on an official channel
+      when:
+        event_type: [model_release, open_weight_release, product_launch, capability_claim]
+        lab_tier: [1]
+        has_official: true
+        magnitude_min: 5
+        p_floor: 0.5
+        not: {lens_action: [no_action, watch]}
+
+    - id: inv.p1.major_infra_deal
+      severity: P1
+      description: Major (magnitude >= 4) compute, energy or custom-silicon deal exposing a BIT holding
+      when:
+        event_type: [compute_deal, energy_deal, custom_silicon]
+        held_exposure: true
+        verified: true
+        magnitude_min: 4
+        p_floor: 0.5
+        not: {lens_action: [no_action, watch]}
+
+    - id: inv.p1.key_talent
+      severity: P1
+      description: Talent move or new venture by a tier-A person, or one rated major (founder / research-lead exit)
+      when:
+        event_type: [talent_move, new_venture]
+        verified: true
+        any:
+          - person_tiers: [A]
+          - magnitude_min: 4
+            lab_tier: [1, 2]
+        not: {lens_action: [no_action, watch]}
+
+    # ---- P2: alert-worthy for a PM today, unless the lens abstained (no_action).
+    - id: inv.p2.capital_markets
+      severity: P2
+      description: Funding, valuation, IPO or M&A at a tier-1/2 lab (magnitude >= 3)
+      when:
+        event_type: [funding_ipo]
+        lab_tier: [1, 2]
+        verified: true
+        magnitude_min: 3
+        p_floor: 0.5
+        not: {lens_action: [no_action]}
+
+    - id: inv.p2.infra_deal_on_holding
+      severity: P2
+      description: Compute, energy or custom-silicon development exposing a BIT holding (magnitude >= 3, p >= 0.9)
+      when:
+        event_type: [compute_deal, energy_deal, custom_silicon]
+        held_exposure: true
+        magnitude_min: 3
+        p_min: 0.9
+        not: {lens_action: [no_action]}
+
+    - id: inv.p2.major_release
+      severity: P2
+      description: Major (magnitude >= 4) release by a tier-1 lab on an official channel (p >= 0.85)
+      when:
+        event_type: [model_release, open_weight_release, product_launch, capability_claim]
+        lab_tier: [1]
+        has_official: true
+        magnitude_min: 4
+        p_min: 0.85
+        not: {lens_action: [no_action]}
+
+    - id: inv.p2.challenger_release
+      severity: P2
+      description: Major (magnitude >= 4) tier-2 challenger release corroborated by >= 2 source classes (p >= 0.9)
+      when:
+        event_type: [model_release, open_weight_release]
+        lab_tier: [2]
+        corroborated: true
+        magnitude_min: 4
+        p_min: 0.9
+        not: {lens_action: [no_action]}
+
+    - id: inv.p2.strategic_tier1
+      severity: P2
+      description: Partnership or strategy shift (magnitude >= 3), or pricing shock (magnitude >= 4), by a tier-1 lab exposing a BIT holding (p >= 0.85)
+      when:
+        lab_tier: [1]
+        held_exposure: true
+        p_min: 0.85
+        any:
+          - event_type: [partnership, strategy_shift]
+            magnitude_min: 3
+          - event_type: [pricing_change]
+            magnitude_min: 4
+        not: {lens_action: [no_action]}
+
+    # Tuning: the layer below the founders is where much early signal sits (brief, section 1).
+    - id: inv.p2.key_talent_tier_b
+      severity: P2
+      description: Talent move or new venture involving a tier-B person
+      when:
+        event_type: [talent_move, new_venture]
+        person_tiers: [B]
+        verified: true
+        p_floor: 0.5
+        not: {lens_action: [no_action]}
+
+    # Fallback for the P1 talent rule: a 'watch' lens vetoes the P1 page but must not silence a
+    # tier-A founder exit or a major reorganisation (e.g. the Discovery Loop founding, 2026-08-05).
+    - id: inv.p2.key_talent_tier_a
+      severity: P2
+      description: Talent move or new venture by a tier-A person, or rated major (magnitude >= 4) at a tier-1/2 lab
+      when:
+        event_type: [talent_move, new_venture]
+        verified: true
+        p_floor: 0.5
+        any:
+          - person_tiers: [A]
+          - {magnitude_min: 4, lab_tier: [1, 2]}
+        not: {lens_action: [no_action]}
+
+  ai_team:
+    # Every rule is vetoed by a 'hold' lens (the ring for "do not invest time yet").
+    - id: ai.p1.major_release
+      severity: P1
+      description: Major (magnitude >= 4) model or open-weight release / launch on an official channel (p >= 0.70)
+      when:
+        event_type: [open_weight_release, model_release, product_launch]
+        has_official: true
+        magnitude_min: 4
+        p_min: 0.70  # 0.75 missed Claude Haiku 5.5 (judge label 2, p 0.733) after the exposure-feature retrain
+        not: {lens_action: [hold]}
+
+    - id: ai.p2.tier1_release
+      severity: P2
+      description: Official tier-1 model release rated significant (magnitude >= 3, p >= 0.70); a 'hold' lens vetoes
+      when:
+        event_type: [model_release, open_weight_release]
+        lab_tier: [1]
+        has_official: true
+        magnitude_min: 3
+        p_min: 0.70  # catches frontier releases the rubric rated 3 (e.g. Claude Opus 5.5) on validated signals only
+        not: {lens_action: [hold]}
+
+    - id: ai.p2.release
+      severity: P2
+      description: Significant (magnitude >= 3) model or open-weight release with code/weights or >= 2 source classes (p >= 0.8)
+      when:
+        event_type: [open_weight_release, model_release]
+        magnitude_min: 3
+        p_min: 0.8
+        any:
+          - corroborated: true
+          - has_code: true
+        not: {lens_action: [hold]}
+
+    - id: ai.p2.tier1_listing
+      severity: P2
+      description: A tier-1 lab model becomes callable on a market listing such as OpenRouter (magnitude >= 3, p >= 0.8)
+      when:
+        event_type: [model_release, open_weight_release]
+        lab_tier: [1]
+        source_classes: [market_data]
+        magnitude_min: 3
+        p_min: 0.8
+        not: {lens_action: [hold]}
+
+    - id: ai.p2.platform_change
+      severity: P2
+      description: API, product or pricing change rated major (magnitude >= 4, p >= 0.75)
+      when:
+        event_type: [product_launch, pricing_change]
+        magnitude_min: 4
+        p_min: 0.75
+        not: {lens_action: [hold]}
+
+    - id: ai.p2.major_research
+      severity: P2
+      description: Technique, paper or capability claim rated major (magnitude >= 4, p >= 0.8)
+      when:
+        event_type: [technique, research_paper, capability_claim]
+        magnitude_min: 4
+        p_min: 0.8
+        not: {lens_action: [hold]}
+
+    # Must-act migration work the magnitude rubric rates low (changelog lines: magnitude 2-3).
+    - id: ai.p2.breaking_change
+      severity: P2
+      description: Official deprecation, retirement, shutdown, re-route, breaking API change or changed default
+      when:
+        breaking_change: true
+        has_official: true
+        p_floor: 0.5
+        not: {lens_action: [hold]}

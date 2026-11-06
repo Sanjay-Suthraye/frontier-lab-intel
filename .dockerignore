@@ -1,0 +1,16 @@
+.git
+.github
+.venv
+.env
+*.env
+.pytest_cache
+.ruff_cache
+**/__pycache__
+tests
+data/raw
+data/dev
+data/fli.sqlite*
+data/*.log
+data/models/fastembed
+deploy
+docs

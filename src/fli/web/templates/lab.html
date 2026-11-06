@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% set lab = d.lab %}
+{% block title %}{{ lab.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="crumbs"><a href="/register/labs">Labs</a> · {{ lab.id }}</p>
+  <h1>{{ lab.name }} <span class="tier t{{ lab.tier }}">T{{ lab.tier }}</span></h1>
+  <p class="muted">{{ lab.kind|replace('_', ' ') }}{% if lab.parent %} · parent {{ lab.parent }}{% endif %}{% if lab.homepage %} · {{ m.ext(lab.homepage) }}{% endif %} · {{ d.documents }} documents ingested</p>
+  {% if lab.description %}<p>{{ lab.description }}</p>{% endif %}
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Public exposure</h2>
+    {% if d.exposure %}
+    <table class="tbl compact">
+      <thead><tr><th>Ticker</th><th>Relation</th><th>Note</th></tr></thead>
+      <tbody>{% for t in d.exposure %}<tr><td>{{ m.ticker(t) }}</td><td>{{ (t.relation or '–')|replace('_', ' ') }}</td><td class="small">{{ t.note or '' }}</td></tr>{% endfor %}</tbody>
+    </table>
+    {% else %}<p class="muted">No listed exposure recorded.</p>{% endif %}
+  </section>
+  <section class="card">
+    <h2>Official identities</h2>
+    {% if d.identities %}
+    <table class="tbl compact">
+      <thead><tr><th>Platform</th><th>Handle</th><th>Method</th><th>Status</th></tr></thead>
+      <tbody>{% for i in d.identities %}<tr><td>{{ i.platform }}</td><td>{% if i.url %}{{ m.ext(i.url, i.handle) }}{% else %}{{ i.handle }}{% endif %}</td><td class="small">{{ i.method }}</td><td class="small">{{ i.status }}</td></tr>{% endfor %}</tbody>
+    </table>
+    {% else %}<p class="muted">No official accounts registered.</p>{% endif %}
+  </section>
+</div>
+
+<section class="card">
+  <h2>Sources and health ({{ d.sources|length }})</h2>
+  {{ m.source_table(d.sources) }}
+</section>
+
+<section class="card">
+  <h2>People ({{ d.people|length }})</h2>
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Name</th><th>Tier</th><th>Title</th><th>Why key</th><th>Status</th><th>Contributor score</th></tr></thead>
+    <tbody>
+    {% for p in d.people %}
+      <tr><td><a href="/register/people/{{ p.id }}">{{ p.name }}</a></td><td><span class="tier p{{ p.tier }}">{{ p.tier }}</span></td>
+        <td class="small">{{ p.title or '–' }}</td><td class="small">{{ (p.why_key or '–')|truncate(120) }}</td><td class="small">{{ p.status }}</td>
+        <td class="num">{{ '%.2f'|format(p.contributor_score) if p.contributor_score is not none else '–' }}</td></tr>
+    {% else %}<tr><td colspan="6" class="empty">No tracked people at this lab.</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Recent developments</h2>
+  {{ m.dev_table(d.developments) }}
+</section>
+{% endblock %}

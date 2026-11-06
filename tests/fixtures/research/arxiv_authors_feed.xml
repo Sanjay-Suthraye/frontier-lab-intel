@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/fjpZeQkgy/ZIESGwm/yNR+8FSMQ</id>
+  <title>arXiv Query: search_query=au:"Oriol Vinyals" OR au:"Noam Shazeer" OR au:"Jeff Dean" OR au:"Jakob Foerster"&amp;id_list=&amp;start=0&amp;max_results=30</title>
+  <updated>2026-11-04T11:03:08Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=au:%22Oriol+Vinyals%22+OR+(au:%22Noam+Shazeer%22+OR+(au:%22Jeff+Dean%22+OR+au:%22Jakob+Foerster%22))&amp;start=0&amp;max_results=30&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>30</opensearch:itemsPerPage>
+  <opensearch:totalResults>8</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2610.39576v2</id>
+    <title>Bayesian Offline Multi-Agent Reinforcement Learning with Latent World Models</title>
+    <updated>2026-11-01T13:56:36Z</updated>
+    <link href="https://arxiv.org/abs/2610.39576v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.39576v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Model-based offline multi-agent reinforcement learning (MARL) provides a promising approach to multi-agent decision-making under partial observability, where the global state is unavailable from offline data. However, limited dataset coverage can lead to substantial out-of-distribution (OOD) model e</summary>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-29T08:16:20Z</published>
+    <arxiv:primary_category term="cs.MA"/>
+    <author>
+      <name>Xi Xiong</name>
+    </author>
+    <author>
+      <name>Lu Liu</name>
+    </author>
+    <author>
+      <name>Yiming Li</name>
+    </author>
+    <author>
+      <name>Jakob Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.28753v1</id>
+    <title>Understanding the Inner Workings of a State-Space Foundation Model for Limit Order Books</title>
+    <updated>2026-10-20T18:01:16Z</updated>
+    <link href="https://arxiv.org/abs/2610.28753v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.28753v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Autoregressive foundation models offer state-of-the-art capabilities to simulate the market by generating the message flow of limit order books (LOBs). Yet, without understanding their inner workings, research directions are hard to narrow and practical use in real-world trading environments remains</summary>
+    <category term="q-fin.TR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-20T18:01:16Z</published>
+    <arxiv:comment>Accepted at the 7th ACM International Conference on AI in Finance (ICAIF '26), November 14-17, 2026, Milan, Italy</arxiv:comment>
+    <arxiv:primary_category term="q-fin.TR"/>
+    <author>
+      <name>Valentin Mohl</name>
+    </author>
+    <author>
+      <name>Alexandre Bismuth</name>
+    </author>
+    <author>
+      <name>Aramis Marti-Shahandeh</name>
+    </author>
+    <author>
+      <name>George Nigmatulin</name>
+    </author>
+    <author>
+      <name>Jakob Foerster</name>
+    </author>
+    <arxiv:doi>10.1145/3858063.3858862</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1145/3858063.3858862" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.28086v1</id>
+    <title>MoDDiT: Simple Token Routing in Diffusion Transformers</title>
+    <updated>2026-10-20T12:05:49Z</updated>
+    <link href="https://arxiv.org/abs/2610.28086v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.28086v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Real-time video generation, interactive world models, and on-device image synthesis are almost a reality. Diffusion Transformers (DiT) achieve excellent sample quality, shifting the bottleneck to the throughput of the models themselves. Natural images are inherently sparse, as large portions of an i</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-20T12:05:49Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Jarek Liesen</name>
+    </author>
+    <author>
+      <name>Matthew T. Jackson</name>
+    </author>
+    <author>
+      <name>Benjamin Ellis</name>
+    </author>
+    <author>
+      <name>Shimon Whiteson</name>
+    </author>
+    <author>
+      <name>Jakob N. Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.03644v1</id>
+    <title>Is Inter-Seed Cross-Play Enough? Evaluating the Robustness of Zero-Shot Coordination Algorithms to Implementation Details</title>
+    <updated>2026-08-04T13:29:00Z</updated>
+    <link href="https://arxiv.org/abs/2608.03644v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.03644v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>AI agents deployed in real-world settings must be capable of coordinating with humans and other AI agents they have not encountered before. Zero-shot coordination (ZSC) algorithms aim to achieve this by specifying high-level learning rules such that independently engineered agents can coordinate wit</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-04T13:29:00Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Maksymilian Wolski</name>
+    </author>
+    <author>
+      <name>Nicholas Hoernle</name>
+    </author>
+    <author>
+      <name>Johannes Forkel</name>
+    </author>
+    <author>
+      <name>Jakob Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.26463v2</id>
+    <title>Finding the Time to Think: Learning Planning Budgets in Real-Time RL</title>
+    <updated>2026-06-27T05:05:34Z</updated>
+    <link href="https://arxiv.org/abs/2606.26463v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.26463v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Deliberating takes time. In real-time settings, that time is not free. Standard reinforcement learning (RL) sidesteps this as the environment waits indefinitely for the agent's decision. Instead, we study real-time RL environments where the environment progresses while waiting for the agent's action</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-24T23:55:15Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Aneesh Muppidi</name>
+    </author>
+    <author>
+      <name>Firas Darwish</name>
+    </author>
+    <author>
+      <name>Dylan Cope</name>
+    </author>
+    <author>
+      <name>João F. Henriques</name>
+    </author>
+    <author>
+      <name>Jakob Nicolaus Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.25996v3</id>
+    <title>Autodata: An agentic data scientist to create high quality synthetic data</title>
+    <updated>2026-07-04T15:07:51Z</updated>
+    <link href="https://arxiv.org/abs/2606.25996v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.25996v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We introduce Autodata, a general method that enables AI agents to act as data scientists who build high quality training and evaluation data. We show how to train (meta-optimize) such a data scientist agent, so that it learns to create even stronger data. We describe the overall formulation, and a s</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-24T16:08:31Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Ilia Kulikov</name>
+    </author>
+    <author>
+      <name>Chenxi Whitehouse</name>
+    </author>
+    <author>
+      <name>Tianhao Wu</name>
+    </author>
+    <author>
+      <name>Yixin Nie</name>
+    </author>
+    <author>
+      <name>Jakob Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.21173v1</id>
+    <title>Inverting the Bellman Equation: From $Q$-Values to World Models</title>
+    <updated>2026-06-19T07:26:14Z</updated>
+    <link href="https://arxiv.org/abs/2606.21173v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.21173v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Model-based and model-free reinforcement learning are traditionally viewed as separate paradigms: instead of learning a model of the transition kernel $P$, model-free agents typically estimate value functions tied to a specific policy and reward. In this paper, we challenge this dichotomy by proving</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-19T07:26:14Z</published>
+    <arxiv:comment>48 pages, 11 figures, 5 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Alistair Letcher</name>
+    </author>
+    <author>
+      <name>Mattie Fellows</name>
+    </author>
+    <author>
+      <name>Alexander D. Goldie</name>
+    </author>
+    <author>
+      <name>Jonathan Richens</name>
+    </author>
+    <author>
+      <name>Jakob N. Foerster</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.21428v1</id>
+    <title>Decoupled DiLoCo for Resilient Distributed Pre-training</title>
+    <updated>2026-04-23T08:45:38Z</updated>
+    <link href="https://arxiv.org/abs/2604.21428v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2604.21428v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Modern large-scale language model pre-training relies heavily on the single program multiple data (SPMD) paradigm, which requires tight coupling across accelerators. Due to this coupling, transient slowdowns, hardware failures, and synchronization overhead stall the entire computation, wasting signi</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-04-23T08:45:38Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Arthur Douillard</name>
+    </author>
+    <author>
+      <name>Keith Rush</name>
+    </author>
+    <author>
+      <name>Yani Donchev</name>
+    </author>
+    <author>
+      <name>Zachary Charles</name>
+    </author>
+    <author>
+      <name>Josef Dean</name>
+    </author>
+    <author>
+      <name>Jeff Dean</name>
+    </author>
+  </entry>
+</feed>

@@ -1,0 +1,66 @@
+# Production-like stack: Postgres + web + scheduler worker.
+#   docker compose up -d --build
+# First start seeds Postgres from the committed snapshot (real data), so the UI is useful at once;
+# the worker then keeps ingesting on its own schedule.
+x-app: &app
+  build: .
+  image: frontier-lab-intel:latest
+  env_file:
+    - path: .env
+      required: false
+  environment:
+    DATABASE_URL: postgresql+psycopg://fli:${POSTGRES_PASSWORD:-fli}@db:5432/fli
+    FLI_LOG_LEVEL: INFO
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: fli
+      POSTGRES_USER: fli
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fli}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fli -d fli"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  init:
+    <<: *app
+    command: ["sh", "-c", "fli db init && fli register && fli snapshot import-if-empty"]
+    restart: "no"
+    healthcheck:
+      disable: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    <<: *app
+    command: ["fli", "serve", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "${FLI_PORT:-8000}:8000"
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  worker:
+    <<: *app
+    command: ["fli", "worker"]
+    healthcheck:
+      disable: true  # liveness = job_run ledger + Healthchecks pings, not HTTP
+    volumes:
+      - raw:/app/data/raw
+      - models:/app/data/models/fastembed
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
+  raw:
+  models:

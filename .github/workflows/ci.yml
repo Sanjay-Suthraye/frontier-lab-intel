@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.11"
+      - name: Install
+        run: uv sync --frozen --python 3.12
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Unit tests (no network, no LLM)
+        run: uv run pytest -q
+      - name: Schema is in sync with the models
+        run: |
+          uv run fli db schema --out /tmp/schema.sql
+          diff -u docs/schema.sql /tmp/schema.sql

@@ -1,0 +1,30 @@
+# Curated register facts as a source of their own.
+# Loaded by fli.register.loader together with every other config/sources*.yaml file.
+#
+# The people register (config/people.yaml -> person / affiliation tables) records dated moves of the
+# tracked people, each with the source URL it was curated from: departures, joins, co-foundings and
+# role changes. The most material talent events of the window (Jeff Dean, Sanjay Ghemawat, Oriol
+# Vinyals and Quoc Le leaving Google to co-found Discovery Loop; the Google DeepMind leadership
+# change; Andrew Tulloch leaving Meta) never appeared on an official lab channel, and press reaches
+# the corpus only as headlines. So the analyst-curated, cited register is a primary input in its own
+# right, not just reference data: without this source those moves never become a development, an
+# alert or a digest item.
+#
+# register_affiliations (src/fli/ingest/collectors/register.py) reads the LOCAL database only (no
+# network, no LLM). Every affiliation whose start or end date falls inside the run window becomes one
+# document of class `curated` (url = the cited source, published_at = the day of the move), and one
+# event is one document: a co-founding team, a team leaving one lab for one destination or a same-day
+# reorganisation is grouped. Affiliations without a source_url are skipped. Moves recorded in the
+# register after they happened are still collected on the next run.
+#
+# Cadence: the register changes when an analyst edits people.yaml and runs `fli register`; daily is
+# plenty. freshness_slo_hours: talent moves are rare, so a quiet register is normal, not stale.
+
+sources:
+  - id: register:affiliations
+    lab: null
+    adapter: register_affiliations
+    kind: register
+    source_class: curated
+    cadence_minutes: 1440
+    freshness_slo_hours: 8760

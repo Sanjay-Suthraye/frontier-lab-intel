@@ -1,0 +1,9 @@
+{
+ "client_id": "REDACTED",
+ "detail": "When authenticating requests to the X API v2 endpoints, you must use keys and tokens from a developer App that is attached to a Project. You can create a project via the developer portal.",
+ "registration_url": "https://developer.x.com/en/docs/projects/overview",
+ "title": "Client Forbidden",
+ "required_enrollment": "Appropriate Level of API Access",
+ "reason": "client-not-enrolled",
+ "type": "https://api.x.com/2/problems/client-forbidden"
+}

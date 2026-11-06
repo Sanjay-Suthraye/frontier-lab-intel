@@ -1,0 +1,132 @@
+# Research + code sources: papers (HF daily papers, arXiv author feeds), GitHub orgs, HF model orgs.
+# Loaded by fli.register.loader together with every other config/sources*.yaml file.
+#
+# Fields: id, lab, adapter, kind (hf_papers | arxiv | github_org | hf_org), url, cadence_minutes,
+# freshness_slo_hours, config. cadence = how often a run is due. freshness_slo_hours = the longest
+# *normal* gap between new items, set from each channel's observed publishing rate (a quiet org is
+# not a broken org); collector failures are caught separately via consecutive_failures.
+#
+# GitHub budget: GITHUB_TOKEN is optional. Unauthenticated (60 req/h per IP, shared by all orgs),
+# one org run costs 1 list call (+1 only when the pushed page is saturated) + top_repos_unauthenticated
+# release checks (default 2), so a full sweep of the 12 orgs is ~40 calls. With a token: top_repos
+# (default 10; 30 for the large orgs below, because stars are a weak proxy for "publishes releases":
+# anthropics' top-10 active repos by stars were mostly cookbooks/plugins without releases).
+
+sources:
+  # ----------------------------------------------------------------------------------- papers
+  # Community-curated arXiv stream with org tags + upvotes; ~45 papers/weekday, 1 call per day.
+  - id: hf:daily_papers
+    lab: null
+    adapter: hf_daily_papers
+    kind: hf_papers
+    url: https://huggingface.co/papers
+    cadence_minutes: 360
+    freshness_slo_hours: 96
+    config:
+      min_upvotes_unmatched: 150   # ~top 1% (Aug-Oct 2026 sample of 1,226 papers: p97=101, p99=145); kept 14 in Aug 1-Nov 4
+      recheck_days: 7              # upvotes accrue for days; re-read a week so late risers still qualify
+      include_ai_summary: true
+      org_aliases:                 # HF org handle -> lab id, on top of the `hf` identities in labs.yaml
+        facebook: meta-ai          # verified "AI at Meta" org (FAIR papers); labs.yaml lists meta-llama
+        meta: meta-ai              # unverified org, but its sampled papers were by Meta authors
+        deepmind: google-deepmind  # unverified org, sampled papers were DeepMind's (DiffusionGemma report)
+        QwenBusinessUnit: qwen
+        thinkingmachines: thinking-machines  # HF itself uses thinkingmachines/Inkling-Small for paper summaries
+        reflection: reflection-ai  # verified org that released Beam-1.0-501B-A23B (Oct 2026)
+
+  # Papers by tracked people (arxiv_name identities, read from the DB each run); OR-batched queries,
+  # >= 3 s between requests per the arXiv API terms. arXiv announces once per weekday.
+  - id: arxiv:authors
+    lab: null
+    adapter: arxiv_authors
+    kind: arxiv
+    url: https://export.arxiv.org/api/query
+    cadence_minutes: 720
+    freshness_slo_hours: 336
+    config:
+      max_results_per_author: 25
+      authors_per_query: 8
+      delay_seconds: 3.0
+      category_prefixes: ["cs.", "stat.", "eess."]   # drops namesakes in physics/biology
+      author_overrides: {}         # {person-id: {query_name: "First Last"} | {skip: true}}
+
+  # ------------------------------------------------------------------------------ GitHub orgs
+  # Flagship agent tooling (codex, agents SDK) and open-weight drops (gpt-oss) land here first.
+  - {id: "openai:github", lab: openai, adapter: github_org, kind: github_org, url: "https://github.com/openai",
+     cadence_minutes: 720, freshness_slo_hours: 336, config: {org: openai, top_repos: 30}}
+  # Claude Code / Agent SDK / MCP releases; new repos revealed chip-design tool mirrors (xls, OpenROAD).
+  - {id: "anthropic:github", lab: anthropic, adapter: github_org, kind: github_org, url: "https://github.com/anthropics",
+     cadence_minutes: 720, freshness_slo_hours: 336, config: {org: anthropics, top_repos: 30}}
+  # DeepMind research code (Gemma tooling, AlphaFold-family, science releases).
+  - {id: "google-deepmind:github", lab: google-deepmind, adapter: github_org, kind: github_org,
+     url: "https://github.com/google-deepmind", cadence_minutes: 720, freshness_slo_hours: 336,
+     config: {org: google-deepmind, top_repos: 30}}
+  # Second official Google org: gemini-cli and the Gemini SDKs ship here, not under google-deepmind.
+  - {id: "google-deepmind:github-gemini", lab: google-deepmind, adapter: github_org, kind: github_org,
+     url: "https://github.com/google-gemini", cadence_minutes: 720, freshness_slo_hours: 336,
+     config: {org: google-gemini, top_repos: 30}}
+  # FAIR research code: >=100 repos pushed Aug-Nov 2026 saturate the pushed page, so the created-sorted
+  # listing is fetched too (2 list calls, 163 distinct repos).
+  - {id: "meta-ai:github", lab: meta-ai, adapter: github_org, kind: github_org, url: "https://github.com/facebookresearch",
+     cadence_minutes: 720, freshness_slo_hours: 336, config: {org: facebookresearch, top_repos: 30}}
+  # Second official Meta org: Llama models, llama-stack releases.
+  - {id: "meta-ai:github-llama", lab: meta-ai, adapter: github_org, kind: github_org, url: "https://github.com/meta-llama",
+     cadence_minutes: 720, freshness_slo_hours: 720, config: {org: meta-llama}}
+  # Rare but material: Grok open-weight drops and SDKs.
+  - {id: "xai:github", lab: xai, adapter: github_org, kind: github_org, url: "https://github.com/xai-org",
+     cadence_minutes: 720, freshness_slo_hours: 2160, config: {org: xai-org}}
+  # Mistral inference code and SDK releases (open-weight challenger).
+  - {id: "mistral:github", lab: mistral, adapter: github_org, kind: github_org, url: "https://github.com/mistralai",
+     cadence_minutes: 720, freshness_slo_hours: 720, config: {org: mistralai}}
+  # DeepSeek publishes infra code (kernels, file systems) that moves accelerator sentiment.
+  - {id: "deepseek:github", lab: deepseek, adapter: github_org, kind: github_org, url: "https://github.com/deepseek-ai",
+     cadence_minutes: 720, freshness_slo_hours: 720, config: {org: deepseek-ai}}
+  # Qwen model repos and the qwen-code agent CLI.
+  - {id: "qwen:github", lab: qwen, adapter: github_org, kind: github_org, url: "https://github.com/QwenLM",
+     cadence_minutes: 720, freshness_slo_hours: 336, config: {org: QwenLM, top_repos: 30}}
+  # Kimi agentic models and kimi-cli.
+  - {id: "moonshot:github", lab: moonshot, adapter: github_org, kind: github_org, url: "https://github.com/MoonshotAI",
+     cadence_minutes: 720, freshness_slo_hours: 720, config: {org: MoonshotAI}}
+  # Alumni startup with little public output: any new repo (e.g. Tinker tooling) is a signal.
+  - {id: "thinking-machines:github", lab: thinking-machines, adapter: github_org, kind: github_org,
+     url: "https://github.com/thinking-machines-lab", cadence_minutes: 720, freshness_slo_hours: 2160,
+     config: {org: thinking-machines-lab}}
+
+  # ------------------------------------------------------------------------- Hugging Face orgs
+  # (Anthropic's HF org has 0 models, so it gets no model source; its papers still match via identity.)
+  # Most-downloaded open-weight family; Aug-Nov 2026: 11 new models -> 8 records (FP8 copies collapsed).
+  - {id: "qwen:hf", lab: qwen, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/Qwen",
+     cadence_minutes: 360, freshness_slo_hours: 336, config: {org: Qwen}}
+  # Google's shared org (Gemma, research checkpoints), mapped to DeepMind as in labs.yaml;
+  # Aug-Nov 2026: 9 new models -> 4 records (six TIPS ViT sizes collapsed into one).
+  - {id: "google-deepmind:hf", lab: google-deepmind, adapter: hf_org_models, kind: hf_org,
+     url: "https://huggingface.co/google", cadence_minutes: 360, freshness_slo_hours: 336, config: {org: google}}
+  # Llama releases (gated: model cards may be unavailable, metadata still recorded).
+  - {id: "meta-ai:hf-llama", lab: meta-ai, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/meta-llama",
+     cadence_minutes: 360, freshness_slo_hours: 1440, config: {org: meta-llama}}
+  # FAIR research weights (SAM, DINO, V-JEPA families) live under the verified "facebook" org.
+  - {id: "meta-ai:hf", lab: meta-ai, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/facebook",
+     cadence_minutes: 360, freshness_slo_hours: 720, config: {org: facebook}}
+  # gpt-oss-style open-weight drops: rare, very material.
+  - {id: "openai:hf", lab: openai, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/openai",
+     cadence_minutes: 360, freshness_slo_hours: 2160, config: {org: openai}}
+  # Grok open-weight drops (2 models ever): rare, but a direct read on xAI's open strategy.
+  - {id: "xai:hf", lab: xai, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/xai-org",
+     cadence_minutes: 360, freshness_slo_hours: 2160, config: {org: xai-org}}
+  # Mistral open weights (Mistral-Large-4, Voxtral, Timestral in Aug-Nov 2026).
+  - {id: "mistral:hf", lab: mistral, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/mistralai",
+     cadence_minutes: 360, freshness_slo_hours: 1440, config: {org: mistralai}}
+  # DeepSeek weight drops are the canonical "efficiency shock" signal for NVDA.
+  - {id: "deepseek:hf", lab: deepseek, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/deepseek-ai",
+     cadence_minutes: 360, freshness_slo_hours: 1440, config: {org: deepseek-ai}}
+  # Kimi open-weight agentic models; none in Aug-Nov 2026, hence the 60-day SLO.
+  - {id: "moonshot:hf", lab: moonshot, adapter: hf_org_models, kind: hf_org, url: "https://huggingface.co/moonshotai",
+     cadence_minutes: 360, freshness_slo_hours: 1440, config: {org: moonshotai}}
+  # Inkling / Inkling-Small (Jul 2026) were published here; not in labs.yaml identities.
+  - {id: "thinking-machines:hf", lab: thinking-machines, adapter: hf_org_models, kind: hf_org,
+     url: "https://huggingface.co/thinkingmachines", cadence_minutes: 360, freshness_slo_hours: 2160,
+     config: {org: thinkingmachines}}
+  # Verified org of Reflection AI's open frontier model (Beam-1.0-501B-A23B, Oct 2026).
+  - {id: "reflection-ai:hf", lab: reflection-ai, adapter: hf_org_models, kind: hf_org,
+     url: "https://huggingface.co/reflection", cadence_minutes: 360, freshness_slo_hours: 2160,
+     config: {org: reflection}}

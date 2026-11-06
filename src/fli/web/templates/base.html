@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Overview{% endblock %} · Frontier Lab Intelligence</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231f5fd1'/%3E%3Cpath d='M4 12V4h7M4 8h5' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/style.css?v={{ static_v }}">
+<script>try{var t=localStorage.getItem("fli-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="top-inner">
+    <a class="brand" href="/" title="Frontier Lab Intelligence">FLI<span>Frontier Lab Intelligence</span></a>
+    <nav aria-label="Main">
+      {% for href, label, key in nav %}<a href="{{ href }}"{% if active == key %} class="on" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+    </nav>
+    <button class="theme" type="button" data-theme-toggle title="Toggle light / dark" aria-label="Toggle light or dark theme">&#9680;</button>
+  </div>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+<footer>
+  Times in {{ tz }} · rendered {{ now|dt }} · <a href="/api">JSON API</a> · <a href="/status">system status</a>
+</footer>
+<script src="/static/app.js?v={{ static_v }}" defer></script>
+</body>
+</html>

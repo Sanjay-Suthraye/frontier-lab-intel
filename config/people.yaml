@@ -1,0 +1,1639 @@
+# Register of tracked people. Loaded by `fli register` (schema: src/fli/register/loader.py).
+#
+# WHO COUNTS AS "KEY" - the tier is the inclusion decision and `why_key` makes it auditable:
+#   A  founders, chief scientists and heads of research of tier-1 labs, and founders of alumni
+#      startups. A move by a tier-A person is material for both audiences (config/materiality.yaml).
+#   B  named leads of flagship model work (pretraining, post-training, reasoning, infra, safety,
+#      interpretability, agents/coding and the flagship product surface) and frequent authors of
+#      flagship reports: the layer below the founders, where most early signal sits.
+#   C  high-signal individual contributors: maintainers of lab repos, prolific technical posters,
+#      and alumni we watch for their next venture.
+#   inclusion_rule: seed_founder | lab_leadership | flagship_lead | flagship_author |
+#                   alumni_founder | high_signal_poster | talent_watch
+#
+# CURRENT AFFILIATION of every tier-A/B person was checked by web search on 2026-11-04
+# (meta.verified_on, meta.verification = the source read). Moves are dated affiliations with a
+# source_url. `lab` is the current employer when it is in config/labs.yaml, otherwise null (the org
+# is in the affiliations), so papers written by alumni are never attributed to their former lab.
+# Month-precision dates use the 1st of the month; unknown start dates of long-held roles are omitted.
+# Affiliation confidence < 1 marks moves reported by secondary sources only.
+#
+# IDENTITIES: x | github | hf | bluesky | arxiv_name | s2 | homepage | scholar. arxiv_name is the
+# name as printed on arXiv. It is left out for very common names (it would flood the arXiv author
+# feed with namesakes); those people carry meta.common_name: true, and entity resolution then needs
+# lab or co-author agreement even for an exact name match.
+#
+# X TRACKING (track: true): X reads cost $0.005 per post and share the X_BUDGET_TOTAL_USD hard cap
+# with the lab accounts. 25 accounts are tracked. Worst-case backfill is 25 x 60 posts = $7.50 (the
+# collector's default cap), which together with the lab accounts' planned ~$3.4 would hit the $10 cap
+# (the guard stops reads cleanly). Estimate, not yet measured: most of these accounts post a few
+# originals a week, so backfill ~$3 and steady state ~$0.05/day. `max_posts: 30` is set for when the
+# loader passes it through (requested), which halves the worst case. Chosen because their posts are
+# first-hand primary signal that the lab account does not duplicate:
+#   (1) leaders who announce strategy, compute deals and moves themselves (sama, gdb, demishassabis,
+#       alexandr_wang, jackclarkSF);
+#   (2) research leads whose rare posts are high-signal and nearly free (merettm, markchen90,
+#       polynoamial, NoamShazeer, lilianweng, janleike, ch402, shengjia_zhao, barret_zoph);
+#   (3) builders who ship API/tooling changes before the docs (OfficialLoganK, bcherny, karpathy,
+#       soumithchintala);
+#   (4) founders of alumni startups with little official output (ilyasut, miramurati,
+#       johnschulman2, MishaLaskin, LiamFedus, JeffDean, OriolVinyalsML).
+# Not tracked: elonmusk (hundreds of posts a day would exhaust the cap; @xai covers launches),
+# ylecun (very high volume, mostly commentary) and everyone whose news reaches an official source.
+#
+# meta.revealed_preference is the validation label of the contributor score
+# (src/fli/register/contributors.py). true: a cited public report shows that in 2024-2026 the person
+#   (a) was recruited away by a competing lab or company in coverage that frames it as poaching or
+#       reports the package or deal value, or
+#   (b) co-founded an alumni startup that raised >= $100M or is backed by a frontier lab/hyperscaler.
+# false: no such report found (checked 2026-11-04). null: a move happened but neither poaching
+# framing nor money was reported; excluded from validation.
+# meta.roles: leadership/flagship roles ever held, EXCLUDING the role that is itself the
+# revealed-preference event (the founding, or the job someone was poached into), so the
+# leadership-roles feature cannot encode the label. meta.profile: research | leadership | product.
+
+people:
+  # ============================================================================ OpenAI (tier 1)
+  - id: sam-altman
+    name: Sam Altman
+    lab: openai
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Sets OpenAI strategy and signs the compute deals (Stargate/ORCL, AMD, AVGO, AWS, MSFT) that move held tickers; often posts launches before the official account."
+    affiliations:
+      - {lab: openai, role: "Co-founder and CEO", source_url: "https://en.wikipedia.org/wiki/Sam_Altman", evidence: "CEO; not among the 12 OpenAI executive exits of 2026"}
+    identities:
+      - {platform: x, handle: sama, track: true, max_posts: 30}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: false, verified_on: "2026-11-04", verification: "https://dealroom.co/news/145108-openais-revolving-door-spins-on-12-executives-exit-in-2026/"}
+
+  - id: greg-brockman
+    name: Greg Brockman
+    lab: openai
+    title: Co-founder and President
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Runs OpenAI's infrastructure scale-up and model launches; first public read on capacity (Stargate, NVDA/AMD/AVGO supply)."
+    affiliations:
+      - {lab: openai, role: "Co-founder and President", source_url: "https://en.wikipedia.org/wiki/Greg_Brockman", evidence: "President; no 2026 change reported"}
+    identities:
+      - {platform: x, handle: gdb, track: true, max_posts: 30}
+      - {platform: github, handle: gdb}
+    meta: {profile: leadership, roles: [founder, president, cto], revealed_preference: false, verified_on: "2026-11-04", verification: "https://dealroom.co/news/145108-openais-revolving-door-spins-on-12-executives-exit-in-2026/"}
+
+  - id: jakub-pachocki
+    name: Jakub Pachocki
+    lab: openai
+    title: Chief Scientist
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Sets OpenAI's research agenda (reasoning, automated research); won the Jan 2026 compute dispute that pushed Jerry Tworek out. Rare, high-signal posts."
+    affiliations:
+      - {lab: openai, role: "Chief Scientist", start: 2024-05-14, source_url: "https://www.technologyreview.com/2025/07/31/1120885/the-two-people-shaping-the-future-of-openais-research/", evidence: "Chief scientist since May 2024; co-heads research with Mark Chen"}
+    identities:
+      - {platform: x, handle: merettm, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: arxiv_name, handle: "Jakub Pachocki"}
+    meta: {profile: research, roles: [research_lead, chief_scientist], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.irishtimes.com/business/2026/02/03/openais-chatgpt-push-triggers-senior-staff-exits"}
+
+  - id: mark-chen
+    name: Mark Chen
+    lab: openai
+    title: Chief Research Officer
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Co-heads OpenAI research (with Pachocki); frames model launches and research priorities publicly."
+    affiliations:
+      - {lab: openai, role: "Chief Research Officer", start: 2025-03-24, source_url: "https://www.technologyreview.com/2025/07/31/1120885/the-two-people-shaping-the-future-of-openais-research/", evidence: "Named CRO March 2025; still CRO in Feb 2026 coverage"}
+    identities:
+      - {platform: x, handle: markchen90, track: true, max_posts: 30}
+    meta: {profile: research, roles: [research_lead], revealed_preference: false, common_name: true, verified_on: "2026-11-04", verification: "https://www.irishtimes.com/business/2026/02/03/openais-chatgpt-push-triggers-senior-staff-exits"}
+
+  - id: wojciech-zaremba
+    name: Wojciech Zaremba
+    lab: openai
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Co-founder still at OpenAI; long-running research lead (robotics, Codex lineage)."
+    affiliations:
+      - {lab: openai, role: "Co-founder", source_url: "https://en.wikipedia.org/wiki/Wojciech_Zaremba", evidence: "no 2026 departure reported", confidence: 0.8}
+    identities:
+      - {platform: x, handle: woj_zaremba}
+      - {platform: github, handle: wojzaremba}
+      - {platform: arxiv_name, handle: "Wojciech Zaremba"}
+    meta: {profile: research, roles: [founder, research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: noam-shazeer
+    name: Noam Shazeer
+    lab: openai
+    title: Member of technical staff (joined from Google, Jun 2026)
+    tier: A
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Transformer and MoE co-inventor; co-led Gemini until June 2026. His move to OpenAI is the clearest GOOGL-to-OpenAI talent-flow signal of 2026."
+    affiliations:
+      - {org: "Character.AI", role: "Co-founder and CEO", end: 2024-08-02, source_url: "https://en.wikipedia.org/wiki/Noam_Shazeer"}
+      - {lab: google-deepmind, role: "VP Engineering, Gemini co-lead", start: 2024-08-02, end: 2026-06-18, source_url: "https://9to5google.com/2026/06/17/geminis-co-lead-is-leaving-google-to-join-openai/", evidence: "returned via Google's ~$2.7B Character.AI licensing deal"}
+      - {lab: openai, role: "Member of technical staff", start: 2026-06-18, source_url: "https://the-decoder.com/googles-gemini-co-lead-noam-shazeer-joins-openai-after-two-year-return-stint/", evidence: "announced on X 2026-06-18; role not disclosed"}
+    identities:
+      - {platform: x, handle: NoamShazeer, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: arxiv_name, handle: "Noam Shazeer"}
+    meta: {profile: research, roles: [founder, ceo, research_lead], revealed_preference: true, revealed_preference_event: "Google ~$2.7B Character.AI deal to rehire him (2024); poached by OpenAI (Jun 2026)", revealed_preference_source: "https://www.outlookbusiness.com/news/noam-shazeer-exits-google-for-openai-check-his-career-net-worth", verified_on: "2026-11-04", verification: "https://the-decoder.com/googles-gemini-co-lead-noam-shazeer-joins-openai-after-two-year-return-stint/"}
+
+  - id: ruoming-pang
+    name: Ruoming Pang
+    lab: openai
+    title: Researcher (joined from Meta MSL, Feb 2026)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Led Apple's foundation models, then MSL infrastructure; two moves in eight months with a reported >$200M Meta package make him the bellwether of model-infra talent pricing."
+    affiliations:
+      - {org: Apple, role: "Head of foundation models", end: 2025-07-01, source_url: "https://www.thestar.com.my/tech/tech-news/2025/07/08/apple039s-top-ai-executive-ruoming-pang-leaves-for-meta-bloomberg-news-reports"}
+      - {lab: meta-ai, role: "MSL infrastructure lead", start: 2025-07-01, end: 2026-02-01, source_url: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple", evidence: "Bloomberg: package of more than $200M over several years"}
+      - {lab: openai, role: "Researcher", start: 2026-02-01, source_url: "https://techeconomy.ng/openai-hires-ruoming-pang-meta-ai", evidence: "The Information, late Feb 2026; OpenAI confirmed", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Ruoming Pang"}
+    meta: {profile: research, roles: [infra_lead, research_lead], revealed_preference: true, revealed_preference_event: "poached by Meta with >$200M package (Jul 2025), then hired by OpenAI (Feb 2026)", revealed_preference_source: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple", verified_on: "2026-11-04", verification: "https://techeconomy.ng/openai-hires-ruoming-pang-meta-ai"}
+
+  - id: lilian-weng
+    name: Lilian Weng
+    lab: openai
+    title: Lead, recursive self-improvement research (rejoined Jul 2026)
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "Thinking Machines co-founder who returned to OpenAI to lead AI-accelerated model development; her Lil'Log posts are canonical AI-team reading."
+    affiliations:
+      - {lab: openai, role: "VP Research, Safety Systems", end: 2024-11-15, source_url: "https://dealroom.co/news/141982-lilian-weng-leaves-thinking-machines-lab-and-rejoins-openai/"}
+      - {lab: thinking-machines, role: "Co-founder", start: 2025-02-18, end: 2026-07-29, source_url: "https://dealroom.co/news/141982-lilian-weng-leaves-thinking-machines-lab-and-rejoins-openai/", evidence: "left for health reasons; last day 2026-07-29"}
+      - {lab: openai, role: "Lead, recursive self-improvement research", start: 2026-07-30, source_url: "https://aimagazine.com/articles/people-moves-lilian-weng-openai", evidence: "The Information, 2026-07-29/30"}
+    identities:
+      - {platform: x, handle: lilianweng, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: github, handle: lilianweng}
+      - {platform: homepage, handle: lilianweng.github.io, url: "https://lilianweng.github.io"}
+      - {platform: arxiv_name, handle: "Lilian Weng"}
+    meta: {profile: research, roles: [safety_lead, research_lead], revealed_preference: true, revealed_preference_event: "co-founded Thinking Machines ($2B seed, Jul 2025); rehired by OpenAI (Jul 2026)", revealed_preference_source: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab", verified_on: "2026-11-04", verification: "https://dealroom.co/news/141982-lilian-weng-leaves-thinking-machines-lab-and-rejoins-openai/"}
+
+  - id: luke-metz
+    name: Luke Metz
+    lab: openai
+    title: Researcher (rejoined Jan 2026)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "ChatGPT post-training veteran and Thinking Machines co-founder; returned to OpenAI with Barret Zoph in Jan 2026."
+    affiliations:
+      - {lab: thinking-machines, role: "Co-founder", start: 2025-02-18, end: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+      - {lab: openai, role: "Researcher", start: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai", evidence: "return confirmed by Fidji Simo"}
+    identities:
+      - {platform: x, handle: Luke_Metz}
+      - {platform: github, handle: lukemetz}
+      - {platform: arxiv_name, handle: "Luke Metz"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "co-founded Thinking Machines (2025); won back by OpenAI (Jan 2026)", revealed_preference_source: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai", verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+
+  - id: sam-schoenholz
+    name: Sam Schoenholz
+    lab: openai
+    title: Researcher (rejoined Jan 2026)
+    tier: C
+    status: active
+    inclusion_rule: talent_watch
+    why_key: "Thinking Machines founding researcher (JAX-MD author) who returned to OpenAI in the Jan 2026 reverse exodus."
+    affiliations:
+      - {lab: thinking-machines, role: "Founding researcher", start: 2025-02-18, end: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+      - {lab: openai, role: "Researcher", start: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+    identities:
+      - {platform: github, handle: sschoenholz}
+      - {platform: arxiv_name, handle: "Samuel S. Schoenholz"}
+    meta: {profile: research, roles: [], revealed_preference: true, revealed_preference_event: "won back from Thinking Machines by OpenAI (Jan 2026)", revealed_preference_source: "https://gizmodo.com/sam-altman-is-tearing-apart-his-former-colleagues-startup-2000711135"}
+
+  - id: noam-brown
+    name: Noam Brown
+    lab: openai
+    title: Research scientist, reasoning
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Foundational o1/o-series reasoning researcher (test-time compute); his posts preview where reasoning models go next."
+    affiliations:
+      - {lab: openai, role: "Research scientist, reasoning", start: 2023-07-01, source_url: "https://latent.space/wiki/noam-brown/", evidence: "listed as OpenAI research scientist as of 2026-09-15"}
+    identities:
+      - {platform: x, handle: polynoamial, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Noam Brown"}
+    meta: {profile: research, roles: [reasoning_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://latent.space/wiki/noam-brown/"}
+
+  - id: lukasz-kaiser
+    name: Lukasz Kaiser
+    lab: openai
+    title: Research scientist (reasoning; Transformer co-author)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Transformer co-author and core reasoning-model researcher; frequent author on flagship OpenAI work."
+    affiliations:
+      - {lab: openai, role: "Research scientist", source_url: "https://en.wikipedia.org/wiki/%C5%81ukasz_Kaiser", evidence: "no 2026 departure reported", confidence: 0.8}
+    identities:
+      - {platform: x, handle: lukaszkaiser}
+      - {platform: github, handle: lukaszkaiser}
+      - {platform: arxiv_name, handle: "Lukasz Kaiser"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: nick-turley
+    name: Nick Turley
+    lab: openai
+    title: Head of ChatGPT
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Owns ChatGPT, OpenAI's consumer surface (the 'code red' focus of 2026): features, pricing tiers and usage numbers."
+    affiliations:
+      - {lab: openai, role: "Head of ChatGPT", source_url: "https://www.irishtimes.com/business/2026/02/03/openais-chatgpt-push-triggers-senior-staff-exits", evidence: "no 2026 departure reported", confidence: 0.8}
+    identities:
+      - {platform: x, handle: nickaturley}
+    meta: {profile: product, roles: [product_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: jerry-tworek
+    name: Jerry Tworek
+    lab: null
+    title: Former VP Research (reasoning), OpenAI
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Led o1/o3 reasoning and Codex research for seven years; left in Jan 2026 after losing a compute-allocation fight. Watched for a new venture."
+    affiliations:
+      - {lab: openai, role: "VP Research, reasoning", end: 2026-01-06, source_url: "https://www.businesstoday.in/technology/news/story/openai-reasoning-chief-jerry-tworek-quits-after-7-years-heres-why-509827-2026-01-07", evidence: "quit after compute/staff requests were rejected"}
+    identities:
+      - {platform: x, handle: MillionInt}
+      - {platform: arxiv_name, handle: "Jerry Tworek"}
+    meta: {profile: research, roles: [reasoning_lead, research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.businesstoday.in/technology/news/story/openai-reasoning-chief-jerry-tworek-quits-after-7-years-heres-why-509827-2026-01-07"}
+
+  - id: kevin-weil
+    name: Kevin Weil
+    lab: null
+    title: Former VP, OpenAI for Science (ex-CPO)
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Ex-CPO who ran OpenAI for Science until it was folded into Codex (Apr 2026); a likely founder of an AI-for-science startup."
+    affiliations:
+      - {lab: openai, role: "Chief Product Officer, then VP OpenAI for Science", start: 2024-06-10, end: 2026-04-17, source_url: "https://techcrunch.com/2026/04/17/kevin-weil-and-bill-peebles-exit-openai-as-company-continues-to-shed-side-quests/"}
+    identities:
+      - {platform: x, handle: kevinweil}
+    meta: {profile: product, roles: [product_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/04/17/kevin-weil-and-bill-peebles-exit-openai-as-company-continues-to-shed-side-quests/"}
+
+  - id: bill-peebles
+    name: Bill Peebles
+    lab: null
+    title: Former head of Sora, OpenAI
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Diffusion-transformer (DiT) author who led Sora; left when OpenAI cut video 'side quests' (Apr 2026). Watched for a video-model startup."
+    affiliations:
+      - {lab: openai, role: "Head of Sora", end: 2026-04-17, source_url: "https://techcrunch.com/2026/04/17/kevin-weil-and-bill-peebles-exit-openai-as-company-continues-to-shed-side-quests/"}
+    identities:
+      - {platform: x, handle: billpeeb}
+      - {platform: arxiv_name, handle: "William Peebles"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/04/17/kevin-weil-and-bill-peebles-exit-openai-as-company-continues-to-shed-side-quests/"}
+
+  # ========================================================================= Anthropic (tier 1)
+  - id: dario-amodei
+    name: Dario Amodei
+    lab: anthropic
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Sets Anthropic strategy and compute commitments (AMZN Trainium, GOOGL TPU, MSFT/NVDA); IPO filed Oct 2026 (ANT). His essays move the safety/export-control debate."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and CEO", source_url: "https://www.anthropic.com/company/leadership"}
+    identities:
+      - {platform: arxiv_name, handle: "Dario Amodei"}
+    meta: {profile: leadership, roles: [founder, ceo, research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: daniela-amodei
+    name: Daniela Amodei
+    lab: anthropic
+    title: Co-founder and President
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Runs Anthropic's go-to-market and operations; the commercial voice ahead of the IPO."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and President", source_url: "https://www.anthropic.com/company/leadership"}
+    identities: []
+    meta: {profile: leadership, roles: [founder, president], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: jared-kaplan
+    name: Jared Kaplan
+    lab: anthropic
+    title: Co-founder and Chief Science Officer
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Scaling-laws author and Anthropic's chief science officer: sets the research agenda behind each Claude generation."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and Chief Science Officer", source_url: "https://www.anthropic.com/company/leadership"}
+    identities:
+      - {platform: arxiv_name, handle: "Jared Kaplan"}
+    meta: {profile: research, roles: [founder, chief_scientist], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: sam-mccandlish
+    name: Sam McCandlish
+    lab: anthropic
+    title: Co-founder and Chief Architect
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Former CTO, now chief architect for large-scale training (pretraining, research productivity, RL infrastructure)."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and CTO", end: 2025-10-02, source_url: "https://techcrunch.com/2025/10/02/anthropic-hires-new-cto-with-focus-on-ai-infrastructure"}
+      - {lab: anthropic, role: "Co-founder and Chief Architect", start: 2025-10-02, source_url: "https://www.anthropic.com/company/leadership"}
+    identities:
+      - {platform: arxiv_name, handle: "Sam McCandlish"}
+    meta: {profile: research, roles: [founder, cto, pretraining_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: tom-brown
+    name: Tom Brown
+    lab: anthropic
+    title: Co-founder and Chief Compute Officer
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Runs Anthropic's compute (Trainium, TPU, GPU capacity): Anthropic's AMZN/GOOGL/AVGO/NVDA/AKAM exposure flows through his org. GPT-3 first author."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and Chief Compute Officer", source_url: "https://www.anthropic.com/company/leadership"}
+    identities: []
+    meta: {profile: leadership, roles: [founder, infra_lead, flagship_author], revealed_preference: false, common_name: true, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: chris-olah
+    name: Chris Olah
+    lab: anthropic
+    title: Co-founder and Interpretability Research Lead
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Founder of mechanistic interpretability; transformer-circuits.pub releases are technique signal for the AI team."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and Interpretability Research Lead", source_url: "https://www.anthropic.com/company/leadership"}
+    identities:
+      - {platform: x, handle: ch402, track: true, max_posts: 30}
+      - {platform: github, handle: colah}
+      - {platform: homepage, handle: colah.github.io, url: "https://colah.github.io"}
+      - {platform: arxiv_name, handle: "Chris Olah"}
+    meta: {profile: research, roles: [founder, interpretability_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: jack-clark
+    name: Jack Clark
+    lab: anthropic
+    title: Co-founder and Head of Public Benefit
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Anthropic policy lead (Import AI): early read on export controls, chip policy and compute-energy politics that hit NVDA/TSM/energy names."
+    affiliations:
+      - {lab: anthropic, role: "Co-founder and Head of Public Benefit", source_url: "https://www.anthropic.com/company/leadership"}
+    identities:
+      - {platform: x, handle: jackclarkSF, track: true, max_posts: 30}
+    meta: {profile: leadership, roles: [founder], revealed_preference: false, common_name: true, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: rahul-patil
+    name: Rahul Patil
+    lab: anthropic
+    title: Chief Technology Officer
+    tier: B
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Ex-Stripe CTO running Anthropic engineering (compute, inference, infrastructure, security) - capacity and reliability signal."
+    affiliations:
+      - {org: Stripe, role: "CTO", end: 2025-10-01, source_url: "https://techcrunch.com/2025/10/02/anthropic-hires-new-cto-with-focus-on-ai-infrastructure"}
+      - {lab: anthropic, role: "Chief Technology Officer", start: 2025-10-02, source_url: "https://techcrunch.com/2025/10/02/anthropic-hires-new-cto-with-focus-on-ai-infrastructure"}
+    identities: []
+    meta: {profile: leadership, roles: [cto], revealed_preference: null, verified_on: "2026-11-04", verification: "https://www.anthropic.com/company/leadership"}
+
+  - id: jan-leike
+    name: Jan Leike
+    lab: anthropic
+    title: Alignment Science co-lead
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Led OpenAI superalignment, now Anthropic alignment science: safety-research and safety-culture signal across labs."
+    affiliations:
+      - {lab: openai, role: "Superalignment co-lead", end: 2024-05-17, source_url: "https://en.wikipedia.org/wiki/Jan_Leike"}
+      - {lab: anthropic, role: "Alignment Science co-lead", start: 2024-05-28, source_url: "https://en.wikipedia.org/wiki/Jan_Leike", evidence: "title varies across sources; still at Anthropic", confidence: 0.9}
+    identities:
+      - {platform: x, handle: janleike, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Jan Leike"}
+    meta: {profile: research, roles: [safety_lead], revealed_preference: null, verified_on: "2026-11-04", verification: "https://www.longtermwiki.com/kb/record/jan-leike"}
+
+  - id: nick-joseph
+    name: Nick Joseph
+    lab: anthropic
+    title: Head of Pretraining
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Leads Claude pretraining (Karpathy joined his division in May 2026): scale-up and data decisions behind each base model."
+    affiliations:
+      - {lab: anthropic, role: "Head of Pretraining", source_url: "https://venturebeat.com/technology/andrej-karpathy-announces-hes-joining-anthropic", evidence: "May 2026 coverage: pretraining division led by Nick Joseph"}
+    identities:
+      - {platform: arxiv_name, handle: "Nicholas Joseph"}
+    meta: {profile: research, roles: [pretraining_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://venturebeat.com/technology/andrej-karpathy-announces-hes-joining-anthropic"}
+
+  - id: andrej-karpathy
+    name: Andrej Karpathy
+    lab: anthropic
+    title: Pretraining research (joined May 2026)
+    tier: A
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "OpenAI founding member and ex-Tesla AI director; joined Anthropic pretraining in May 2026. The most-read technical poster in the field (AI-team adoption signal)."
+    affiliations:
+      - {org: "Eureka Labs", role: "Founder", start: 2024-07-16, end: 2026-05-19, source_url: "https://en.wikipedia.org/wiki/Andrej_Karpathy"}
+      - {lab: anthropic, role: "Pretraining research", start: 2026-05-19, source_url: "https://venturebeat.com/technology/andrej-karpathy-announces-hes-joining-anthropic", evidence: "announced on X 2026-05-19; works on using Claude to speed up pretraining research"}
+    identities:
+      - {platform: x, handle: karpathy, track: true, max_posts: 30}
+      - {platform: github, handle: karpathy}
+      - {platform: homepage, handle: karpathy.ai, url: "https://karpathy.ai"}
+      - {platform: arxiv_name, handle: "Andrej Karpathy"}
+    meta: {profile: research, roles: [founder, research_lead], revealed_preference: null, verified_on: "2026-11-04", verification: "https://venturebeat.com/technology/andrej-karpathy-announces-hes-joining-anthropic"}
+
+  - id: boris-cherny
+    name: Boris Cherny
+    lab: anthropic
+    title: Head of Claude Code
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Created and leads Claude Code; announces agentic-coding features before the docs (direct AI-team adoption signal)."
+    affiliations:
+      - {lab: anthropic, role: "Head of Claude Code", source_url: "https://www.anthropic.com/news", evidence: "no 2026 departure reported", confidence: 0.8}
+    identities:
+      - {platform: x, handle: bcherny, track: true, max_posts: 30}
+      - {platform: github, handle: bcherny}
+    meta: {profile: product, roles: [agents_lead, product_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: mike-krieger
+    name: Mike Krieger
+    lab: anthropic
+    title: Co-lead, Anthropic Labs (former CPO)
+    tier: B
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Instagram co-founder; Anthropic's CPO until Jan 2026, now co-leads Anthropic Labs (new product bets)."
+    affiliations:
+      - {lab: anthropic, role: "Chief Product Officer", start: 2024-05-15, end: 2026-01-14, source_url: "https://www.technobezz.com/news/anthropic-reorganizes-leadership-as-mike-krieger-moves-to-co-2026-01-14-tvd2"}
+      - {lab: anthropic, role: "Co-lead, Anthropic Labs", start: 2026-01-14, source_url: "https://www.technobezz.com/news/anthropic-reorganizes-leadership-as-mike-krieger-moves-to-co-2026-01-14-tvd2"}
+    identities:
+      - {platform: x, handle: mikeyk}
+    meta: {profile: product, roles: [founder, product_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.technobezz.com/news/anthropic-reorganizes-leadership-as-mike-krieger-moves-to-co-2026-01-14-tvd2"}
+
+  - id: eric-boyd
+    name: Eric Boyd
+    lab: anthropic
+    title: AI infrastructure lead (joined from Microsoft, Apr 2026)
+    tier: B
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Ran Microsoft's AI platform (Azure OpenAI); poached to scale Anthropic infrastructure - read-through to MSFT/AMZN/GOOGL capacity."
+    affiliations:
+      - {org: Microsoft, role: "President, AI Platform", end: 2026-04-08, source_url: "https://www.businesstoday.in/technology/story/anthropic-poaches-microsofts-eric-boyd-to-lead-ai-infrastructure-push-524630-2026-04-08"}
+      - {lab: anthropic, role: "AI infrastructure lead", start: 2026-04-08, source_url: "https://www.businesstoday.in/technology/story/anthropic-poaches-microsofts-eric-boyd-to-lead-ai-infrastructure-push-524630-2026-04-08"}
+    identities: []
+    meta: {profile: leadership, roles: [infra_lead, product_lead], revealed_preference: true, revealed_preference_event: "poached from Microsoft by Anthropic (Apr 2026)", revealed_preference_source: "https://www.businesstoday.in/technology/story/anthropic-poaches-microsofts-eric-boyd-to-lead-ai-infrastructure-push-524630-2026-04-08", verified_on: "2026-11-04", verification: "https://www.businesstoday.in/technology/story/anthropic-poaches-microsofts-eric-boyd-to-lead-ai-infrastructure-push-524630-2026-04-08"}
+
+  - id: andrew-tulloch
+    name: Andrew Tulloch
+    lab: anthropic
+    title: Inference and performance (reported, joined Sep 2026)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Thinking Machines co-founder whose reported $1.5B Meta offer symbolised the 2025 talent war; left Meta after the Muse launch, reportedly for Anthropic inference."
+    affiliations:
+      - {lab: thinking-machines, role: "Co-founder", start: 2025-02-18, end: 2025-10-01, source_url: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+      - {lab: meta-ai, role: "TBD Lab researcher", start: 2025-10-01, end: 2026-09-09, source_url: "https://www.semafor.com/article/09/09/2026/ai-researcher-andrew-tulloch-is-leaving-meta"}
+      - {lab: anthropic, role: "Inference and performance (reported)", start: 2026-09-14, source_url: "https://technews.tw/2026/09/11/andrew-tulloch-departs-meta-joins-anthropic/", evidence: "TechNews/HTX report; not confirmed by Anthropic", confidence: 0.7}
+    identities:
+      - {platform: github, handle: ajtulloch}
+    meta: {profile: research, roles: [infra_lead], revealed_preference: true, revealed_preference_event: "co-founded Thinking Machines; reported $1.5B Meta package (Oct 2025)", revealed_preference_source: "https://thenextweb.com/news/andrew-tulloch-leaving-meta-anthropic-tbd-lab", verified_on: "2026-11-04", verification: "https://www.semafor.com/article/09/09/2026/ai-researcher-andrew-tulloch-is-leaving-meta"}
+
+  - id: sam-bowman
+    name: Sam Bowman
+    lab: anthropic
+    title: Alignment research lead
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Leads alignment evaluation work and writes the alignment sections of Claude system cards."
+    affiliations:
+      - {lab: anthropic, role: "Alignment research lead", source_url: "https://www.anthropic.com/research", confidence: 0.8}
+    identities:
+      - {platform: x, handle: sleepinyourhat}
+      - {platform: github, handle: sleepinyourhat}
+      - {platform: arxiv_name, handle: "Samuel R. Bowman"}
+    meta: {profile: research, roles: [safety_lead, flagship_author], revealed_preference: false}
+
+  - id: amanda-askell
+    name: Amanda Askell
+    lab: anthropic
+    title: Alignment fine-tuning (Claude character and constitution)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Shapes Claude's character and constitution; explains model-behaviour changes that the AI team sees in production."
+    affiliations:
+      - {lab: anthropic, role: "Alignment fine-tuning researcher", source_url: "https://www.anthropic.com/research", confidence: 0.8}
+    identities:
+      - {platform: x, handle: AmandaAskell}
+      - {platform: arxiv_name, handle: "Amanda Askell"}
+    meta: {profile: research, roles: [post_training_lead], revealed_preference: false}
+
+  - id: nicholas-carlini
+    name: Nicholas Carlini
+    lab: anthropic
+    title: Research scientist, security
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "Adversarial-ML researcher (ex-Google DeepMind) whose blog posts on model capabilities and attacks are widely read by practitioners."
+    affiliations:
+      - {lab: google-deepmind, role: "Research scientist", end: 2025-03-01, source_url: "https://nicholas.carlini.com"}
+      - {lab: anthropic, role: "Research scientist", start: 2025-03-01, source_url: "https://nicholas.carlini.com", confidence: 0.8}
+    identities:
+      - {platform: github, handle: carlini}
+      - {platform: homepage, handle: nicholas.carlini.com, url: "https://nicholas.carlini.com"}
+      - {platform: arxiv_name, handle: "Nicholas Carlini"}
+    meta: {profile: research, roles: [], revealed_preference: null}
+
+  # =================================================================== Google DeepMind (tier 1)
+  - id: demis-hassabis
+    name: Demis Hassabis
+    lab: google-deepmind
+    title: Co-founder; Chair of Google DeepMind and Alphabet Chief Scientist
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Stepped back from running GDM in the Aug 2026 reshuffle (Alphabet shares fell ~5%); remains chair, Alphabet chief scientist and Isomorphic CEO."
+    affiliations:
+      - {lab: google-deepmind, role: "Co-founder and CEO", end: 2026-08-05, source_url: "https://9to5google.com/2026/08/05/demis-hassabis-deepmind/"}
+      - {lab: google-deepmind, role: "Chair; Alphabet Chief Scientist", start: 2026-08-05, source_url: "https://9to5google.com/2026/08/05/demis-hassabis-deepmind/"}
+    identities:
+      - {platform: x, handle: demishassabis, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Demis Hassabis"}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: false, verified_on: "2026-11-04", verification: "https://9to5google.com/2026/08/05/demis-hassabis-deepmind/"}
+
+  - id: koray-kavukcuoglu
+    name: Koray Kavukcuoglu
+    lab: google-deepmind
+    title: SVP, Google DeepMind (Gemini models, frontier research, Gemini app)
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Runs Google DeepMind day to day since Aug 2026, reporting to Pichai; owns the delayed Gemini 3.5 Pro and the release cadence."
+    affiliations:
+      - {lab: google-deepmind, role: "CTO; Google Chief AI Architect", end: 2026-08-05, source_url: "https://www.businesstoday.in/technology/news/story/google-deepmind-leadership-changes-547553-2026-08-06"}
+      - {lab: google-deepmind, role: "SVP, Google DeepMind", start: 2026-08-05, source_url: "https://www.businesstoday.in/technology/news/story/google-deepmind-leadership-changes-547553-2026-08-06"}
+    identities:
+      - {platform: x, handle: koraykv}
+      - {platform: arxiv_name, handle: "Koray Kavukcuoglu"}
+    meta: {profile: leadership, roles: [cto, research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.businesstoday.in/technology/news/story/google-deepmind-leadership-changes-547553-2026-08-06"}
+
+  - id: shane-legg
+    name: Shane Legg
+    lab: google-deepmind
+    title: Co-founder and Chief AGI Scientist
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "DeepMind co-founder; AGI timelines and safety framing from inside Google."
+    affiliations:
+      - {lab: google-deepmind, role: "Co-founder and Chief AGI Scientist", source_url: "https://www.softwareseni.com/google-deepmind-leadership-restructuring-and-what-it-changes/", evidence: "untouched by the Aug 2026 reshuffle", confidence: 0.8}
+    identities:
+      - {platform: x, handle: ShaneLegg}
+      - {platform: arxiv_name, handle: "Shane Legg"}
+    meta: {profile: research, roles: [founder, chief_scientist], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.softwareseni.com/google-deepmind-leadership-restructuring-and-what-it-changes/"}
+
+  - id: barret-zoph
+    name: Barret Zoph
+    lab: google-deepmind
+    title: VP Research, RL and post-training (joined Aug 2026)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Ran OpenAI post-training, co-founded Thinking Machines (CTO), returned to OpenAI for five months, and joined Google DeepMind in Aug 2026 to lead RL/post-training for Gemini."
+    affiliations:
+      - {lab: openai, role: "VP Research, post-training", end: 2024-09-25, source_url: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+      - {lab: thinking-machines, role: "Co-founder and CTO", start: 2025-02-18, end: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+      - {lab: openai, role: "Head of enterprise AI", start: 2026-01-14, end: 2026-06-19, source_url: "https://winbuzzer.com/2026/06/23/barret-zoph-leaves-openai-after-five-month-return-ends-xcxwbn/"}
+      - {lab: google-deepmind, role: "VP Research, RL and post-training", start: 2026-08-26, source_url: "https://www.thestar.com.my/tech/tech-news/2026/08/27/thinking-machines-lab-co-founder-barret-zoph-joins-google", evidence: "announced on X; confirmed by a Google spokesperson"}
+    identities:
+      - {platform: x, handle: barret_zoph, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Barret Zoph"}
+    meta: {profile: research, roles: [post_training_lead], revealed_preference: true, revealed_preference_event: "co-founded Thinking Machines ($2B seed); won back by OpenAI (Jan 2026); hired by Google DeepMind (Aug 2026)", revealed_preference_source: "https://thenextweb.com/news/barret-zoph-google-deepmind-thinking-machines", verified_on: "2026-11-04", verification: "https://www.thestar.com.my/tech/tech-news/2026/08/27/thinking-machines-lab-co-founder-barret-zoph-joins-google"}
+
+  - id: pushmeet-kohli
+    name: Pushmeet Kohli
+    lab: google-deepmind
+    title: VP Research, Science and Strategic Initiatives
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Runs GDM's AI-for-science portfolio (AlphaFold lineage, AlphaEvolve) - the competitive frame for Periodic Labs and Discovery Loop."
+    affiliations:
+      - {lab: google-deepmind, role: "VP Research, Science and Strategic Initiatives", source_url: "https://www.mitsloanme.com/article/pushmeet-kohli/", confidence: 0.8}
+    identities:
+      - {platform: x, handle: pushmeet}
+      - {platform: arxiv_name, handle: "Pushmeet Kohli"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: john-jumper
+    name: John Jumper
+    lab: google-deepmind
+    title: Distinguished scientist, AlphaFold lead
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Nobel-winning AlphaFold lead; AI-for-science signal (Isomorphic, drug discovery)."
+    affiliations:
+      - {lab: google-deepmind, role: "Distinguished scientist, AlphaFold lead", source_url: "https://en.wikipedia.org/wiki/John_M._Jumper", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "John Jumper"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: josh-woodward
+    name: Josh Woodward
+    lab: google-deepmind
+    title: VP, Google Labs and Gemini app
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Ships Gemini app and Labs products (NotebookLM lineage): GOOGL consumer-AI distribution signal."
+    affiliations:
+      - {lab: google-deepmind, role: "VP, Google Labs and Gemini app", source_url: "https://www.businesstoday.in/technology/news/story/google-deepmind-leadership-changes-547553-2026-08-06", evidence: "Gemini app teams now report into Kavukcuoglu's org", confidence: 0.7}
+    identities:
+      - {platform: x, handle: joshwoodward}
+    meta: {profile: product, roles: [product_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: logan-kilpatrick
+    name: Logan Kilpatrick
+    lab: google-deepmind
+    title: Product lead, Google AI Studio and Gemini API
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "Announces Gemini API models, pricing and rate-limit changes first - a direct adopt/trial signal for the AI team."
+    affiliations:
+      - {lab: google-deepmind, role: "Product lead, AI Studio and Gemini API", source_url: "https://ai.google.dev", confidence: 0.8}
+    identities:
+      - {platform: x, handle: OfficialLoganK, track: true, max_posts: 30}
+      - {platform: github, handle: logankilpatrick}
+    meta: {profile: product, roles: [product_lead], revealed_preference: false}
+
+  - id: anca-dragan
+    name: Anca Dragan
+    lab: google-deepmind
+    title: Head of AI Safety and Alignment
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Leads GDM safety and alignment (Frontier Safety Framework); safety-policy signal for Gemini launches."
+    affiliations:
+      - {lab: google-deepmind, role: "Head of AI Safety and Alignment", source_url: "https://deepmind.google/discover/blog/", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Anca D. Dragan"}
+    meta: {profile: research, roles: [safety_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: neel-nanda
+    name: Neel Nanda
+    lab: google-deepmind
+    title: Mechanistic interpretability team lead
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "Leads GDM mech-interp; TransformerLens maintainer and prolific explainer of interpretability results."
+    affiliations:
+      - {lab: google-deepmind, role: "Mechanistic interpretability team lead", source_url: "https://www.neelnanda.io", confidence: 0.8}
+    identities:
+      - {platform: x, handle: NeelNanda5}
+      - {platform: github, handle: neelnanda-io}
+      - {platform: homepage, handle: neelnanda.io, url: "https://www.neelnanda.io"}
+      - {platform: arxiv_name, handle: "Neel Nanda"}
+    meta: {profile: research, roles: [interpretability_lead, maintainer], revealed_preference: false}
+
+  - id: varun-mohan
+    name: Varun Mohan
+    lab: google-deepmind
+    title: Gemini agentic coding (ex-Windsurf CEO)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Brought into Google DeepMind by the ~$2.4B Windsurf licence-and-hire deal (Jul 2025) to lead agentic coding for Gemini."
+    affiliations:
+      - {org: "Windsurf (Codeium)", role: "Co-founder and CEO", end: 2025-07-11, source_url: "https://www.nasdaq.com/articles/google-pay-24-billion-ai-executives-windsurf"}
+      - {lab: google-deepmind, role: "Gemini agentic coding", start: 2025-07-11, source_url: "https://www.nasdaq.com/articles/google-pay-24-billion-ai-executives-windsurf", confidence: 0.9}
+    identities:
+      - {platform: x, handle: _mohansolo}
+    meta: {profile: product, roles: [founder, ceo, agents_lead], revealed_preference: true, revealed_preference_event: "Google paid ~$2.4B to license Windsurf tech and hire him (Jul 2025)", revealed_preference_source: "https://www.nasdaq.com/articles/google-pay-24-billion-ai-executives-windsurf", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: yi-tay
+    name: Yi Tay
+    lab: google-deepmind
+    title: Research scientist (Gemini)
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "Prolific Gemini-era researcher and poster on pretraining and evaluation practice."
+    affiliations:
+      - {lab: google-deepmind, role: "Research scientist", source_url: "https://www.yitay.net", confidence: 0.6}
+    identities:
+      - {platform: arxiv_name, handle: "Yi Tay"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: null}
+
+  # ============================================================== Meta AI / MSL / FAIR (tier 1)
+  - id: alexandr-wang
+    name: Alexandr Wang
+    lab: meta-ai
+    title: Chief AI Officer (Meta Superintelligence Labs, TBD Lab)
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Runs MSL and TBD Lab (Muse models, Apr-Sep 2026): Meta's AI capex and model strategy - META is a BIT holding."
+    affiliations:
+      - {org: "Scale AI", role: "Founder and CEO", end: 2025-06-12, source_url: "https://en.wikipedia.org/wiki/Alexandr_Wang"}
+      - {lab: meta-ai, role: "Chief AI Officer", start: 2025-06-12, source_url: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+    identities:
+      - {platform: x, handle: alexandr_wang, track: true, max_posts: 30}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: true, revealed_preference_event: "brought in via Meta's $14.3B Scale AI deal to run MSL (Jun 2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs", verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+
+  - id: nat-friedman
+    name: Nat Friedman
+    lab: meta-ai
+    title: Head of Products and Applied Research, MSL
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Ex-GitHub CEO running MSL products and applied research: how Muse models reach Meta's apps."
+    affiliations:
+      - {lab: meta-ai, role: "Head of Products and Applied Research, MSL", start: 2025-06-30, source_url: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+    identities:
+      - {platform: x, handle: natfriedman}
+      - {platform: github, handle: natfriedman}
+    meta: {profile: leadership, roles: [ceo, product_lead], revealed_preference: true, revealed_preference_event: "recruited by Meta for MSL alongside the NFDG deal (Jun 2025)", revealed_preference_source: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple", verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+
+  - id: shengjia-zhao
+    name: Shengjia Zhao
+    lab: meta-ai
+    title: Chief Scientist, Meta Superintelligence Labs
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "ChatGPT/GPT-4 co-creator poached from OpenAI to be MSL chief scientist (Jul 2025); sets Meta's frontier research direction."
+    affiliations:
+      - {lab: openai, role: "Research scientist (ChatGPT, GPT-4, reasoning)", end: 2025-06-01, source_url: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple"}
+      - {lab: meta-ai, role: "Chief Scientist, MSL", start: 2025-07-25, source_url: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple"}
+    identities:
+      - {platform: x, handle: shengjia_zhao, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: github, handle: ShengjiaZhao}
+      - {platform: arxiv_name, handle: "Shengjia Zhao"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "poached from OpenAI and named MSL chief scientist (Jul 2025)", revealed_preference_source: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple", verified_on: "2026-11-04", verification: "https://builtin.com/artificial-intelligence/meta-superintelligence-labs"}
+
+  - id: daniel-gross
+    name: Daniel Gross
+    lab: meta-ai
+    title: MSL (products and applied research, under Alexandr Wang)
+    tier: B
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "SSI co-founder and former CEO who left for Meta MSL in mid-2025."
+    affiliations:
+      - {lab: ssi, role: "Co-founder and CEO", start: 2024-06-19, end: 2025-06-29, source_url: "https://www.eweek.com/de/news/ilya-sutskever-ceo-safe-superintelligence/"}
+      - {lab: meta-ai, role: "MSL products and applied research", start: 2025-07-01, source_url: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs", confidence: 0.8}
+    identities:
+      - {platform: x, handle: danielgross}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: true, revealed_preference_event: "co-founded SSI ($3B raised); recruited by Meta MSL (Jul 2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc.", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: rob-fergus
+    name: Rob Fergus
+    lab: meta-ai
+    title: Head of FAIR
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Leads FAIR (Meta's long-horizon research arm) inside MSL; FAIR open releases are AI-team signal."
+    affiliations:
+      - {lab: google-deepmind, role: "Research director", end: 2025-05-01, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+      - {lab: meta-ai, role: "Head of FAIR", start: 2025-05-01, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Rob Fergus"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: null, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: aparna-ramani
+    name: Aparna Ramani
+    lab: meta-ai
+    title: Head of MSL Infra
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Runs Meta's AI infrastructure (clusters, in-house chip rollout) - capex and NVDA/AVGO read-through."
+    affiliations:
+      - {lab: meta-ai, role: "Head of MSL Infra", source_url: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+    identities: []
+    meta: {profile: leadership, roles: [infra_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+
+  - id: jack-rae
+    name: Jack Rae
+    lab: meta-ai
+    title: MSL researcher (ex-Gemini, Chinchilla)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Gemini pretraining/reasoning lead poached from Google DeepMind for MSL in 2025."
+    affiliations:
+      - {lab: google-deepmind, role: "Principal scientist, Gemini", end: 2025-06-01, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-06-01, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", confidence: 0.8}
+    identities:
+      - {platform: x, handle: jack_w_rae}
+      - {platform: arxiv_name, handle: "Jack W. Rae"}
+    meta: {profile: research, roles: [research_lead, flagship_author], revealed_preference: true, revealed_preference_event: "poached from Google DeepMind by Meta MSL (2025)", revealed_preference_source: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: lucas-beyer
+    name: Lucas Beyer
+    lab: meta-ai
+    title: MSL researcher (ex-OpenAI Zurich, ViT/SigLIP)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "ViT/SigLIP co-author; moved Google -> OpenAI Zurich -> Meta MSL within a year, with Kolesnikov and Zhai."
+    affiliations:
+      - {lab: openai, role: "Researcher, Zurich", start: 2024-12-01, end: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", confidence: 0.8}
+    identities:
+      - {platform: x, handle: giffmana}
+      - {platform: github, handle: lucasb-eyer, evidence: "github.com/giffmana 404s (checked 2026-11-04); lucasb-eyer is his GitHub"}
+      - {platform: arxiv_name, handle: "Lucas Beyer"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "poached from OpenAI by Meta MSL (Jun 2025)", revealed_preference_source: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: alexander-kolesnikov
+    name: Alexander Kolesnikov
+    lab: meta-ai
+    title: MSL researcher (ex-OpenAI Zurich)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "ViT/big_vision author, moved with Beyer and Zhai to Meta MSL."
+    affiliations:
+      - {lab: openai, role: "Researcher, Zurich", start: 2024-12-01, end: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", confidence: 0.8}
+    identities:
+      - {platform: github, handle: akolesnikoff}
+      - {platform: arxiv_name, handle: "Alexander Kolesnikov"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "poached from OpenAI by Meta MSL (Jun 2025)", revealed_preference_source: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+
+  - id: xiaohua-zhai
+    name: Xiaohua Zhai
+    lab: meta-ai
+    title: MSL researcher (ex-OpenAI Zurich)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "ViT/SigLIP co-author, moved with Beyer and Kolesnikov to Meta MSL."
+    affiliations:
+      - {lab: openai, role: "Researcher, Zurich", start: 2024-12-01, end: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-06-25, source_url: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Xiaohua Zhai"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "poached from OpenAI by Meta MSL (Jun 2025)", revealed_preference_source: "https://the-decoder.com/meta-founds-superintelligence-labs-with-top-acquisitions-from-openai-and-google/"}
+
+  - id: jason-wei
+    name: Jason Wei
+    lab: meta-ai
+    title: MSL researcher (ex-OpenAI, chain-of-thought)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Chain-of-thought and o1 author poached from OpenAI by Meta (Jul 2025); prolific explainer of reasoning research."
+    affiliations:
+      - {lab: openai, role: "Researcher (o1, deep research)", end: 2025-07-15, source_url: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-07-15, source_url: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/", confidence: 0.8}
+    identities:
+      - {platform: x, handle: _jasonwei}
+      - {platform: github, handle: jasonwei20}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, common_name: true, revealed_preference_event: "poached from OpenAI by Meta MSL (Jul 2025)", revealed_preference_source: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: hyung-won-chung
+    name: Hyung Won Chung
+    lab: meta-ai
+    title: MSL researcher (ex-OpenAI, o1)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "o1 and Flan author poached from OpenAI by Meta with Jason Wei (Jul 2025)."
+    affiliations:
+      - {lab: openai, role: "Researcher (o1, deep research)", end: 2025-07-15, source_url: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/"}
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-07-15, source_url: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/", confidence: 0.8}
+    identities:
+      - {platform: x, handle: hwchung27}
+      - {platform: arxiv_name, handle: "Hyung Won Chung"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "poached from OpenAI by Meta MSL (Jul 2025)", revealed_preference_source: "https://the-decoder.com/meta-hires-two-more-leading-openai-researchers-for-its-superalignment-team/", verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  - id: binyuan-hui
+    name: Binyuan Hui
+    lab: meta-ai
+    title: Researcher (ex-Qwen Code lead)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Led Qwen Code (Qwen3-Coder) before joining Meta in the 2026 Qwen exodus; open coding-model signal."
+    affiliations:
+      - {lab: qwen, role: "Staff research scientist, Qwen Code lead", source_url: "https://www.caixinglobal.com/2026-03-04/alibabas-ai-model-chief-resigns-102419448.html", evidence: "reported in Mar 2026 as having already left for Meta"}
+      - {lab: meta-ai, role: "Researcher", source_url: "https://www.caixinglobal.com/2026-03-04/alibabas-ai-model-chief-resigns-102419448.html", confidence: 0.8}
+    identities:
+      - {platform: x, handle: huybery}
+      - {platform: github, handle: huybery}
+      - {platform: arxiv_name, handle: "Binyuan Hui"}
+    meta: {profile: research, roles: [agents_lead, flagship_author], revealed_preference: true, revealed_preference_event: "recruited from Alibaba Qwen by Meta (early 2026)", revealed_preference_source: "https://www.caixinglobal.com/2026-03-04/alibabas-ai-model-chief-resigns-102419448.html", verified_on: "2026-11-04", verification: "https://www.caixinglobal.com/2026-03-04/alibabas-ai-model-chief-resigns-102419448.html"}
+
+  - id: matt-deitke
+    name: Matt Deitke
+    lab: meta-ai
+    title: MSL researcher (multimodal; ex-Vercept, AI2)
+    tier: C
+    status: active
+    inclusion_rule: talent_watch
+    why_key: "Molmo/Objaverse author whose ~$250M Meta package (Aug 2025) became the talent-war reference point."
+    affiliations:
+      - {lab: meta-ai, role: "MSL researcher", start: 2025-08-01, source_url: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Matt Deitke"}
+    meta: {profile: research, roles: [], revealed_preference: true, revealed_preference_event: "recruited by Meta with a reported ~$250M package (Aug 2025)", revealed_preference_source: "https://www.axios.com/2025/08/06/meta-ai-talent-jobs-pay-openai-apple"}
+
+  - id: jakob-foerster
+    name: Jakob Foerster
+    lab: meta-ai
+    title: Research scientist, FAIR (and Oxford associate professor)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Prolific multi-agent RL and open-endedness author at FAIR; high paper volume makes him a good attribution canary."
+    affiliations:
+      - {lab: meta-ai, role: "Research scientist, FAIR", source_url: "https://www.jakobfoerster.com", confidence: 0.7}
+    identities:
+      - {platform: arxiv_name, handle: "Jakob Foerster"}
+      - {platform: arxiv_name, handle: "Jakob N. Foerster"}
+    meta: {profile: research, roles: [], revealed_preference: false}
+
+  # ============================================================================== xAI (tier 1)
+  # Every original co-founder except Musk had left by 2026-03-28 (xAI merged into SpaceX, Feb 2026).
+  # The alumni stay tracked: the next Grok-trained startup will come from this list.
+  - id: elon-musk
+    name: Elon Musk
+    lab: xai
+    title: Founder (xAI, merged into SpaceX)
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Sole remaining founder; sets Colossus capex (NVDA, DELL, SMCI) and the Grok roadmap after the 2026 SpaceX merger and co-founder exodus."
+    affiliations:
+      - {lab: openai, role: "Co-founder (board)", end: 2018-02-21, source_url: "https://en.wikipedia.org/wiki/Elon_Musk"}
+      - {lab: xai, role: "Founder", start: 2023-07-12, source_url: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+    identities:
+      - {platform: x, handle: elonmusk}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: false, verified_on: "2026-11-04", verification: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+
+  - id: igor-babuschkin
+    name: Igor Babuschkin
+    lab: null
+    title: Founder, Babuschkin Ventures (ex-xAI co-founder)
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Built xAI's engineering and infrastructure; left in Aug 2025 to back AI-safety and agent startups."
+    affiliations:
+      - {lab: xai, role: "Co-founder (engineering, infrastructure)", start: 2023-07-12, end: 2025-08-13, source_url: "https://finance.yahoo.com/news/igor-babuschkin-exits-xai-create-093518481.html"}
+      - {org: "Babuschkin Ventures", role: "Founder", start: 2025-08-13, source_url: "https://finance.yahoo.com/news/igor-babuschkin-exits-xai-create-093518481.html"}
+    identities:
+      - {platform: x, handle: ibab}
+      - {platform: github, handle: ibab}
+      - {platform: arxiv_name, handle: "Igor Babuschkin"}
+    meta: {profile: leadership, roles: [founder, infra_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://finance.yahoo.com/news/igor-babuschkin-exits-xai-create-093518481.html"}
+
+  - id: jimmy-ba
+    name: Jimmy Ba
+    lab: null
+    title: Former xAI co-founder (Grok research)
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Adam co-author and core Grok 3 researcher; left xAI in Feb 2026. Watched for a new venture."
+    affiliations:
+      - {lab: xai, role: "Co-founder (research)", start: 2023-07-12, end: 2026-02-10, source_url: "https://www.businesstoday.in/technology/news/story/elon-musks-xai-sees-co-founder-exit-jimmy-ba-bids-farewell-515605-2026-02-11"}
+    identities:
+      - {platform: arxiv_name, handle: "Jimmy Ba"}
+    meta: {profile: research, roles: [research_lead, flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.businesstoday.in/technology/news/story/elon-musks-xai-sees-co-founder-exit-jimmy-ba-bids-farewell-515605-2026-02-11"}
+
+  - id: tony-wu
+    name: Yuhuai (Tony) Wu
+    lab: null
+    title: Former xAI co-founder (reasoning)
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Led xAI reasoning work (Minerva/autoformalisation background); announced his exit on 2026-02-10."
+    affiliations:
+      - {lab: xai, role: "Co-founder (reasoning)", start: 2023-07-12, end: 2026-02-10, source_url: "https://the-decoder.com/half-of-xais-co-founders-have-now-left-elon-musks-ai-startup/"}
+    identities:
+      - {platform: arxiv_name, handle: "Yuhuai Wu"}
+    meta: {profile: research, roles: [reasoning_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://the-decoder.com/half-of-xais-co-founders-have-now-left-elon-musks-ai-startup/"}
+
+  - id: greg-yang
+    name: Greg Yang
+    lab: null
+    title: Former xAI co-founder (stepped down Jan 2026)
+    tier: C
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Tensor Programs / muP author; stepped down from xAI for health reasons in Jan 2026."
+    affiliations:
+      - {lab: xai, role: "Co-founder (math for AI)", start: 2023-07-12, end: 2026-01-01, source_url: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+    identities:
+      - {platform: x, handle: TheGregYang}
+      - {platform: github, handle: thegregyang}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, common_name: true}
+
+  - id: guodong-zhang
+    name: Guodong Zhang
+    lab: null
+    title: Former xAI co-founder (Grok training)
+    tier: C
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Led parts of Grok training; left xAI in Mar 2026."
+    affiliations:
+      - {lab: xai, role: "Co-founder (training)", start: 2023-07-12, end: 2026-03-01, source_url: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+    identities: []
+    meta: {profile: research, roles: [pretraining_lead], revealed_preference: false, common_name: true}
+
+  - id: zihang-dai
+    name: Zihang Dai
+    lab: null
+    title: Former xAI co-founder
+    tier: C
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Transformer-XL/XLNet co-author (with Kimi's Zhilin Yang); left xAI in Mar 2026."
+    affiliations:
+      - {lab: xai, role: "Co-founder", start: 2023-07-12, end: 2026-03-01, source_url: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+    identities:
+      - {platform: arxiv_name, handle: "Zihang Dai"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false}
+
+  - id: manuel-kroiss
+    name: Manuel Kroiss
+    lab: null
+    title: Former xAI pretraining lead
+    tier: C
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "Ran Grok pretraining; left in late Mar 2026 as the last co-founders departed."
+    affiliations:
+      - {lab: xai, role: "Pretraining lead", end: 2026-03-27, source_url: "https://thenextweb.com/news/xai-all-cofounders-departed-musk-spacex-rebuild"}
+    identities: []
+    meta: {profile: research, roles: [pretraining_lead], revealed_preference: false}
+
+  # ============================================================================ Mistral (tier 2)
+  - id: arthur-mensch
+    name: Arthur Mensch
+    lab: mistral
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Runs Europe's frontier challenger (ASML-led Series C); sovereign-AI deals and open-weight strategy."
+    affiliations:
+      - {lab: mistral, role: "Co-founder and CEO", start: 2023-04-28, source_url: "https://en.wikipedia.org/wiki/Mistral_AI"}
+    identities:
+      - {platform: x, handle: arthurmensch}
+      - {platform: arxiv_name, handle: "Arthur Mensch"}
+    meta: {profile: leadership, roles: [founder, ceo, flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.tipranks.com/private-companies/pc:mstrl"}
+
+  - id: guillaume-lample
+    name: Guillaume Lample
+    lab: mistral
+    title: Co-founder and Chief Scientist
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Drives Mistral's model research (ex-FAIR, LLaMA); model-release signal."
+    affiliations:
+      - {lab: mistral, role: "Co-founder and Chief Scientist", start: 2023-04-28, source_url: "https://en.wikipedia.org/wiki/Mistral_AI"}
+    identities:
+      - {platform: x, handle: GuillaumeLample}
+      - {platform: github, handle: glample}
+      - {platform: arxiv_name, handle: "Guillaume Lample"}
+    meta: {profile: research, roles: [founder, chief_scientist], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.tipranks.com/private-companies/pc:mstrl"}
+
+  - id: timothee-lacroix
+    name: Timothée Lacroix
+    lab: mistral
+    title: Co-founder and CTO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Leads Mistral engineering and infrastructure (ex-FAIR, LLaMA)."
+    affiliations:
+      - {lab: mistral, role: "Co-founder and CTO", start: 2023-04-28, source_url: "https://en.wikipedia.org/wiki/Mistral_AI"}
+    identities:
+      - {platform: arxiv_name, handle: "Timothée Lacroix"}
+    meta: {profile: research, roles: [founder, cto], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.tipranks.com/private-companies/pc:mstrl"}
+
+  # =========================================================================== DeepSeek (tier 2)
+  # The V4 report (Apr 2026, ~300 authors) marked 10 authors as departed; named ones are below.
+  - id: liang-wenfeng
+    name: Liang Wenfeng
+    lab: deepseek
+    title: Founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Founder of DeepSeek (High-Flyer); his efficiency-first releases (V3, R1, V4) move accelerator sentiment (NVDA)."
+    affiliations:
+      - {lab: deepseek, role: "Founder and CEO", start: 2023-07-17, source_url: "https://en.wikipedia.org/wiki/DeepSeek"}
+    identities:
+      - {platform: arxiv_name, handle: "Wenfeng Liang"}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: false, verified_on: "2026-11-04", verification: "https://finance.sina.cn/2026-04-28/detail-inhvzwqc1684062.d.html"}
+
+  - id: damai-dai
+    name: Damai Dai
+    lab: deepseek
+    title: Researcher (MoE architecture)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "DeepSeekMoE first author and core V2/V3 architect: the sparse-attention/MoE efficiency line that matters for inference cost."
+    affiliations:
+      - {lab: deepseek, role: "Researcher, architecture", source_url: "https://kr-asia.com/pulses/161617", evidence: "not among the departures named in V4 coverage", confidence: 0.7}
+    identities:
+      - {platform: arxiv_name, handle: "Damai Dai"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "https://kr-asia.com/pulses/161617"}
+
+  - id: zhihong-shao
+    name: Zhihong Shao
+    lab: deepseek
+    title: Researcher (reasoning, GRPO)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "DeepSeekMath/GRPO first author and R1 core: the RL recipe the open-weight world copies."
+    affiliations:
+      - {lab: deepseek, role: "Researcher, reasoning", source_url: "https://kr-asia.com/pulses/161617", evidence: "not among the departures named in V4 coverage", confidence: 0.7}
+    identities:
+      - {platform: arxiv_name, handle: "Zhihong Shao"}
+    meta: {profile: research, roles: [reasoning_lead, flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "https://kr-asia.com/pulses/161617"}
+
+  - id: peiyi-wang
+    name: Peiyi Wang
+    lab: deepseek
+    title: Researcher (R1 core)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Core R1 contributor (process supervision, RL)."
+    affiliations:
+      - {lab: deepseek, role: "Researcher", source_url: "https://kr-asia.com/pulses/161617", confidence: 0.7}
+    identities: []
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, common_name: true}
+
+  - id: zhenda-xie
+    name: Zhenda Xie
+    lab: deepseek
+    title: Researcher (multimodal, V3)
+    tier: C
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Janus/V3 contributor; multimodal and training-efficiency work."
+    affiliations:
+      - {lab: deepseek, role: "Researcher", source_url: "https://kr-asia.com/pulses/161617", confidence: 0.7}
+    identities:
+      - {platform: arxiv_name, handle: "Zhenda Xie"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false}
+
+  - id: daya-guo
+    name: Daya Guo
+    lab: null
+    title: Former DeepSeek researcher (R1 first author), reportedly ByteDance Seed
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "DeepSeek-R1 first author; his reported move to ByteDance Seed is the highest-profile DeepSeek departure."
+    affiliations:
+      - {lab: deepseek, role: "Researcher (R1, DeepSeek-Coder)", end: 2026-03-01, source_url: "https://finance.sina.cn/2026-04-28/detail-inhvzwqc1684062.d.html"}
+      - {org: "ByteDance Seed", role: "Researcher (reported)", start: 2026-03-01, source_url: "https://finance.sina.cn/2026-04-28/detail-inhvzwqc1684062.d.html", confidence: 0.6}
+    identities:
+      - {platform: arxiv_name, handle: "Daya Guo"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: null, verified_on: "2026-11-04", verification: "https://finance.sina.cn/2026-04-28/detail-inhvzwqc1684062.d.html"}
+
+  - id: haoran-wei
+    name: Haoran Wei
+    lab: null
+    title: Former DeepSeek researcher (DeepSeek-OCR)
+    tier: C
+    status: departed
+    inclusion_rule: talent_watch
+    why_key: "DeepSeek-OCR core author (optical context compression); left around Feb 2026, destination undisclosed."
+    affiliations:
+      - {lab: deepseek, role: "Researcher (DeepSeek-OCR)", end: 2026-02-01, source_url: "https://finance.sina.cn/2026-04-28/detail-inhvzwqc1684062.d.html"}
+    identities: []
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, common_name: true}
+
+  # =============================================================================== Qwen (tier 2)
+  - id: jingren-zhou
+    name: Jingren Zhou
+    lab: qwen
+    title: Alibaba Group Chief Scientist (leads Tongyi Lab)
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "Owns Alibaba's model strategy (open-weight Qwen); moved from Alibaba Cloud CTO to group chief scientist in Jun 2026 (BABA)."
+    affiliations:
+      - {lab: qwen, role: "Alibaba Cloud CTO, head of Tongyi Lab", end: 2026-06-01, source_url: "https://eu.36kr.com/en/p/3993126854186888"}
+      - {lab: qwen, role: "Alibaba Group Chief Scientist", start: 2026-06-01, source_url: "https://eu.36kr.com/en/p/3993126854186888"}
+    identities:
+      - {platform: arxiv_name, handle: "Jingren Zhou"}
+    meta: {profile: leadership, roles: [cto, chief_scientist], revealed_preference: false, verified_on: "2026-11-04", verification: "https://eu.36kr.com/en/p/3993126854186888"}
+
+  - id: dayiheng-liu
+    name: Dayiheng Liu
+    lab: qwen
+    title: Head of the Qwen LLM project (reported, Sep 2026)
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    why_key: "Long-time Qwen pretraining lead, reportedly appointed head of Qwen on 2026-09-21 after Junyang Lin's exit."
+    affiliations:
+      - {lab: qwen, role: "Pretraining lead", end: 2026-09-21, source_url: "https://eu.36kr.com/en/p/3993126854186888"}
+      - {lab: qwen, role: "Head of Qwen LLM project", start: 2026-09-21, source_url: "https://eu.36kr.com/en/p/3993126854186888", evidence: "insider reports; no official Alibaba announcement", confidence: 0.7}
+    identities:
+      - {platform: arxiv_name, handle: "Dayiheng Liu"}
+    meta: {profile: research, roles: [pretraining_lead], revealed_preference: false, verified_on: "2026-11-04", verification: "https://eu.36kr.com/en/p/3993126854186888"}
+
+  - id: junyang-lin
+    name: Junyang Lin
+    lab: null
+    title: Founder, Pragmatik Labs (ex-Qwen technical lead)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "Led Qwen to the most-downloaded open-weight family; resigned 2026-03-04 and founded Tencent-backed Pragmatik Labs (agents)."
+    affiliations:
+      - {lab: qwen, role: "Qwen technical lead", end: 2026-03-04, source_url: "https://www.caixinglobal.com/2026-03-04/alibabas-ai-model-chief-resigns-102419448.html"}
+      - {org: "Pragmatik Labs", role: "Founder", source_url: "https://eu.36kr.com/en/p/3993126854186888", evidence: "Tencent investment reported", confidence: 0.8}
+    identities:
+      - {platform: x, handle: JustinLin610}
+      - {platform: github, handle: JustinLin610}
+      - {platform: arxiv_name, handle: "Junyang Lin"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, revealed_preference_event: "founded Tencent-backed Pragmatik Labs after leaving Qwen (2026)", revealed_preference_source: "https://eu.36kr.com/en/p/3993126854186888", verified_on: "2026-11-04", verification: "https://eu.36kr.com/en/p/3993126854186888"}
+
+  # ===================================================================== Moonshot / Kimi (tier 2)
+  - id: yang-zhilin
+    name: Yang Zhilin
+    lab: moonshot
+    title: Founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Founder of Moonshot (Kimi K2 Jul 2025, K2.5 Jan 2026, 2.8T open-weight K3 Jul 2026); Transformer-XL/XLNet author."
+    affiliations:
+      - {lab: moonshot, role: "Founder and CEO", start: 2023-03-01, source_url: "https://en.wikipedia.org/wiki/Moonshot_AI"}
+    identities:
+      - {platform: github, handle: kimiyoung}
+      - {platform: arxiv_name, handle: "Zhilin Yang"}
+    meta: {profile: leadership, roles: [founder, ceo, flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "https://www.thenationalnews.com/future/technology/2026/07/17/zhilin-yang-moonshot-ai-kimi/"}
+
+  - id: zhou-xinyu
+    name: Zhou Xinyu
+    lab: moonshot
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Moonshot co-founder (Tsinghua classmate of Yang Zhilin)."
+    affiliations:
+      - {lab: moonshot, role: "Co-founder", start: 2023-03-01, source_url: "https://en.wikipedia.org/wiki/Moonshot_AI"}
+    identities: []
+    meta: {profile: leadership, roles: [founder], revealed_preference: false, common_name: true, verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Moonshot_AI"}
+
+  - id: wu-yuxin
+    name: Wu Yuxin
+    lab: moonshot
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Moonshot co-founder (ex-FAIR/Google Brain; Detectron2, Group Normalization)."
+    affiliations:
+      - {lab: moonshot, role: "Co-founder", start: 2023-03-01, source_url: "https://en.wikipedia.org/wiki/Moonshot_AI"}
+    identities:
+      - {platform: github, handle: ppwwyyxx}
+    meta: {profile: research, roles: [founder, flagship_author], revealed_preference: false, common_name: true, verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Moonshot_AI"}
+
+  - id: jianlin-su
+    name: Jianlin Su
+    lab: moonshot
+    title: Researcher (RoPE inventor; Muon at scale)
+    tier: B
+    status: active
+    inclusion_rule: flagship_author
+    why_key: "Invented RoPE and scaled the Muon optimizer for Kimi; his kexue.fm posts preview Moonshot's training tricks."
+    affiliations:
+      - {lab: moonshot, role: "Researcher", source_url: "https://arxiv.org/abs/2502.16982", evidence: "co-author of 'Muon is Scalable for LLM Training' (Moonshot)", confidence: 0.8}
+    identities:
+      - {platform: github, handle: bojone}
+      - {platform: homepage, handle: kexue.fm, url: "https://kexue.fm"}
+      - {platform: arxiv_name, handle: "Jianlin Su"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: false, verified_on: "2026-11-04", verification: "no 2026 change found (searched 2026-11-04)"}
+
+  # ============================================================ Thinking Machines Lab (tier 3)
+  - id: mira-murati
+    name: Mira Murati
+    lab: thinking-machines
+    title: Founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "Ex-OpenAI CTO running Thinking Machines ($2B seed at $12B; 1 GW NVDA Vera Rubin deal; Inkling open weights Jul 2026) through repeated co-founder exits."
+    affiliations:
+      - {lab: openai, role: "CTO", end: 2024-09-25, source_url: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+      - {lab: thinking-machines, role: "Founder and CEO", start: 2025-02-18, source_url: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+    identities:
+      - {platform: x, handle: miramurati, track: true, max_posts: 30, freshness_slo_hours: 2160}
+    meta: {profile: leadership, roles: [cto], revealed_preference: true, revealed_preference_event: "founded Thinking Machines: $2B seed at $12B (Jul 2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab", verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+
+  - id: john-schulman
+    name: John Schulman
+    lab: thinking-machines
+    title: Co-founder and Chief Scientist
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "OpenAI co-founder (PPO, ChatGPT post-training) who went OpenAI -> Anthropic -> Thinking Machines; Tinker and Inkling research lead."
+    affiliations:
+      - {lab: openai, role: "Co-founder, post-training lead", end: 2024-08-05, source_url: "https://www.thestar.com.my/tech/tech-news/2025/02/06/john-schulman-leaves-ai-startup-anthropic"}
+      - {lab: anthropic, role: "Researcher", start: 2024-08-05, end: 2025-02-06, source_url: "https://www.thestar.com.my/tech/tech-news/2025/02/06/john-schulman-leaves-ai-startup-anthropic"}
+      - {lab: thinking-machines, role: "Co-founder and Chief Scientist", start: 2025-02-18, source_url: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+    identities:
+      - {platform: x, handle: johnschulman2, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: github, handle: joschu}
+      - {platform: homepage, handle: joschu.net, url: "http://joschu.net"}
+      - {platform: arxiv_name, handle: "John Schulman"}
+    meta: {profile: research, roles: [founder, post_training_lead], revealed_preference: true, revealed_preference_event: "co-founded Thinking Machines ($2B seed, 2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab", verified_on: "2026-11-04", verification: "https://en.wikipedia.org/wiki/Thinking_Machines_Lab"}
+
+  - id: soumith-chintala
+    name: Soumith Chintala
+    lab: thinking-machines
+    title: CTO
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    why_key: "PyTorch co-creator; left Meta in late 2025 and became Thinking Machines CTO when Barret Zoph was ousted (Jan 2026)."
+    affiliations:
+      - {lab: meta-ai, role: "PyTorch co-creator and lead", end: 2025-11-01, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+      - {lab: thinking-machines, role: "CTO", start: 2026-01-14, source_url: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+    identities:
+      - {platform: x, handle: soumithchintala, track: true, max_posts: 30}
+      - {platform: github, handle: soumith}
+      - {platform: arxiv_name, handle: "Soumith Chintala"}
+    meta: {profile: research, roles: [maintainer, infra_lead], revealed_preference: null, verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/01/14/mira-muratis-startup-thinking-machines-lab-is-losing-two-of-its-co-founders-to-openai"}
+
+  - id: horace-he
+    name: Horace He
+    lab: thinking-machines
+    title: Member of technical staff (inference, PyTorch compiler)
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    why_key: "Wrote Thinking Machines' LLM-inference determinism work; prolific poster on GPU performance."
+    affiliations:
+      - {lab: thinking-machines, role: "Member of technical staff", source_url: "https://thinkingmachines.ai/blog/", evidence: "one third of the founding team left by May 2026; his status not separately confirmed", confidence: 0.6}
+    identities:
+      - {platform: x, handle: cHHillee}
+      - {platform: github, handle: Chillee}
+      - {platform: homepage, handle: horace.io, url: "https://horace.io"}
+    meta: {profile: research, roles: [maintainer], revealed_preference: false}
+
+  # ================================================================= Safe Superintelligence (tier 3)
+  - id: ilya-sutskever
+    name: Ilya Sutskever
+    lab: ssi
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "SSI publishes almost nothing, so his rare posts and talks are the signal ($32B valuation; first model rumoured for 2026; GOOGL TPU user)."
+    affiliations:
+      - {lab: openai, role: "Co-founder and Chief Scientist", end: 2024-05-14, source_url: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc."}
+      - {lab: ssi, role: "Co-founder", start: 2024-06-19, source_url: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc."}
+      - {lab: ssi, role: "CEO", start: 2025-07-03, source_url: "https://thelogic.co/briefing/sutskever-becomes-safe-superintelligence-ceo/"}
+    identities:
+      - {platform: x, handle: ilyasut, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: arxiv_name, handle: "Ilya Sutskever"}
+    meta: {profile: research, roles: [founder, chief_scientist], revealed_preference: true, revealed_preference_event: "co-founded SSI: $3B raised at $32B (2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc.", verified_on: "2026-11-04", verification: "https://thelogic.co/briefing/sutskever-becomes-safe-superintelligence-ceo/"}
+
+  - id: daniel-levy
+    name: Daniel Levy
+    lab: ssi
+    title: Co-founder and President
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "SSI co-founder (ex-OpenAI optimisation team lead), president since Gross left."
+    affiliations:
+      - {lab: openai, role: "Researcher, optimization team lead", end: 2024-05-01, source_url: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc."}
+      - {lab: ssi, role: "Co-founder and President", start: 2024-06-19, source_url: "https://thelogic.co/briefing/sutskever-becomes-safe-superintelligence-ceo/"}
+    identities: []
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, common_name: true, revealed_preference_event: "co-founded SSI: $3B raised at $32B (2025)", revealed_preference_source: "https://en.wikipedia.org/wiki/Safe_Superintelligence_Inc.", verified_on: "2026-11-04", verification: "https://thelogic.co/briefing/sutskever-becomes-safe-superintelligence-ceo/"}
+
+  # ======================================================================= Reflection AI (tier 3)
+  - id: misha-laskin
+    name: Misha Laskin
+    lab: reflection-ai
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "Ex-Gemini reward-modelling lead; Reflection raised $2B (NVDA-led, Oct 2025) and announced the 501B open-weight Beam (Oct 2026); NVDA reportedly weighing a deal."
+    affiliations:
+      - {lab: google-deepmind, role: "Research scientist, Gemini reward modelling", end: 2024-03-01, source_url: "https://futuresearch.ai/reflection-ai-forecast/"}
+      - {lab: reflection-ai, role: "Co-founder and CEO", start: 2024-03-01, source_url: "https://futuresearch.ai/reflection-ai-forecast/"}
+    identities:
+      - {platform: x, handle: MishaLaskin, track: true, max_posts: 30}
+      - {platform: github, handle: MishaLaskin}
+      - {platform: arxiv_name, handle: "Michael Laskin"}
+    meta: {profile: research, roles: [post_training_lead], revealed_preference: true, revealed_preference_event: "co-founded Reflection AI: $2B round led by NVDA (Oct 2025)", revealed_preference_source: "https://www.cryptopolitan.com/reflection-ai-raises-2b-deepseek-rival/", verified_on: "2026-11-04", verification: "https://futuresearch.ai/reflection-ai-forecast/"}
+
+  - id: ioannis-antonoglou
+    name: Ioannis Antonoglou
+    lab: reflection-ai
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "AlphaGo/MuZero and Gemini RLHF veteran; Reflection's research co-founder."
+    affiliations:
+      - {lab: google-deepmind, role: "Principal research engineer (AlphaGo, MuZero, Gemini RLHF)", end: 2024-03-01, source_url: "https://futuresearch.ai/reflection-ai-forecast/"}
+      - {lab: reflection-ai, role: "Co-founder", start: 2024-03-01, source_url: "https://futuresearch.ai/reflection-ai-forecast/"}
+    identities:
+      - {platform: arxiv_name, handle: "Ioannis Antonoglou"}
+    meta: {profile: research, roles: [flagship_author], revealed_preference: true, revealed_preference_event: "co-founded Reflection AI: $2B round led by NVDA (Oct 2025)", revealed_preference_source: "https://www.cryptopolitan.com/reflection-ai-raises-2b-deepseek-rival/", verified_on: "2026-11-04", verification: "https://futuresearch.ai/reflection-ai-forecast/"}
+
+  # ======================================================================= Periodic Labs (tier 3)
+  - id: liam-fedus
+    name: Liam Fedus
+    lab: periodic-labs
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "Ex-OpenAI VP post-training (ChatGPT co-creator) building an AI scientist for materials; $300M seed."
+    affiliations:
+      - {lab: openai, role: "VP Research, post-training", end: 2025-03-01, source_url: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+      - {lab: periodic-labs, role: "Co-founder", start: 2025-09-30, source_url: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+    identities:
+      - {platform: x, handle: LiamFedus, track: true, max_posts: 30, freshness_slo_hours: 2160}
+      - {platform: arxiv_name, handle: "William Fedus"}
+    meta: {profile: research, roles: [post_training_lead], revealed_preference: true, revealed_preference_event: "co-founded Periodic Labs: $300M seed (Sep 2025)", revealed_preference_source: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/", verified_on: "2026-11-04", verification: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+
+  - id: ekin-dogus-cubuk
+    name: Ekin Dogus Cubuk
+    lab: periodic-labs
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: alumni_founder
+    why_key: "Led Google DeepMind materials and chemistry (GNoME); Periodic's science co-founder."
+    affiliations:
+      - {lab: google-deepmind, role: "Lead, materials and chemistry (GNoME)", end: 2025-04-01, source_url: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+      - {lab: periodic-labs, role: "Co-founder", start: 2025-09-30, source_url: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+    identities:
+      - {platform: arxiv_name, handle: "Ekin Dogus Cubuk"}
+      - {platform: arxiv_name, handle: "Ekin D. Cubuk"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, revealed_preference_event: "co-founded Periodic Labs: $300M seed (Sep 2025)", revealed_preference_source: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/", verified_on: "2026-11-04", verification: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/"}
+
+  - id: alexandre-passos
+    name: Alexandre Passos
+    lab: periodic-labs
+    title: Founding team (ex-OpenAI)
+    tier: C
+    status: active
+    inclusion_rule: talent_watch
+    why_key: "Named early member of Periodic Labs from OpenAI (ex-TensorFlow core)."
+    affiliations:
+      - {lab: periodic-labs, role: "Founding team", start: 2025-09-30, source_url: "https://www.maginative.com/article/periodic-labs-launches-with-300m-to-build-an-ai-scientist/", confidence: 0.8}
+    identities:
+      - {platform: arxiv_name, handle: "Alexandre Passos"}
+    meta: {profile: research, roles: [], revealed_preference: null}
+
+  # ====================================================================== Discovery Loop (tier 3)
+  # Announced 2026-08-05: Jeff Dean + three long-time Google collaborators, a Google-backed PBC
+  # (Radical Ventures, Khosla) to automate scientific research. GOOGL fell ~5% on the news.
+  - id: jeff-dean
+    name: Jeff Dean
+    lab: discovery-loop
+    title: Co-founder (ex-Google Chief Scientist)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "Left Google after 27 years (Aug 2026) to co-found Discovery Loop; the most senior Google AI departure ever (GOOGL talent-drain signal)."
+    affiliations:
+      - {lab: google-deepmind, role: "Chief Scientist, Google DeepMind and Google Research", end: 2026-08-05, source_url: "https://techrepublic.com/article/news-google-ai-leadership-hassabis-jeff-dean"}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05, source_url: "https://www.geekwire.com/2026/the-startup-idea-that-convinced-a-uw-computer-science-legend-to-leave-google-after-27-years/"}
+    identities:
+      - {platform: x, handle: JeffDean, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Jeff Dean"}
+      - {platform: arxiv_name, handle: "Jeffrey Dean"}
+    meta: {profile: research, roles: [chief_scientist, research_lead], revealed_preference: true, revealed_preference_event: "co-founded Google-backed Discovery Loop (Aug 2026)", revealed_preference_source: "https://www.geekwire.com/2026/the-startup-idea-that-convinced-a-uw-computer-science-legend-to-leave-google-after-27-years/", verified_on: "2026-11-04", verification: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+
+  - id: sanjay-ghemawat
+    name: Sanjay Ghemawat
+    lab: discovery-loop
+    title: Co-founder (ex-Google Fellow)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "MapReduce/Bigtable/TensorFlow co-creator; Jeff Dean's long-time partner, co-founded Discovery Loop."
+    affiliations:
+      - {org: Google, role: "Google Fellow", end: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+    identities:
+      - {platform: arxiv_name, handle: "Sanjay Ghemawat"}
+    meta: {profile: research, roles: [infra_lead], revealed_preference: true, revealed_preference_event: "co-founded Google-backed Discovery Loop (Aug 2026)", revealed_preference_source: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/", verified_on: "2026-11-04", verification: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+
+  - id: oriol-vinyals
+    name: Oriol Vinyals
+    lab: discovery-loop
+    title: Co-founder (ex-Gemini co-lead)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "Seq2seq/AlphaStar author and Gemini co-lead until Aug 2026; his exit with Dean leaves Kavukcuoglu as the sole Gemini leader."
+    affiliations:
+      - {lab: google-deepmind, role: "VP Research, Gemini co-lead", end: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+    identities:
+      - {platform: x, handle: OriolVinyalsML, track: true, max_posts: 30}
+      - {platform: arxiv_name, handle: "Oriol Vinyals"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, revealed_preference_event: "co-founded Google-backed Discovery Loop (Aug 2026)", revealed_preference_source: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/", verified_on: "2026-11-04", verification: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+
+  - id: quoc-le
+    name: Quoc Le
+    lab: discovery-loop
+    title: Co-founder (ex-Google Fellow)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "Seq2seq, AutoML and chain-of-thought-era Google Brain leader; Discovery Loop co-founder."
+    affiliations:
+      - {lab: google-deepmind, role: "Google Fellow", end: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05, source_url: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+    identities:
+      - {platform: x, handle: quocleix}
+      - {platform: arxiv_name, handle: "Quoc V. Le"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, common_name: true, revealed_preference_event: "co-founded Google-backed Discovery Loop (Aug 2026)", revealed_preference_source: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/", verified_on: "2026-11-04", verification: "https://gigazine.net/gsc_news/en/20260806-google-jeff-dean-discovery-loop/"}
+
+  # ============================================ founders of alumni startups outside the lab register
+  - id: yann-lecun
+    name: Yann LeCun
+    lab: null
+    title: Founder and Executive Chairman, AMI Labs (ex-Meta Chief AI Scientist)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "Left Meta (Nov 2025) to found AMI Labs in Paris ($1.03B seed, Mar 2026; NVDA, Samsung, Toyota) - the world-model bet against LLMs."
+    affiliations:
+      - {lab: meta-ai, role: "VP and Chief AI Scientist", end: 2025-11-20, source_url: "https://en.wikipedia.org/wiki/Meta_Superintelligence_Labs"}
+      - {org: "AMI Labs (Advanced Machine Intelligence)", role: "Founder and Executive Chairman", start: 2026-01-01, source_url: "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models"}
+    identities:
+      - {platform: x, handle: ylecun}
+      - {platform: arxiv_name, handle: "Yann LeCun"}
+    meta: {profile: research, roles: [founder, chief_scientist], revealed_preference: true, revealed_preference_event: "founded AMI Labs: $1.03B seed (Mar 2026)", revealed_preference_source: "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models", verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models"}
+
+  - id: david-silver
+    name: David Silver
+    lab: null
+    title: Founder and CEO, Ineffable Intelligence (ex-Google DeepMind)
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    why_key: "AlphaGo/AlphaZero lead; left GDM in late 2025 and raised a $1.1B seed (Sequoia, Lightspeed, NVDA, Google; Apr 2026) for RL without human data."
+    affiliations:
+      - {lab: google-deepmind, role: "Principal research scientist, RL lead", end: 2025-12-01, source_url: "https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data/"}
+      - {org: "Ineffable Intelligence", role: "Founder and CEO", start: 2025-11-01, source_url: "https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data/"}
+    identities: []
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, common_name: true, revealed_preference_event: "founded Ineffable Intelligence: $1.1B seed at $5.1B (Apr 2026)", revealed_preference_source: "https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data/", verified_on: "2026-11-04", verification: "https://techcrunch.com/2026/04/27/deepminds-david-silver-just-raised-1-1b-to-build-an-ai-that-learns-without-human-data/"}

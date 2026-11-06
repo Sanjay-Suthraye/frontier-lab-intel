@@ -1,0 +1,284 @@
+# Official lab channels (adapters in src/fli/ingest/collectors/feeds.py: rss | sitemap | docs_changelog).
+#
+# Every URL below was verified live on 2026-11-04 with one request, and robots.txt allows our
+# User-Agent. Rules of thumb:
+#   - prefer a published feed; use a sitemap only when there is none; never scrape behind a bot wall.
+#   - changelogs are read as markdown (`<page>.md`, served by Mintlify/Docusaurus/Google docs) when
+#     available: 10x smaller than the HTML and the headings are clean.
+#   - freshness_slo_hours = 24 * max(2, ceil(1.5 * p90 gap between posting days over the last 365 days)),
+#     capped at 120 days; cadence follows volume and tier (tier 1 every 2-3 h, alumni daily).
+#   - max_fetch bounds article downloads per run; backfill_max_fetch applies to windows > 14 days.
+#
+# Labs with no usable official channel for these adapters (covered by GitHub/HF/X/press collectors):
+#   qwen            qwen.ai is a JS app with no feed, sitemap or robots.txt; qwenlm.github.io/blog/index.xml
+#                   stopped at 2025-09-22; the Alibaba Cloud Model Studio lifecycle page is a region-duplicated
+#                   table, not dated sections.
+#   ssi             ssi.inc is a single static statement page: no posts, feed or sitemap.
+#   discovery-loop  no official website yet.
+# Channels deliberately not used:
+#   openai.com article pages and x.ai/news answer automated clients with a bot challenge (HTTP 403);
+#   ai.meta.com's robots.txt carries Meta's "no automated collection without written permission" notice;
+#   alignment.anthropic.com has no feed or sitemap and dates its index by month only;
+#   claude.com/resources is marketing that mirrors anthropic.com/news.
+
+sources:
+  # ---------------------------------------------------------------- OpenAI (tier 1)
+  # Full archive feed, ~2.3 posts/day since Aug; article pages are behind a bot challenge, so the
+  # 140-char summary + title is the content (no bypass).
+  - id: openai:news
+    lab: openai
+    adapter: rss
+    kind: official_blog
+    url: https://openai.com/news/rss.xml
+    cadence_minutes: 120
+    freshness_slo_hours: 120
+    config: {fetch_full_text: false}
+
+  # Alignment Research Blog (feed starts 2025-12): long-form safety research with author lists; pages fetchable.
+  - id: openai:alignment
+    lab: openai
+    adapter: rss
+    kind: research_blog
+    url: https://alignment.openai.com/rss.xml
+    cadence_minutes: 360
+    freshness_slo_hours: 1200
+    config: {fetch_full_text: true, max_fetch: 10}
+
+  # API changelog (model launches, pricing, deprecations): month headings + day headings, 31 dates since Aug.
+  - id: openai:api-changelog
+    lab: openai
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://developers.openai.com/api/docs/changelog.md
+    cadence_minutes: 180
+    freshness_slo_hours: 432
+    config: {title: "OpenAI API changelog"}
+
+  # ---------------------------------------------------------------- Anthropic (tier 1)
+  # No RSS. The sitemap lists every /news post; its lastmod is CMS edit time (bulk rewrites on
+  # 09-28, 10-14 and 10-23 touched all 273 posts), so the publication date comes from the page's
+  # article:published_time and the page cache stops edits from re-downloading posts. SLO is an
+  # estimate (median gap 3 days on the /news listing); re-derive after the full backfill.
+  - id: anthropic:news
+    lab: anthropic
+    adapter: sitemap
+    kind: official_blog
+    url: https://www.anthropic.com/sitemap.xml
+    cadence_minutes: 180
+    freshness_slo_hours: 120
+    config:
+      include: ['^https://www\.anthropic\.com/news/[^/]+$']
+      exclude: ['/news/(announcements|features|models|partnerships|policy|product|safeguards|security)$']
+      max_fetch: 30
+      backfill_max_fetch: 300
+
+  # Same sitemap, /research: interpretability, alignment, economic research and (since 2026) the
+  # engineering blog, whose posts now live under /research.
+  - id: anthropic:research
+    lab: anthropic
+    adapter: sitemap
+    kind: research_blog
+    url: https://www.anthropic.com/sitemap.xml
+    cadence_minutes: 180
+    freshness_slo_hours: 168
+    config:
+      include: ['^https://www\.anthropic\.com/research/[^/]+$']
+      max_fetch: 30
+      backfill_max_fetch: 250
+
+  # Claude Developer Platform release notes (models, API features, deprecations): 39 dates since Aug.
+  - id: anthropic:release-notes
+    lab: anthropic
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://platform.claude.com/docs/en/release-notes/overview.md
+    cadence_minutes: 180
+    freshness_slo_hours: 288
+    config: {title: "Claude Developer Platform release notes"}
+
+  # Transformer Circuits Thread: the interpretability team's own venue (Atom); low volume, high signal.
+  - id: anthropic:circuits
+    lab: anthropic
+    adapter: rss
+    kind: research_blog
+    url: https://transformer-circuits.pub/feed.xml
+    cadence_minutes: 720
+    freshness_slo_hours: 2880
+    config: {fetch_full_text: true, max_fetch: 5}
+
+  # ---------------------------------------------------------------- Google DeepMind (tier 1)
+  # Official DeepMind blog feed (100 entries back to 2025-11); summaries are short, pages fetchable.
+  - id: google-deepmind:blog
+    lab: google-deepmind
+    adapter: rss
+    kind: official_blog
+    url: https://deepmind.google/blog/rss.xml
+    cadence_minutes: 180
+    freshness_slo_hours: 288
+    config: {fetch_full_text: true, max_fetch: 15, backfill_max_fetch: 60}
+
+  # Google's AI news feed (Gemini app and product launches, monthly AI recaps); only the latest 20
+  # entries are served (back to 2026-09-09), feed content is a teaser, so pages are fetched.
+  - id: google-deepmind:google-ai-blog
+    lab: google-deepmind
+    adapter: rss
+    kind: official_blog
+    url: https://blog.google/innovation-and-ai/technology/ai/rss/
+    cadence_minutes: 240
+    freshness_slo_hours: 264
+    config: {fetch_full_text: true, max_fetch: 10, backfill_max_fetch: 25}
+
+  # Gemini API release notes (models, GA/deprecations, pricing): markdown twin of the AI Studio page.
+  - id: google-deepmind:gemini-api
+    lab: google-deepmind
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://aistudio.google.com/docs/changelog.md
+    cadence_minutes: 180
+    freshness_slo_hours: 480
+    config: {title: "Gemini API release notes", link_url: "https://ai.google.dev/gemini-api/docs/changelog"}
+
+  # ---------------------------------------------------------------- Meta AI (tier 1)
+  # Meta Newsroom (WordPress feed, full text): corporate AI launches (Muse models, MSL, data centres)
+  # land here; noisy (regional newsrooms), triage filters. ?paged=N reaches back for the backfill.
+  - id: meta-ai:newsroom
+    lab: meta-ai
+    adapter: rss
+    kind: official_blog
+    url: https://about.fb.com/news/feed/
+    cadence_minutes: 180
+    freshness_slo_hours: 216
+    config: {max_pages: 10}
+
+  # Engineering at Meta (WordPress feed, full text): AI infrastructure, MTIA, training/inference at scale.
+  - id: meta-ai:engineering
+    lab: meta-ai
+    adapter: rss
+    kind: engineering_blog
+    url: https://engineering.fb.com/feed/
+    cadence_minutes: 360
+    freshness_slo_hours: 432
+    config: {max_pages: 8}
+
+  # ---------------------------------------------------------------- xAI (tier 1)
+  # x.ai/news is behind a bot challenge; the API release notes are the official channel we can read.
+  # HTML (not the .md twin) because only the HTML carries day-level date badges ("October 27").
+  - id: xai:release-notes
+    lab: xai
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://docs.x.ai/developers/release-notes
+    cadence_minutes: 360
+    freshness_slo_hours: 984
+    config: {title: "xAI API release notes", date_selector: "div"}
+
+  # ---------------------------------------------------------------- Mistral (tier 2)
+  # Official news feed (93 entries back to 2023); summaries only, pages fetchable.
+  - id: mistral:news
+    lab: mistral
+    adapter: rss
+    kind: official_blog
+    url: https://mistral.ai/news/rss
+    cadence_minutes: 360
+    freshness_slo_hours: 936
+    config: {fetch_full_text: true, max_fetch: 15, backfill_max_fetch: 30}
+
+  # Docs changelog: model launches, deprecations and third-party models served on La Plateforme.
+  - id: mistral:changelog
+    lab: mistral
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://docs.mistral.ai/resources/changelogs.md
+    cadence_minutes: 360
+    freshness_slo_hours: 1296
+    config: {title: "Mistral docs changelog", link_url: "https://docs.mistral.ai/resources/changelogs"}
+
+  # ---------------------------------------------------------------- DeepSeek (tier 2)
+  # API docs change log ("Date: YYYY-MM-DD" sections): every model release and API change.
+  - id: deepseek:changelog
+    lab: deepseek
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://api-docs.deepseek.com/updates.md
+    cadence_minutes: 360
+    freshness_slo_hours: 2880
+    config: {title: "DeepSeek API change log", link_url: "https://api-docs.deepseek.com/updates"}
+
+  # Release announcements in the API docs (/news/newsYYMMDD). The sitemap has no lastmod and the pages
+  # no date metadata, so the date comes from the URL.
+  - id: deepseek:news
+    lab: deepseek
+    adapter: sitemap
+    kind: release_notes
+    url: https://api-docs.deepseek.com/sitemap.xml
+    cadence_minutes: 720
+    freshness_slo_hours: 2880
+    config:
+      include: ['^https://api-docs\.deepseek\.com/news/news\d{6}/?$']
+      url_date_regex: 'news(?P<y>\d{2})(?P<m>\d{2})(?P<d>\d{2})'
+      max_fetch: 10
+
+  # ---------------------------------------------------------------- Moonshot AI (tier 2)
+  # Kimi Open Platform changelog: the only dated official channel (moonshot.ai is a JS app). Dated by
+  # month only, so each entry is its own record (published_at = first of the month).
+  - id: moonshot:platform-changelog
+    lab: moonshot
+    adapter: docs_changelog
+    kind: docs_changelog
+    url: https://platform.kimi.ai/docs/platform-changelog.md
+    cadence_minutes: 720
+    freshness_slo_hours: 2880
+    config: {title: "Kimi Open Platform changelog"}
+
+  # ---------------------------------------------------------------- alumni startups (tier 3)
+  # Thinking Machines "Connectionism" research blog (Hugo feed with full text); last post 2026-07-31.
+  - id: thinking-machines:blog
+    lab: thinking-machines
+    adapter: rss
+    kind: research_blog
+    url: https://thinkingmachines.ai/blog/index.xml
+    cadence_minutes: 720
+    freshness_slo_hours: 2160
+    config: {}
+
+  # Thinking Machines news (Tinker, Inkling, partnerships, grants) has no feed; sitemap lastmod is the
+  # Hugo build time, so it is ignored and dates come from the pages' JSON-LD.
+  - id: thinking-machines:news
+    lab: thinking-machines
+    adapter: sitemap
+    kind: official_blog
+    url: https://thinkingmachines.ai/sitemap.xml
+    cadence_minutes: 1440
+    freshness_slo_hours: 2880
+    config:
+      include: ['^https://thinkingmachines\.ai/news/[^/]+/$']
+      lastmod: ignore
+      max_fetch: 20
+
+  # Reflection AI blog (3 posts, first open-weight model "Beam" on 2026-10-05); no feed, lastmod is the
+  # build time; dates come from the post byline.
+  - id: reflection-ai:blog
+    lab: reflection-ai
+    adapter: sitemap
+    kind: official_blog
+    url: https://reflection.ai/sitemap.xml
+    cadence_minutes: 1440
+    freshness_slo_hours: 2880
+    config:
+      include: ['^https://reflection\.ai/blog/[^/]+$']
+      lastmod: ignore
+      max_fetch: 10
+
+  # Periodic Labs news: the sitemap lists only / and /news, so posts are discovered from the news index.
+  - id: periodic-labs:news
+    lab: periodic-labs
+    adapter: sitemap
+    kind: official_blog
+    url: https://periodic.com/sitemap.xml
+    cadence_minutes: 1440
+    freshness_slo_hours: 2880
+    config:
+      include: ['^https://periodic\.com/news/[^/]+$']
+      index_pages: ['https://periodic.com/news']
+      lastmod: ignore
+      max_fetch: 10

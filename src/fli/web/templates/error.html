@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ code }}{% endblock %}
+{% block content %}
+<section class="card error-page">
+  <h1>{{ code }} · {{ {404: 'Not found', 401: 'Authentication required', 403: 'Not allowed'}.get(code, 'Something went wrong') }}</h1>
+  <p>{{ message }}</p>
+  <p><a href="/">Back to the overview</a></p>
+</section>
+{% endblock %}

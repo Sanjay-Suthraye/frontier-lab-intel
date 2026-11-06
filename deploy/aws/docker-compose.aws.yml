@@ -1,0 +1,30 @@
+# AWS overlay: Caddy terminates TLS (automatic Let's Encrypt certificate for <ip>.sslip.io) and
+# proxies to the web container. Only ports 22 (your IP), 80 and 443 are open in the security group;
+# deploy.sh also binds web's published port to the instance's loopback (FLI_PORT=127.0.0.1:8000).
+#
+# The instance is public, so the web refuses to start without a login (FLI_BASIC_AUTH from .env)
+# and FLI_AUTH_ALL=1 puts every page and API read behind it (/healthz stays open for probes).
+services:
+  web:
+    environment:
+      FLI_AUTH_ALL: "1"
+      FLI_BASIC_AUTH: ${FLI_BASIC_AUTH:?set FLI_BASIC_AUTH=user:password in .env before deploying}
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      FLI_HOSTNAME: ${FLI_HOSTNAME:?set FLI_HOSTNAME}
+    volumes:
+      - ./deploy/aws/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

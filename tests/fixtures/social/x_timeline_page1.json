@@ -1,0 +1,143 @@
+{
+ "data": [
+  {
+   "id": "1985112233445566778",
+   "edit_history_tweet_ids": [
+    "1985112233445566778"
+   ],
+   "created_at": "2026-10-28T16:00:05.000Z",
+   "text": "Fixture post: a placeholder API capability announcement. https://t.co/AbCdEf1234",
+   "entities": {
+    "urls": [
+     {
+      "start": 57,
+      "end": 80,
+      "url": "https://t.co/AbCdEf1234",
+      "expanded_url": "https://www.anthropic.com/news/fixture-announcement",
+      "display_url": "anthropic.com/news/fixture-a…",
+      "status": 200,
+      "title": "Fixture announcement page",
+      "description": "Placeholder description",
+      "unwound_url": "https://www.anthropic.com/news/fixture-announcement"
+     }
+    ]
+   },
+   "public_metrics": {
+    "retweet_count": 812,
+    "reply_count": 240,
+    "like_count": 6120,
+    "quote_count": 190,
+    "bookmark_count": 1450,
+    "impression_count": 1830000
+   }
+  },
+  {
+   "id": "1984000000000000001",
+   "edit_history_tweet_ids": [
+    "1984000000000000001"
+   ],
+   "created_at": "2026-10-20T09:30:00.000Z",
+   "text": "Fixture long post. This text is longer than 280 characters, so the API returns a truncated `text` and the complete body in note_tweet. It describes a placeholder announcement with several sentences of detail that only the full version contains, including… https://t.co/LongPost01",
+   "note_tweet": {
+    "text": "Fixture long post. This text is longer than 280 characters, so the API returns a truncated `text` and the complete body in note_tweet. It describes a placeholder announcement with several sentences of detail that only the full version contains, including the final sentence that a truncated read would lose. Read more: https://t.co/LongPost01",
+    "entities": {
+     "urls": [
+      {
+       "start": 319,
+       "end": 342,
+       "url": "https://t.co/LongPost01",
+       "expanded_url": "https://www.anthropic.com/research/fixture-paper",
+       "display_url": "anthropic.com/research/fixtu…"
+      }
+     ]
+    }
+   },
+   "entities": {
+    "urls": [
+     {
+      "start": 256,
+      "end": 279,
+      "url": "https://t.co/LongPost01",
+      "expanded_url": "https://www.anthropic.com/research/fixture-paper",
+      "display_url": "anthropic.com/research/fixtu…"
+     }
+    ]
+   },
+   "public_metrics": {
+    "retweet_count": 300,
+    "reply_count": 95,
+    "like_count": 2400,
+    "quote_count": 60,
+    "bookmark_count": 700,
+    "impression_count": 640000
+   }
+  },
+  {
+   "id": "1983500000000000002",
+   "edit_history_tweet_ids": [
+    "1983500000000000002"
+   ],
+   "created_at": "2026-10-15T18:12:44.000Z",
+   "text": "Fixture quote post adding context to an earlier thread https://t.co/QuoteLnk1",
+   "referenced_tweets": [
+    {
+     "type": "quoted",
+     "id": "1983000000000000000"
+    }
+   ],
+   "entities": {
+    "urls": [
+     {
+      "start": 55,
+      "end": 78,
+      "url": "https://t.co/QuoteLnk1",
+      "expanded_url": "https://twitter.com/AnthropicAI/status/1983000000000000000",
+      "display_url": "x.com/AnthropicAI/st…"
+     }
+    ]
+   },
+   "public_metrics": {
+    "retweet_count": 40,
+    "reply_count": 12,
+    "like_count": 520,
+    "quote_count": 4,
+    "bookmark_count": 30,
+    "impression_count": 90000
+   }
+  },
+  {
+   "id": "1982000000000000003",
+   "edit_history_tweet_ids": [
+    "1982000000000000003"
+   ],
+   "created_at": "2026-10-10T12:00:00.000Z",
+   "text": "Fixture post with an attached chart https://t.co/MediaLnk1",
+   "entities": {
+    "urls": [
+     {
+      "start": 36,
+      "end": 59,
+      "url": "https://t.co/MediaLnk1",
+      "expanded_url": "https://x.com/AnthropicAI/status/1982000000000000003/photo/1",
+      "display_url": "pic.x.com/fixture",
+      "media_key": "3_1982000000000000003"
+     }
+    ]
+   },
+   "public_metrics": {
+    "retweet_count": 10,
+    "reply_count": 3,
+    "like_count": 150,
+    "quote_count": 1,
+    "bookmark_count": 9,
+    "impression_count": 25000
+   }
+  }
+ ],
+ "meta": {
+  "result_count": 4,
+  "newest_id": "1985112233445566778",
+  "oldest_id": "1982000000000000003",
+  "next_token": "7140dibdnow9c7btw4b3v1i0k"
+ }
+}

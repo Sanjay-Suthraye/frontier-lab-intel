@@ -1,0 +1,257 @@
+# Known-events ground truth for the recall evaluation (fli eval --suite known_events).
+#
+# Written on 2026-11-04 BEFORE looking at any system output, from independent web research
+# (press coverage, company releases, filings). Purpose: did the system surface the developments
+# a BIT Capital PM or AI engineer would have wanted to know about, how highly did it rank them,
+# and how early relative to mainstream coverage?
+#
+# Matching rule used by the harness: a development matches an event if it is attributed to one of
+# `labs` (when given), its first_seen_at is within +/- `window_days` of `date`, and its title or
+# insight titles/claims/artifacts contain at least one term from every group in `match_all`
+# (case-insensitive, whole words or phrases: 'accord' does not match 'according'). When several
+# developments match, the event is credited to the best one: same `event_type`, then most match
+# groups in its title, then the highest score for the first audience listed, then the closest in
+# time. Detection delay is measured from the publication date of the source document of the
+# insight that reports the event, not from the development's first sighting.
+# Confidence reflects sourcing quality at the time of writing; several events had conflicting
+# details across outlets, noted in `notes` - that is part of the test (the system should cite
+# primary sources and flag unconfirmed claims).
+#
+# Audit note (2026-11-04): the match terms of white-house-accord, openai-gpt61-shelved and
+# anthropic-s1 were tightened after an audit of the harness found false matches ('accord' inside
+# 'According to ...', the GPT-6.1 Sol launch counted as the shelving story, 'listing' in an API
+# changelog credited as the S-1). Only `match_all` changed; the events themselves (ids, dates,
+# titles, labs, audiences, windows) are unchanged and still predate any look at system output.
+
+window: {start: "2026-08-01", end: "2026-11-04"}
+
+events:
+  - id: gdm-reshuffle-and-dean-exit
+    date: "2026-08-05"
+    labs: [google-deepmind, discovery-loop]
+    event_type: talent_move
+    title: "Jeff Dean leaves Google after 27 years to co-found Discovery Loop; DeepMind leadership reshuffle"
+    audiences: [investment, ai_team]
+    tickers: [GOOGL]
+    match_all: [["jeff dean", "discovery loop"]]
+    window_days: 7
+    confidence: high
+    notes: >-
+      Same day: Hassabis moved from day-to-day DeepMind CEO to chair of Google DeepMind and Alphabet
+      chief scientist; Koray Kavukcuoglu runs day-to-day (Gemini). Alphabet fell up to 5% intraday and
+      closed down ~3.5-4% (sources differ). Reports disagree on which other researchers co-founded
+      Discovery Loop (Sanjay Ghemawat named consistently; Vinyals / Quoc Le in some reports).
+    evidence: ["https://www.investing.com/news/stock-market-news/alphabet-shares-fall-5-as-ai-pioneer-jeff-dean-exits-in-major-shakeup-4838743"]
+
+  - id: gdm-leadership-change
+    date: "2026-08-05"
+    labs: [google-deepmind]
+    event_type: strategy_shift
+    title: "Hassabis becomes Google DeepMind chair and Alphabet chief scientist; Kavukcuoglu runs day-to-day"
+    audiences: [investment]
+    tickers: [GOOGL]
+    match_all: [["hassabis", "kavukcuoglu", "chief scientist"]]
+    window_days: 7
+    confidence: high
+    notes: "Hassabis' exact new title was reported inconsistently in early coverage."
+
+  - id: discovery-loop-funding
+    date: "2026-09-15"
+    labs: [discovery-loop]
+    event_type: funding_ipo
+    title: "Discovery Loop reportedly raising at ~$50B, weeks after talks at ~$10B"
+    audiences: [investment]
+    tickers: [GOOGL]
+    match_all: [["discovery loop"], ["valuation", "raise", "funding", "billion"]]
+    window_days: 21
+    confidence: medium
+    notes: "Business Insider reports; not confirmed by the company. Radical Ventures and Khosla named as leads of the initial round (Aug 5 release)."
+
+  - id: openai-jalapeno-benchmarks
+    date: "2026-08-25"
+    labs: [openai]
+    event_type: custom_silicon
+    title: "OpenAI's Broadcom-built Jalapeno inference chip claims 1.5-1.9x work per watt vs Nvidia GB200/GB300"
+    audiences: [investment, ai_team]
+    tickers: [NVDA, AVGO, TSM]
+    match_all: [["jalapeno", "jalapeño"]]
+    window_days: 14
+    confidence: medium
+    notes: >-
+      Self-reported results on SemiAnalysis InferenceX; not independently reproduced; comparison of an
+      inference ASIC with general-purpose GPUs, without speculative decoding. Exact announcement date approximate.
+
+  - id: anthropic-fable-mythos-5-1
+    date: "2026-09-01"
+    labs: [anthropic]
+    event_type: model_release
+    title: "Anthropic releases Claude Fable 5.1 (general) and Claude Mythos 5.1 (vetted cyber/life-science programmes)"
+    audiences: [investment, ai_team]
+    tickers: [AMZN, GOOGL, CRWD, PANW]
+    match_all: [["fable 5.1", "mythos 5.1"]]
+    window_days: 7
+    confidence: high
+
+  - id: sb-energy-s1
+    date: "2026-09-01"
+    labs: [openai]
+    event_type: funding_ipo
+    title: "SB Energy files S-1 (Nasdaq SBE); prospectus says it is 'substantially dependent' on OpenAI"
+    audiences: [investment]
+    tickers: ["9984.T"]
+    match_all: [["sb energy"]]
+    window_days: 10
+    confidence: high
+    notes: "Stargate power developer; SoftBank and OpenAI are its only customers per the filing. Press/filing-originated."
+
+  - id: openai-gpt6-astra
+    date: "2026-09-03"
+    labs: [openai]
+    event_type: model_release
+    title: "OpenAI GPT-6 'Astra' staged rollout"
+    audiences: [investment, ai_team]
+    tickers: [MSFT, ORCL, NVDA]
+    match_all: [["gpt-6", "astra"]]
+    window_days: 10
+    confidence: medium
+    notes: "Secondary sources disagree on naming and timing; verify against openai.com/news. Reportedly the first pretraining run on >100k GPUs at the Abilene Stargate site."
+
+  - id: openai-chatgpt-financial-services
+    date: "2026-09-10"
+    labs: [openai]
+    event_type: product_launch
+    title: "OpenAI launches ChatGPT for financial services with S&P Global / FactSet data integrations"
+    audiences: [investment]
+    tickers: [SPGI, FDS]
+    match_all: [["financial"], ["chatgpt", "openai"]]
+    window_days: 10
+    confidence: medium
+    notes: "S&P Global shares ~-1% that day; no confirmed FactSet move."
+
+  - id: openai-navier-stokes-claim
+    date: "2026-09-15"
+    labs: [openai]
+    event_type: capability_claim
+    title: "OpenAI says an internal agent swarm produced a proof of finite-time blow-up for a forced Navier-Stokes variant"
+    audiences: [ai_team, investment]
+    tickers: []
+    match_all: [["navier", "stokes", "millennium"]]
+    window_days: 30
+    confidence: medium
+    notes: "Disputed and unreviewed at the time; Lean verification claimed; OpenAI said it will not claim the prize. Date approximate."
+
+  - id: anthropic-opus-5-5
+    date: "2026-09-22"
+    labs: [anthropic]
+    event_type: model_release
+    title: "Anthropic releases Claude Opus 5.5 (lower price than Opus 5)"
+    audiences: [ai_team, investment]
+    tickers: [AMZN, GOOGL]
+    match_all: [["opus 5.5"]]
+    window_days: 7
+    confidence: medium
+
+  - id: qwen4-roadmap
+    date: "2026-09-22"
+    labs: [qwen]
+    event_type: strategy_shift
+    title: "Alibaba Apsara: Qwen 4 in training; plans a 5-10T-parameter model"
+    audiences: [ai_team, investment]
+    tickers: [BABA]
+    match_all: [["qwen"], ["qwen 4", "qwen4", "trillion", "apsara"]]
+    window_days: 10
+    confidence: medium
+    notes: "Tier names (Max/Flash/Plus/27B) circulated but are not in the official release."
+
+  - id: akamai-anthropic-compute
+    date: "2026-09-24"
+    labs: [anthropic]
+    event_type: compute_deal
+    title: "Anthropic signs $11.6B, 7-year compute agreement with Akamai; AKAM +20% after hours"
+    audiences: [investment]
+    tickers: [AKAM]
+    match_all: [["akamai"]]
+    window_days: 7
+    confidence: high
+    notes: "Warrant for up to ~5% of Akamai; expands to ~$20B if Anthropic adds $9B. An earlier $1.8B contract (May) was only later tied to Anthropic by Bloomberg."
+    evidence: ["https://siliconangle.com/2026/09/24/akamai-shares-jump-more-than-20-on-11-6b-anthropic-computing-deal/"]
+
+  - id: openai-gpt61-shelved
+    date: "2026-09-28"
+    labs: [openai]
+    event_type: safety_policy
+    title: "Reuters: OpenAI decided not to release GPT-6.1 Astra after internal testing raised safety concerns"
+    audiences: [investment, ai_team]
+    tickers: [MSFT]
+    # tightened after the audit (was [["6.1"], ["astra", "release", "safety"]], which matched the GPT-6.1 Sol launch)
+    match_all:
+      - ["6.1"]
+      - ["astra"]
+      - ["shelved", "shelve", "shelving", "not to release", "not release", "withheld", "withhold", "withholding",
+         "safety concern", "safety concerns"]
+    window_days: 10
+    confidence: medium
+
+  - id: white-house-accord
+    date: "2026-09-29"
+    labs: [anthropic, google-deepmind, openai, meta-ai, xai]
+    event_type: safety_policy
+    title: "White House voluntary AI accord signed by lab and chip CEOs"
+    audiences: [investment]
+    tickers: [GOOGL, META, NVDA]
+    # tightened after the audit (was [["white house", "accord"]]: either word alone, 'accord' even inside 'according')
+    match_all:
+      - ["white house"]
+      - ["accord", "accords", "commitment", "commitments", "pledge", "pledges", "pledged"]
+    window_days: 7
+    confidence: medium
+    notes: "Signatory list differs across outlets (whether Altman signed)."
+
+  - id: gemini-4-argon
+    date: "2026-09-30"
+    labs: [google-deepmind]
+    event_type: model_release
+    title: "Google unveils Gemini 4 Argon"
+    audiences: [ai_team, investment]
+    tickers: [GOOGL]
+    match_all: [["gemini 4"], ["argon"]]
+    window_days: 7
+    confidence: high
+
+  - id: openai-on-google-cloud
+    date: "2026-10-21"
+    labs: [openai]
+    event_type: partnership
+    title: "OpenAI frontier models and Codex come to Google Cloud Model Garden (private preview)"
+    audiences: [investment, ai_team]
+    tickers: [GOOGL, MSFT]
+    match_all: [["google cloud", "model garden", "vertex"]]
+    window_days: 7
+    confidence: high
+
+  - id: anthropic-s1
+    date: "2026-10-26"
+    labs: [anthropic]
+    event_type: funding_ipo
+    title: "Anthropic files public S-1 for a Nasdaq listing (ANT); H1-2026 revenue ~$16.3B"
+    audiences: [investment]
+    tickers: [ANT, AMZN, GOOGL, AVGO]
+    # tightened after the audit (was [["s-1", "ipo", "listing"]]: 'listing spend limits' in an API changelog matched)
+    match_all: [["s-1", "ipo", "initial public offering"]]
+    window_days: 7
+    confidence: high
+    notes: >-
+      Press accounts conflict on profitability (operating loss vs net loss incl. convertible-note items);
+      the primary source is the EDGAR filing. Reported valuation target $1.5-2T. The S-1 disclosed ~$161.2B
+      of Broadcom-related equipment lease obligations (AVGO).
+
+  - id: gemini-4-carbon
+    date: "2026-10-28"
+    labs: [google-deepmind]
+    event_type: model_release
+    title: "Google announces Gemini 4 Carbon (frontier, cyber focus, restricted access); #1 on AA Intelligence Index v5"
+    audiences: [ai_team, investment]
+    tickers: [GOOGL, CRWD, PANW]
+    match_all: [["gemini 4"], ["carbon"]]
+    window_days: 7
+    confidence: high

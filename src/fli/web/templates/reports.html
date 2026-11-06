@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Weekly reports</h1>
+  <p class="muted">One digest per audience per week (Monday to Sunday), every item cited.
+    Show: <a href="/reports"{% if not audience %} class="on"{% endif %}>both</a>{% for a in audiences %} · <a href="/reports?audience={{ a|slug }}"{% if audience == a %} class="on"{% endif %}>{{ a|audl }}</a>{% endfor %}</p>
+</div>
+<section class="card">
+<div class="scroll"><table class="tbl">
+  <thead><tr><th>Week</th><th>Audience</th><th>Title</th><th>Items</th><th>Generated</th><th></th></tr></thead>
+  <tbody>
+  {% for r in reports %}
+    <tr>
+      <td class="nowrap">{{ r.period_start|date }} – {{ r.period_end|date }}</td>
+      <td>{{ r.audience|audl }}</td>
+      <td><a href="/reports/{{ r.id }}">{{ r.title }}</a></td>
+      <td class="num">{{ r.n_items }}</td>
+      <td class="small nowrap">{{ r.created_at|dt }}{% if r.model %} · {{ r.model }}{% endif %}</td>
+      <td class="small"><a href="/api/reports/{{ r.id }}">json</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6" class="empty">No reports yet. <code>fli digest --backfill</code> generates every missing week.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}JSON API{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>JSON API</h1>
+  <p class="muted">For BIT's Signals &amp; Alerts platform layer. Times are UTC ISO 8601 with a trailing <code>Z</code>. <code>relevance</code> is a calibrated probability in [0, 1] that the audience would call the development worth knowing (not that it is material; <code>p_material</code> is the same number under its old name). It comes from the live scoring model; <code>model_version</code> <code>prior-v0</code> marks the unvalidated hand-set prior. Machine-readable schema: <a href="/api/openapi.json">/api/openapi.json</a>.</p>
+</div>
+
+<section class="card">
+  <h2>Read endpoints</h2>
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Endpoint</th><th>Parameters</th><th>Returns</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><code>GET /api/developments</code></td>
+        <td class="small"><code>audience</code> investment | ai_team (omit: both, ranked by the higher score) · <code>since</code> ISO date on first_seen_at (default: last 7 days) · <code>updated_since</code> for pollers (catches re-scored or grown items) · <code>min_p</code> 0–1 · <code>lab</code> · <code>event_type</code> · <code>limit</code> ≤ 500</td>
+        <td class="small">ranked items with scores, both lenses, <code>tickers</code> (exposure exactly as the alert rules count it, with BIT weights; <code>basis</code> lens = a direction the investment lens commits to, event = an event-specific exposure link), <code>held_tickers</code> (the BIT holdings among them), <code>lab_relations</code> (the lab's curated relations: context, never exposure), source classes, <code>unconfirmed</code>, alerts and cited sources (<code>curated: true</code> marks a curated register entry, with the <code>cited_url</code> it cites; never an official source)</td></tr>
+      <tr><td class="nowrap"><code>GET /api/developments/{id}</code></td><td class="small">–</td>
+        <td class="small">full detail: insights with evidence quotes and verified marks, score contributions, exposure links (each with <code>basis</code> event | lab_relation | below_threshold), alerts, labels, and <code>why_flagged</code> per audience: the materiality decision (<code>severity</code>, <code>rule_severity</code>, <code>unconfirmed</code>), <code>rules</code> that fired with the facts each <code>matched</code>, <code>guards</code>, <code>not_fired</code> rules with their first <code>failed</code> condition, the <code>facts</code> and the <code>score</code> the rules read with its top contributions</td></tr>
+      <tr><td class="nowrap"><code>GET /api/alerts</code></td>
+        <td class="small"><code>audience</code> · <code>since</code> (default: last 7 days) · <code>severity</code> P1 | P2 | P3 · <code>status</code> open | acked | suppressed | all (default all) · <code>limit</code> ≤ 1000</td>
+        <td class="small">alerts newest first with fired rules, delivery state (<code>delivery.channels</code> in_app / slack, <code>delivery.mode</code> live | historical) and a link to the development; for routing: <code>relevance</code>, the alert audience's lens <code>action</code> and <code>horizon</code>, <code>tickers</code> <code>[{symbol, direction, bit_weight, basis}]</code> and <code>held_tickers</code>, the exposure and BIT holdings exactly as the materiality rules count them (event-specific exposure links, and the tickers a non-abstaining investment lens gives a positive / negative / mixed direction), <code>lab_relations</code> (context only, never routing) and <code>why_flagged</code> (the decision for the alert's audience evaluated now, same shape as on <code>/api/developments/{id}</code>)</td></tr>
+      <tr><td class="nowrap"><code>GET /api/reports</code></td><td class="small"><code>audience</code></td><td class="small">weekly digests (metadata)</td></tr>
+      <tr><td class="nowrap"><code>GET /api/reports/{id}</code></td><td class="small">–</td><td class="small">digest markdown, sanitised HTML and ranked items</td></tr>
+      <tr><td class="nowrap"><code>GET /api/health</code></td><td class="small">–</td><td class="small">ok | degraded | critical, source states, last ingest, open ops events, spend vs budget</td></tr>
+      <tr><td class="nowrap"><code>GET /healthz</code></td><td class="small">–</td><td class="small">liveness probe (database ping); public even when all pages require auth</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Write endpoints</h2>
+  <p class="small muted">Protected by HTTP Basic auth when <code>FLI_BASIC_AUTH=user:pass</code> is set (<code>FLI_AUTH_ALL=1</code> protects every page too); labels and acks are then recorded under the authenticated login, whatever the body says. Without credentials configured only a local client (loopback, not through a proxy) may write; everyone else gets 403. Cross-origin browser posts are rejected.</p>
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Endpoint</th><th>Body (JSON or form)</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><code>POST /api/labels</code></td><td class="small"><code>{"development_id": 12, "audience": "investment", "label": 2, "annotator": "anna", "reason": "..."}</code> — label 0 noise · 1 worth knowing · 2 material; stored as <code>human:&lt;login&gt;</code> under auth (else <code>human:&lt;annotator&gt;</code>), rubric r1; re-posting replaces your earlier label</td></tr>
+      <tr><td class="nowrap"><code>POST /api/alerts/{id}/ack</code></td><td class="small"><code>{"status": "acked"}</code> (or <code>open</code> / <code>suppressed</code>)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Examples</h2>
+  <pre class="md"><code>curl -s '{{ base }}/api/developments?audience=investment&amp;min_p=0.6&amp;since=2026-10-27'
+curl -s '{{ base }}/api/alerts?severity=P1&amp;status=open'
+curl -s -u pm:secret -H 'content-type: application/json' \
+     -d '{"development_id": 12, "audience": "ai_team", "label": 1, "annotator": "anna"}' {{ base }}/api/labels</code></pre>
+</section>
+{% endblock %}

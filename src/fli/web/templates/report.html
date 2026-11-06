@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ r.title|truncate(60) }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="crumbs"><a href="/reports">Reports</a> · {{ r.audience|audl }} · {{ r.period_start|date }} – {{ r.period_end|date }}</p>
+  <nav class="pager pager-top" aria-label="Report navigation">
+    {% if r.prev_id %}<a href="/reports/{{ r.prev_id }}">&larr; previous week</a>{% endif %}
+    <span class="muted small">generated {{ r.created_at|dt }}{% if r.model %} · {{ r.model }}{% endif %} · <a href="/api/reports/{{ r.id }}">json</a></span>
+    {% if r.next_id %}<a href="/reports/{{ r.next_id }}">next week &rarr;</a>{% endif %}
+  </nav>
+</div>
+<div class="report-layout">
+  <article class="card md report">
+    {{ body }}
+  </article>
+  {% if r["items"] %}
+  <aside class="card report-items">
+    <h2>Ranked items</h2>
+    <ol>
+      {% for it in r["items"] %}
+      <li>{{ m.score(it.p_material) if it.p_material is not none else '' }} <a href="/developments/{{ it.development_id }}">{{ it.title or ('development #' ~ it.development_id) }}</a></li>
+      {% endfor %}
+    </ol>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}

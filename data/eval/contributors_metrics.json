@@ -1,0 +1,75 @@
+{
+  "n_people": 103,
+  "n_labelled": 94,
+  "n_positive": 36,
+  "n_negative": 58,
+  "baseline": {
+    "name": "citations_only",
+    "auc": 0.5,
+    "precision_at_20": 0.4
+  },
+  "base_rate": 0.383,
+  "method": "logistic_regression",
+  "model_version": "contrib-lr-v1",
+  "loo_auc": 0.405,
+  "precision_at_20": 0.5,
+  "coefficients": {
+    "leadership_roles": -0.232
+  },
+  "intercept": -0.006,
+  "dropped_sparse_features": [
+    "papers_12m",
+    "insight_mentions",
+    "tracked_coauthors",
+    "log_citations",
+    "h_index"
+  ],
+  "by_profile": {
+    "leadership": {
+      "n": 21,
+      "n_positive": 5,
+      "loo_auc": 0.263,
+      "baseline_auc": 0.5
+    },
+    "product": {
+      "n": 7,
+      "n_positive": 1,
+      "loo_auc": 0.0,
+      "baseline_auc": 0.5
+    },
+    "research": {
+      "n": 66,
+      "n_positive": 30,
+      "loo_auc": 0.355,
+      "baseline_auc": 0.5
+    }
+  },
+  "features": [
+    "papers_12m",
+    "insight_mentions",
+    "tracked_coauthors",
+    "leadership_roles",
+    "log_citations",
+    "h_index"
+  ],
+  "imputed_medians": {
+    "papers_12m": 0.0,
+    "insight_mentions": 0.0,
+    "tracked_coauthors": 0.0,
+    "leadership_roles": 1.0,
+    "log_citations": 0.0,
+    "h_index": 0.0
+  },
+  "corpus": {
+    "documents": 1002,
+    "insights": 673,
+    "people_with_papers_12m": 9,
+    "people_with_insight_mentions": 10
+  },
+  "label": "meta.revealed_preference (config/people.yaml)",
+  "created_at": "2026-11-04T13:49:23",
+  "cite_calls": 4,
+  "cite_found": 0,
+  "cite_errors": 0,
+  "cite_rate_limited": 4
+}

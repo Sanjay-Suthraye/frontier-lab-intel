@@ -1,0 +1,6 @@
+# Minimal lab register for tests/test_register.py (same schema as config/labs.yaml).
+labs:
+  - {id: openai, name: OpenAI, kind: frontier_lab, tier: 1, identities: [{platform: x, handle: OpenAI}]}
+  - {id: anthropic, name: Anthropic, kind: frontier_lab, tier: 1, identities: [{platform: github, handle: anthropics}]}
+  - {id: google-deepmind, name: Google DeepMind, kind: big_tech_lab, tier: 1}
+  - {id: discovery-loop, name: Discovery Loop, kind: alumni_startup, tier: 3}

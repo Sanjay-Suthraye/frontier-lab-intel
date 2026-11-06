@@ -1,0 +1,206 @@
+# Register of labs - first-class entities, because much of the highest-value signal is official.
+#
+# tier 1: frontier labs whose official moves are material by default
+# tier 2: frontier challengers / open-weight leaders (AI-team relevance, price pressure)
+# tier 3: alumni startups - low volume, very high signal per item (founding, hiring, first release)
+#
+# public_exposure: how a development at this lab reaches public equities. Relations marked
+# "verify" are reported but not confirmed from a primary source; the lens stage treats them as weak.
+# Sources (feeds, orgs, accounts, boards) are declared in config/sources_*.yaml.
+
+labs:
+  - id: openai
+    name: OpenAI
+    kind: frontier_lab
+    tier: 1
+    homepage: https://openai.com
+    description: Frontier lab behind GPT and ChatGPT; largest consumer AI footprint.
+    public_exposure:
+      - {ticker: MSFT, relation: investor_and_cloud_partner}
+      - {ticker: ORCL, relation: compute_supplier, note: "Stargate compute contracts"}
+      - {ticker: NVDA, relation: chip_supplier_and_investor}
+      - {ticker: AMD, relation: chip_supplier, note: "6 GW supply agreement with warrants (Oct 2025)"}
+      - {ticker: AVGO, relation: custom_silicon_partner, note: "co-developed inference accelerator"}
+      - {ticker: TSM, relation: foundry_for_custom_silicon}
+      - {ticker: AMZN, relation: compute_supplier, note: "AWS capacity agreement (Nov 2025)"}
+      - {ticker: CRWV, relation: compute_supplier}
+      - {ticker: "9984.T", relation: investor}
+    identities:
+      - {platform: x, handle: OpenAI}
+      - {platform: github, handle: openai}
+      - {platform: hf, handle: openai}
+
+  - id: anthropic
+    name: Anthropic
+    kind: frontier_lab
+    tier: 1
+    homepage: https://www.anthropic.com
+    description: Frontier lab behind Claude; enterprise and coding focus. S-1 filed 2026-10-26 (Nasdaq ANT).
+    public_exposure:
+      - {ticker: AMZN, relation: investor_and_cloud_partner, note: "Trainium / AWS"}
+      - {ticker: GOOGL, relation: investor_and_cloud_partner, note: "TPU capacity"}
+      - {ticker: AVGO, relation: chip_supplier, note: "TPU systems"}
+      - {ticker: MSFT, relation: investor_and_cloud_partner, note: "Azure commitment (Nov 2025)"}
+      - {ticker: NVDA, relation: chip_supplier_and_investor}
+      - {ticker: AKAM, relation: compute_supplier, note: "$11.6B 7-year compute agreement (Sep 2026)"}
+      - {ticker: ANT, relation: issuer, note: "IPO pending"}
+    identities:
+      - {platform: x, handle: AnthropicAI}
+      - {platform: github, handle: anthropics}
+      - {platform: hf, handle: Anthropic}
+
+  - id: google-deepmind
+    name: Google DeepMind
+    kind: big_tech_lab
+    tier: 1
+    parent: Alphabet
+    homepage: https://deepmind.google
+    description: Alphabet's AI lab behind Gemini; TPU-native.
+    public_exposure:
+      - {ticker: GOOGL, relation: parent}
+      - {ticker: AVGO, relation: custom_silicon_partner, note: "TPU co-design"}
+      - {ticker: TSM, relation: foundry_for_custom_silicon}
+    identities:
+      - {platform: x, handle: GoogleDeepMind}
+      - {platform: github, handle: google-deepmind}
+      - {platform: hf, handle: google}
+
+  - id: meta-ai
+    name: Meta AI (Superintelligence Labs / FAIR)
+    kind: big_tech_lab
+    tier: 1
+    parent: Meta Platforms
+    homepage: https://ai.meta.com
+    description: Meta's AI organisation (MSL, FAIR, Llama).
+    public_exposure:
+      - {ticker: META, relation: parent}
+      - {ticker: NVDA, relation: chip_supplier}
+      - {ticker: GOOGL, relation: chip_supplier, note: "TPU discussions reported Nov 2025 (verify)"}
+    identities:
+      - {platform: x, handle: AIatMeta}
+      - {platform: github, handle: facebookresearch}
+      - {platform: hf, handle: meta-llama}
+
+  - id: xai
+    name: xAI
+    kind: frontier_lab
+    tier: 1
+    homepage: https://x.ai
+    description: Frontier lab behind Grok; Colossus clusters in Memphis.
+    public_exposure:
+      - {ticker: NVDA, relation: chip_supplier}
+      - {ticker: DELL, relation: server_supplier}
+      - {ticker: SMCI, relation: server_supplier}
+      - {ticker: TSLA, relation: affiliated, note: "Musk-affiliated companies (verify current structure)"}
+    identities:
+      - {platform: x, handle: xai}
+      - {platform: github, handle: xai-org}
+      - {platform: hf, handle: xai-org}
+
+  - id: mistral
+    name: Mistral AI
+    kind: open_weight_lab
+    tier: 2
+    homepage: https://mistral.ai
+    description: European frontier challenger; open-weight and enterprise models.
+    public_exposure:
+      - {ticker: ASML, relation: investor, note: "led Series C (Sep 2025)"}
+      - {ticker: NVDA, relation: chip_supplier}
+      - {ticker: MSFT, relation: investor_and_distribution}
+    identities:
+      - {platform: x, handle: MistralAI}
+      - {platform: github, handle: mistralai}
+      - {platform: hf, handle: mistralai}
+
+  - id: deepseek
+    name: DeepSeek
+    kind: open_weight_lab
+    tier: 2
+    homepage: https://www.deepseek.com
+    description: Chinese open-weight lab; efficiency breakthroughs move accelerator sentiment.
+    public_exposure:
+      - {ticker: NVDA, relation: efficiency_shock_risk}
+      - {ticker: BABA, relation: competitor}
+    identities:
+      - {platform: x, handle: deepseek_ai}
+      - {platform: github, handle: deepseek-ai}
+      - {platform: hf, handle: deepseek-ai}
+
+  - id: qwen
+    name: Qwen (Alibaba)
+    kind: open_weight_lab
+    tier: 2
+    parent: Alibaba
+    homepage: https://qwenlm.github.io
+    description: Alibaba's model family; most-downloaded open-weight base models.
+    public_exposure:
+      - {ticker: BABA, relation: parent}
+    identities:
+      - {platform: x, handle: Alibaba_Qwen}
+      - {platform: github, handle: QwenLM}
+      - {platform: hf, handle: Qwen}
+
+  - id: moonshot
+    name: Moonshot AI (Kimi)
+    kind: open_weight_lab
+    tier: 2
+    homepage: https://www.moonshot.ai
+    description: Chinese lab behind Kimi open-weight agentic models.
+    public_exposure:
+      - {ticker: BABA, relation: investor}
+    identities:
+      - {platform: x, handle: Kimi_Moonshot}
+      - {platform: github, handle: MoonshotAI}
+      - {platform: hf, handle: moonshotai}
+
+  - id: thinking-machines
+    name: Thinking Machines Lab
+    kind: alumni_startup
+    tier: 3
+    homepage: https://thinkingmachines.ai
+    description: Founded by former OpenAI CTO Mira Murati and OpenAI alumni.
+    public_exposure:
+      - {ticker: NVDA, relation: investor, note: "reported seed investor (verify)"}
+    identities:
+      - {platform: x, handle: thinkymachines}
+      - {platform: github, handle: thinking-machines-lab}
+
+  - id: ssi
+    name: Safe Superintelligence (SSI)
+    kind: alumni_startup
+    tier: 3
+    homepage: https://ssi.inc
+    description: Founded by Ilya Sutskever; almost no public output, so its people are the signal.
+    public_exposure:
+      - {ticker: GOOGL, relation: compute_supplier, note: "TPU usage reported (verify)"}
+    identities: []
+
+  - id: reflection-ai
+    name: Reflection AI
+    kind: alumni_startup
+    tier: 3
+    homepage: https://reflection.ai
+    description: Founded by former DeepMind researchers; open frontier models.
+    public_exposure:
+      - {ticker: NVDA, relation: investor, note: "led Oct 2025 round (verify)"}
+    identities:
+      - {platform: x, handle: reflection_ai}
+
+  - id: periodic-labs
+    name: Periodic Labs
+    kind: alumni_startup
+    tier: 3
+    homepage: https://periodic.com
+    description: AI-for-science lab founded by OpenAI and DeepMind alumni.
+    public_exposure: []
+    identities: []
+
+  - id: discovery-loop
+    name: Discovery Loop
+    kind: alumni_startup
+    tier: 3
+    homepage: null
+    description: Founded Aug 2026 by Jeff Dean and other Google veterans after leaving Google.
+    public_exposure:
+      - {ticker: GOOGL, relation: talent_drain}
+    identities: []

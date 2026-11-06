@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}People{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Register: people</h1>
+  <p class="muted">Tier A = founders and research leads; B = the layer below, where much of the real signal sits; C = watch list. Each row says why the person is tracked and which inclusion rule admitted them.</p>
+</div>
+<form class="filters card" method="get" action="/register/people" data-autosubmit>
+  <label>Lab <select name="lab"><option value="">All labs</option>{% for id, name in labs %}<option value="{{ id }}"{{ ' selected' if filt.lab == id }}>{{ name }}</option>{% endfor %}</select></label>
+  <label>Tier <select name="tier"><option value="">All tiers</option>{% for t in ['A', 'B', 'C'] %}<option value="{{ t }}"{{ ' selected' if filt.tier == t }}>{{ t }}</option>{% endfor %}</select></label>
+  <label>Search <input type="search" name="q" value="{{ filt.q or '' }}" placeholder="name or title"></label>
+  <button type="submit" class="btn">Filter</button>
+  <a href="/register/people" class="reset">reset</a>
+</form>
+<section class="card">
+<p class="small muted">{{ people|length }} people</p>
+<div class="scroll"><table class="tbl">
+  <thead><tr><th>Name</th><th>Tier</th><th>Lab</th><th>Title</th><th>Why key</th><th>Rule</th><th>Status</th><th title="confirmed identities">IDs</th><th title="attributed documents">Docs</th><th>Score</th></tr></thead>
+  <tbody>
+  {% for p in people %}
+    <tr>
+      <td><a href="/register/people/{{ p.id }}"><b>{{ p.name }}</b></a></td>
+      <td><span class="tier p{{ p.tier }}">{{ p.tier }}</span></td>
+      <td>{% if p.lab_id %}<a href="/register/labs/{{ p.lab_id }}">{{ p.lab_name or p.lab_id }}</a>{% else %}–{% endif %}</td>
+      <td class="small">{{ p.title or '–' }}</td>
+      <td class="small">{{ (p.why_key or '–')|truncate(110) }}</td>
+      <td class="small">{{ (p.inclusion_rule or '–')|replace('_', ' ') }}</td>
+      <td class="small">{{ p.status|replace('_', ' ') }}</td>
+      <td class="num">{{ p.identities }}</td>
+      <td class="num">{{ p.documents }}</td>
+      <td class="num">{{ '%.2f'|format(p.contributor_score) if p.contributor_score is not none else '–' }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="10" class="empty">No people match. The register is loaded from <code>config/people.yaml</code> by <code>fli register</code>.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+</section>
+{% endblock %}

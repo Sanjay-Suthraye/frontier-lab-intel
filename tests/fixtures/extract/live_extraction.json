@@ -1,0 +1,144 @@
+{
+ "note": "Real claude-haiku-5-5 extraction responses recorded 2026-11-04 by the live check; document text trimmed to the paragraphs that contain quotes.",
+ "records": [
+  {
+   "url": "https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/",
+   "title": "Gemini 4 Carbon: Our next frontier model",
+   "content_text": "Today, we’re announcing the next frontier model: Gemini 4 Carbon, our strongest model with state-of-the-art cybersecurity and long horizon capabilities.\nCarbon ranks #1 on the recently updated v5.0 of Artificial Analysis Intelligence Index at 59. It shows significant gains across coding and agentic tasks as well as across key capabilities critical for cybersecurity defense, landing a firm lead in SEC-bench Pro (88.2%) for finding vulnerabilities, ExploitGym (54.8%) for exploitation, and CWE-bench (71.0%) for patching. On internal benchmarks, Carbon drives a strong uplift in generating secure code, and in live coding environments with our own teams it shows reduced misalignment and fabrication rates.\nGemini 4 Carbon will launch at the same introductory price 1 as Argon at $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price.\n- Finding real vulnerabilities: Core to cybersecurity defense is finding real vulnerabilities. Carbon achieves a state-of-the-art 88.2% on SEC-bench Pro, autonomously uncovering complex flaws buried in real-world software.\n- Patching at the root cause: Ultimately after identifying the vulnerabilities, fixing the root cause is a critical step in the cybersecurity defense lifecycle. Carbon reaches 71.0% on Collinear’s CWE-bench, turning validated findings directly into working code fixes.",
+   "lab_ids": [
+    "anthropic",
+    "deepseek",
+    "discovery-loop",
+    "google-deepmind",
+    "meta-ai",
+    "mistral",
+    "moonshot",
+    "openai",
+    "periodic-labs",
+    "qwen",
+    "reflection-ai",
+    "ssi",
+    "thinking-machines",
+    "xai"
+   ],
+   "person_ids": [
+    "koray-kavukcuoglu"
+   ],
+   "response": {
+    "no_material_insight": false,
+    "insights": [
+     {
+      "evidence_quotes": [
+       "Today, we’re announcing the next frontier model: Gemini 4 Carbon, our strongest model with state-of-the-art cybersecurity and long horizon capabilities.",
+       "Carbon ranks #1 on the recently updated v5.0 of Artificial Analysis Intelligence Index at 59."
+      ],
+      "claim": "Google DeepMind announced Gemini 4 Carbon, its next frontier model, saying it ranks #1 on Artificial Analysis Intelligence Index v5.0 at 59. Broad availability is pending; access starts with cyber defenders and trusted partners.",
+      "title": "Google DeepMind announces Gemini 4 Carbon frontier model",
+      "event_type": "model_release",
+      "lab_id": "google-deepmind",
+      "person_ids": [
+       "koray-kavukcuoglu"
+      ],
+      "artifacts": [
+       "Gemini 4 Carbon",
+       "Gemini 4 Argon"
+      ],
+      "orgs": [
+       "Artificial Analysis",
+       "Wiz",
+       "Collinear",
+       "Gray Swan"
+      ],
+      "magnitude": 5,
+      "is_rumor": false,
+      "confidence": 0.93
+     },
+     {
+      "evidence_quotes": [
+       "Gemini 4 Carbon will launch at the same introductory price 1 as Argon at $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price."
+      ],
+      "claim": "Google says Gemini 4 Carbon will launch at the same introductory price as Argon: $2 per million input tokens and $10 per million output tokens, with cached input 95% off.",
+      "title": "Gemini 4 Carbon pricing set at $2/$10 per million tokens",
+      "event_type": "pricing_change",
+      "lab_id": "google-deepmind",
+      "person_ids": [],
+      "artifacts": [
+       "Gemini 4 Carbon"
+      ],
+      "orgs": [],
+      "magnitude": 2,
+      "is_rumor": false,
+      "confidence": 0.85
+     },
+     {
+      "evidence_quotes": [
+       "Carbon achieves a state-of-the-art 88.2% on SEC-bench Pro, autonomously uncovering complex flaws buried in real-world software.",
+       "Carbon reaches 71.0% on Collinear’s CWE-bench, turning validated findings directly into working code fixes."
+      ],
+      "claim": "Google reports Gemini 4 Carbon scores 88.2% on SEC-bench Pro, 54.8% on ExploitGym and 71.0% on CWE-bench, citing state-of-the-art cybersecurity performance.",
+      "title": "Gemini 4 Carbon claims state-of-the-art cybersecurity benchmark results",
+      "event_type": "capability_claim",
+      "lab_id": "google-deepmind",
+      "person_ids": [],
+      "artifacts": [
+       "Gemini 4 Carbon"
+      ],
+      "orgs": [
+       "Collinear"
+      ],
+      "magnitude": 3,
+      "is_rumor": false,
+      "confidence": 0.85
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://arxiv.org/abs/2611.05306",
+   "title": "You don't need long context",
+   "content_text": "Later tokens are costlier to generate than earlier tokens. On frontier open weight models, the disparity in cost may rise to as much as 7x. Through frequent compaction, we show across a broad range of long-horizon and long-input tasks that frontier language models sacrifice little to no task accuracy when maintaining short contexts. We further demonstrate that LLM performance does not collapse on long-horizon software engineering tasks even when taking at most one action per context, and based on that we outline the concept of semantic state space models (SSSMs). Our findings question the need for long-context language models.",
+   "lab_ids": [
+    "anthropic",
+    "deepseek",
+    "discovery-loop",
+    "google-deepmind",
+    "meta-ai",
+    "mistral",
+    "moonshot",
+    "openai",
+    "periodic-labs",
+    "qwen",
+    "reflection-ai",
+    "ssi",
+    "thinking-machines",
+    "xai"
+   ],
+   "person_ids": [],
+   "response": {
+    "no_material_insight": false,
+    "insights": [
+     {
+      "evidence_quotes": [
+       "Through frequent compaction, we show across a broad range of long-horizon and long-input tasks that frontier language models sacrifice little to no task accuracy when maintaining short contexts.",
+       "Our findings question the need for long-context language models."
+      ],
+      "claim": "An NVIDIA-affiliated arXiv paper says frontier language models sacrifice little to no task accuracy when maintaining short contexts through frequent compaction, and questions the need for long-context models.",
+      "title": "NVIDIA-affiliated arXiv paper challenges need for long-context LLMs",
+      "event_type": "research_paper",
+      "lab_id": "none",
+      "person_ids": [],
+      "artifacts": [
+       "semantic state space models (SSSMs)"
+      ],
+      "orgs": [
+       "NVIDIA"
+      ],
+      "magnitude": 2,
+      "is_rumor": false,
+      "confidence": 0.8
+     }
+    ]
+   }
+  }
+ ]
+}

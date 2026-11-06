@@ -1,0 +1,57 @@
+[
+ {
+  "id": "0f1e2d3c-0000-4000-8000-000000000001",
+  "text": "Research Scientist, Pretraining",
+  "categories": {
+   "commitment": "Full-time",
+   "department": "Science",
+   "location": "Paris",
+   "team": "Research",
+   "allLocations": [
+    "Paris",
+    "London"
+   ]
+  },
+  "createdAt": 1792490400000,
+  "workplaceType": "onsite",
+  "country": "FR",
+  "hostedUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000001",
+  "applyUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000001/apply",
+  "descriptionPlain": "Fixture description."
+ },
+ {
+  "id": "0f1e2d3c-0000-4000-8000-000000000002",
+  "text": "Data Center Electrical Engineer",
+  "categories": {
+   "commitment": "Full-time",
+   "department": "Infrastructure",
+   "location": "Paris",
+   "team": "Compute"
+  },
+  "createdAt": 1792663200000,
+  "workplaceType": "onsite",
+  "country": "FR",
+  "hostedUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000002",
+  "applyUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000002/apply",
+  "descriptionPlain": "Fixture description."
+ },
+ {
+  "id": "0f1e2d3c-0000-4000-8000-000000000003",
+  "text": "Enterprise Account Executive, DACH",
+  "categories": {
+   "commitment": "Full-time",
+   "department": "Revenue",
+   "location": "Munich",
+   "team": "Sales",
+   "allLocations": [
+    "Munich"
+   ]
+  },
+  "createdAt": 1788256800000,
+  "workplaceType": "hybrid",
+  "country": "DE",
+  "hostedUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000003",
+  "applyUrl": "https://jobs.lever.co/example/0f1e2d3c-0000-4000-8000-000000000003/apply",
+  "descriptionPlain": "Fixture description."
+ }
+]

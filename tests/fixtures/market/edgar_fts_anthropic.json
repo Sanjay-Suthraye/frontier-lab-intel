@@ -1,0 +1,139 @@
+{
+ "took": 41,
+ "timed_out": false,
+ "_shards": {
+  "total": 50,
+  "successful": 50,
+  "skipped": 0,
+  "failed": 0
+ },
+ "hits": {
+  "total": {
+   "value": 3,
+   "relation": "eq"
+  },
+  "max_score": 9.8,
+  "hits": [
+   {
+    "_index": "edgar_file",
+    "_id": "0009999999-26-000123:fixture-s1.htm",
+    "_score": 9.8,
+    "_source": {
+     "ciks": [
+      "0009999999"
+     ],
+     "period_ending": null,
+     "file_num": [
+      "333-290001"
+     ],
+     "display_names": [
+      "FIXTURE ISSUER PBC  (FXT)  (CIK 0009999999)"
+     ],
+     "xsl": null,
+     "sequence": 1,
+     "root_forms": [
+      "S-1"
+     ],
+     "file_date": "2026-10-26",
+     "biz_states": [],
+     "sics": [
+      "7372"
+     ],
+     "form": "S-1",
+     "adsh": "0009999999-26-000123",
+     "film_num": [],
+     "biz_locations": [
+      "San Francisco, CA"
+     ],
+     "file_type": "S-1",
+     "file_description": "Registration statement",
+     "inc_states": [],
+     "items": []
+    }
+   },
+   {
+    "_index": "edgar_file",
+    "_id": "0009999999-26-000123:fixture-ex10-1.htm",
+    "_score": 7.1,
+    "_source": {
+     "ciks": [
+      "0009999999"
+     ],
+     "period_ending": null,
+     "file_num": [],
+     "display_names": [
+      "FIXTURE ISSUER PBC  (FXT)  (CIK 0009999999)"
+     ],
+     "xsl": null,
+     "sequence": 1,
+     "root_forms": [
+      "S-1"
+     ],
+     "file_date": "2026-10-26",
+     "biz_states": [],
+     "sics": [
+      "7372"
+     ],
+     "form": "S-1",
+     "adsh": "0009999999-26-000123",
+     "film_num": [],
+     "biz_locations": [],
+     "file_type": "EX-10.1",
+     "file_description": "Fixture services agreement",
+     "inc_states": [],
+     "items": []
+    }
+   },
+   {
+    "_index": "edgar_file",
+    "_id": "0008888888-26-000201:fixture-8k.htm",
+    "_score": 5.4,
+    "_source": {
+     "ciks": [
+      "0008888888"
+     ],
+     "period_ending": "2026-10-27",
+     "file_num": [],
+     "display_names": [
+      "FIXTURE CLOUD CORP  (FXC)  (CIK 0008888888)"
+     ],
+     "xsl": null,
+     "sequence": 1,
+     "root_forms": [
+      "8-K"
+     ],
+     "file_date": "2026-10-28",
+     "biz_states": [],
+     "sics": [
+      "7370"
+     ],
+     "form": "8-K",
+     "adsh": "0008888888-26-000201",
+     "film_num": [],
+     "biz_locations": [],
+     "file_type": "8-K",
+     "file_description": "Current report",
+     "inc_states": [],
+     "items": [
+      "1.01",
+      "9.01"
+     ]
+    }
+   }
+  ]
+ },
+ "aggregations": {
+  "form_filter": {
+   "buckets": [
+    {
+     "key": "S-1",
+     "doc_count": 2
+    },
+    {
+     "key": "8-K",
+     "doc_count": 1
+    }
+   ]
+  }
+ }
+}

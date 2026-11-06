@@ -1,0 +1,66 @@
+[
+ {
+  "html_url": "https://github.com/anthropics/claude-agent-sdk-python/releases/tag/v0.2.178",
+  "id": 433388468,
+  "tag_name": "v0.2.178",
+  "target_commitish": "main",
+  "name": "v0.2.178",
+  "draft": false,
+  "prerelease": false,
+  "created_at": "2026-11-04T00:54:26Z",
+  "published_at": "2026-11-04T00:54:29Z",
+  "body": "\n### Internal/Other Changes\n\n- Updated bundled Claude CLI to version 2.1.318\n\n\n---\n\n**PyPI:** https://pypi.org/project/claude-agent-sdk/0.2.178/\n\n```bash\npip install claude-agent-sdk==0.2.178\n```\n",
+  "author": {
+   "login": "github-actions[bot]"
+  },
+  "assets": []
+ },
+ {
+  "html_url": "https://github.com/anthropics/claude-agent-sdk-python/releases/tag/v0.2.177",
+  "id": 432204919,
+  "tag_name": "v0.2.177",
+  "target_commitish": "main",
+  "name": "v0.2.177",
+  "draft": false,
+  "prerelease": false,
+  "created_at": "2026-11-03T02:17:54Z",
+  "published_at": "2026-11-03T02:17:57Z",
+  "body": "\n### New Features\n\n- **`on_failure` option for `HookMatcher`**: Control what happens when a hook callback fails. Set `on_failure=\"block\"` to block the action when a callback raises, returns `None`, or returns a value the CLI rejects. Defaults to `\"continue\"` (treat failure as no decision). Requires a CLI version that supports this option; connecting to an older CLI with `on_failure=\"block\"` raises `CLIConnectionError` (#1460)\n\n### Internal/Other Changes\n\n- Updated bundled Claude CLI to version 2.1.317\n- Tests: e2e tests now accept either `Bash` or `PowerShell` tool in shell-dependent tests, fixing intermittent failures on Windows (#1467)\n\n\n---\n\n**PyPI:** https://pypi.org/project/claude-agent-sdk/0.2.177/\n\n```bash\npip install claude-agent-sdk==0.2.177\n```\n",
+  "author": {
+   "login": "github-actions[bot]"
+  },
+  "assets": []
+ },
+ {
+  "html_url": "https://github.com/anthropics/claude-agent-sdk-python/releases/tag/v0.2.176",
+  "id": 429652008,
+  "tag_name": "v0.2.176",
+  "target_commitish": "main",
+  "name": "v0.2.176",
+  "draft": false,
+  "prerelease": true,
+  "created_at": "2026-10-31T01:47:10Z",
+  "published_at": "2026-10-31T01:47:13Z",
+  "body": "\n### Internal/Other Changes\n\n- Updated bundled Claude CLI to version 2.1.316\n\n\n---\n\n**PyPI:** https://pypi.org/project/claude-agent-sdk/0.2.176/\n\n```bash\npip install claude-agent-sdk==0.2.176\n```\n",
+  "author": {
+   "login": "github-actions[bot]"
+  },
+  "assets": []
+ },
+ {
+  "html_url": "https://github.com/anthropics/claude-agent-sdk-python/releases/tag/v0.2.175",
+  "id": 428572476,
+  "tag_name": "v0.2.175",
+  "target_commitish": "main",
+  "name": "v0.2.175",
+  "draft": false,
+  "prerelease": false,
+  "created_at": "2026-10-30T01:50:49Z",
+  "published_at": "2026-10-30T01:50:51Z",
+  "body": "\n### Internal/Other Changes\n\n- Updated bundled Claude CLI to version 2.1.314\n- CI: raised PyPI project size limit guard from 50 GiB to 150 GiB to match the new quota granted by PyPI (#1455)\n\n\n---\n\n**PyPI:** https://pypi.org/project/claude-agent-sdk/0.2.175/\n\n```bash\npip install claude-agent-sdk==0.2.175\n```\n",
+  "author": {
+   "login": "github-actions[bot]"
+  },
+  "assets": []
+ }
+]

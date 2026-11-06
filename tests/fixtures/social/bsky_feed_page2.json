@@ -1,0 +1,67 @@
+{
+ "feed": [
+  {
+   "post": {
+    "uri": "at://did:plc:c2mjfv2a7judclufinscuyid/app.bsky.feed.post/3lbpy4dsre42p",
+    "cid": "bafyreigalac3a2j5biqflazfmu7kzpcdhdimbvrziz47gjk5wfdbcysexu",
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2024-11-24T21:44:17.865Z",
+     "embed": {
+      "$type": "app.bsky.embed.record",
+      "record": {
+       "cid": "bafyreihu4rq3dw6yrj6zq4kyffx47npc4dilclxhbx2l3d72br7dloxova",
+       "uri": "at://did:plc:ilhs5ksfpze2l5rqgig4ycl6/app.bsky.feed.post/3lb5rxiws4c2z"
+      }
+     },
+     "langs": [
+      "en"
+     ],
+     "text": "Auto-Regressive LLMs (auto-encoders with causal transformer architectures) and BERT-style models (denoising auto-encoders with transformer archis) are smashing demonstrations of the power of self-supervised (pre-)training.\nBut they only work for sequences of discrete symbols: language, proteins..."
+    },
+    "replyCount": 2,
+    "repostCount": 8,
+    "likeCount": 49,
+    "quoteCount": 0,
+    "indexedAt": "2024-11-24T21:44:18.156Z",
+    "author": {
+     "did": "did:plc:c2mjfv2a7judclufinscuyid",
+     "handle": "yann-lecun.bsky.social",
+     "displayName": "Yann LeCun"
+    }
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:nugxbh6opi4bgwu65cu3im3u/app.bsky.feed.post/3lbl4l67da22l",
+    "cid": "bafyreicdqa5rahmr3un2ngevt47sys7ph4ma2ds6s57ybqxhlrdsfgza6e",
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2024-11-22T23:20:51.577Z",
+     "langs": [
+      "en"
+     ],
+     "text": "“Sky Fortress” is a Ukrainian system of thousands of microphones, listening for the distinctive sounds of Russian low-flying UAVs such as the Shared.\nThey are networked to machine-learning processing nodes, that can send a truck with a .50 cal. gun to an intercept point.\n1/3"
+    },
+    "replyCount": 4,
+    "repostCount": 39,
+    "likeCount": 151,
+    "quoteCount": 15,
+    "indexedAt": "2024-11-22T23:20:54.067Z",
+    "author": {
+     "did": "did:plc:nugxbh6opi4bgwu65cu3im3u",
+     "handle": "grandparoy2.bsky.social",
+     "displayName": "Roy"
+    }
+   },
+   "reason": {
+    "$type": "app.bsky.feed.defs#reasonRepost",
+    "by": {
+     "did": "did:plc:c2mjfv2a7judclufinscuyid",
+     "handle": "yann-lecun.bsky.social"
+    },
+    "indexedAt": "2024-11-24T21:28:33.649Z"
+   }
+  }
+ ]
+}

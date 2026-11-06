@@ -1,0 +1,70 @@
+[project]
+name = "frontier-lab-intel"
+version = "0.1.0"
+description = "Frontier Lab Intelligence: tracks frontier AI labs and their people, extracts cited insights, and scores materiality for an investment team and an AI team."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "anthropic>=1.0",
+  "httpx>=0.27",
+  "tenacity>=8.2",
+  "feedparser>=6.0",
+  "trafilatura>=1.12",
+  "beautifulsoup4>=4.12",
+  "lxml>=5.0",
+  "sqlalchemy>=2.0.30",
+  "alembic>=1.13",
+  "psycopg[binary]>=3.1",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "pyyaml>=6.0",
+  "numpy>=1.26",
+  "scikit-learn>=1.5",
+  "datasketch>=1.6",
+  "rapidfuzz>=3.9",
+  "fastembed>=0.4",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "jinja2>=3.1",
+  "markdown>=3.6",
+  "python-multipart>=0.0.9",
+  "apscheduler>=3.10,<4",
+  "typer>=0.12",
+  "python-dateutil>=2.9",
+  "sentry-sdk>=2.0",
+  "requests-oauthlib>=2.0",
+  "tweepy>=4.14",
+  "arxiv>=2.1",
+  "huggingface-hub>=0.24",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "pytest-asyncio>=0.23",
+  "respx>=0.21",
+  "ruff>=0.5",
+]
+
+[project.scripts]
+fli = "fli.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fli"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["B008", "E501", "E731", "E741", "SIM905"]  # B008: FastAPI/typer DI defaults; E501: formatter owns line length

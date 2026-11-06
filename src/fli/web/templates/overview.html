@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+{% set h = o.health %}
+<section class="strip card" aria-label="System health">
+  <div class="strip-item">
+    <span class="strip-label">System</span>
+    <a href="/status">{{ m.state(h.status, h.reasons|join('; ')) }}</a>
+  </div>
+  <div class="strip-item">
+    <span class="strip-label">Sources</span>
+    <a href="/status#sources" class="strip-counts">
+      <span class="st st-ok">{{ h.sources.ok }} ok</span>
+      <span class="st st-stale">{{ h.sources.stale }} stale</span>
+      <span class="st st-failing">{{ h.sources.failing }} failing</span>
+      {% if h.sources.pending %}<span class="st st-pending">{{ h.sources.pending }} pending</span>{% endif %}
+    </a>
+  </div>
+  <div class="strip-item">
+    <span class="strip-label">Last ingest</span>
+    {% if h.last_ingest_basis == 'documents' %}
+    <span title="no ingest has run in this database (imported data); newest document fetched {{ h.last_ingest_at|dt }}">{{ h.last_ingest_at|ago }} <span class="small muted">· imported</span></span>
+    {% else %}
+    <span title="{{ h.last_ingest_at|dt }}">{{ h.last_ingest_at|ago }}</span>
+    {% endif %}
+  </div>
+  <div class="strip-item grow">
+    {{ m.budget_bar(h.budgets.llm_total, "LLM total") }}
+    {{ m.budget_bar(h.budgets.llm_today, "LLM today") }}
+  </div>
+  <div class="strip-item">
+    <span class="strip-label">Corpus</span>
+    <span>{{ h.counts.documents }} docs · {{ h.counts.insights }} insights · {{ h.counts.developments }} developments</span>
+  </div>
+</section>
+
+{% if o.note %}<p class="note">{{ o.note }}</p>{% endif %}
+
+{% if o.holdings %}
+<section class="card">
+  <header class="sec-head">
+    <h2>BIT holdings touched {{ 'this week' if not o.until else 'that week' }}</h2>
+    <span class="muted small">top positions of BIT Global Technology Leaders, counted as the alert rules count exposure (event-specific links and the lens's committed tickers; lab relations are not exposure); click to see them in the investment feed</span>
+  </header>
+  <div class="holdings">
+    {% for hd in o.holdings %}
+    <a class="holding{{ ' quiet' if not hd.count }}" href="/feed/investment?ticker={{ hd.symbol|urlencode }}&amp;week={{ 'all' if o.until else '7d' }}&amp;min_p=0&amp;dismissed=1" title="{{ hd.company }}: {{ hd.count }} development{{ '' if hd.count == 1 else 's' }} exposing it{% if hd.lab_only %}; {{ hd.lab_only }} more only through a lab relation (context, not counted){% endif %}{% if hd.top_title %} · most relevant: {{ hd.top_title }}{% endif %}" data-lab-only="{{ hd.lab_only }}">
+      <span class="h-sym">{{ hd.symbol }}</span>
+      <span class="h-w">{{ '%.1f'|format(hd.weight) }}%</span>
+      <span class="h-n">{{ hd.count }} dev{{ '' if hd.count == 1 else 's' }}</span>
+      {% if hd.max_p is not none %}{{ m.score(hd.max_p) }}{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<div class="grid2">
+{% for aud in audiences %}
+  {% set items = o.top[aud]["items"] %}
+  <section class="card">
+    <header class="sec-head">
+      <h2>{{ aud|audl }} · top developments</h2>
+      <a href="/feed/{{ aud|slug }}">full feed &rarr;</a>
+    </header>
+    {% if items %}
+    <ol class="toplist">
+      {% for c in items %}
+      <li>
+        {{ m.score(c.p, prior=c.p_prior) }}
+        <div class="tl-body">
+          <a href="/developments/{{ c.id }}" class="tl-title">{{ c.lens.headline if c.lens else c.title }}</a>
+          <div class="meta">
+            {{ c.lab_name or 'unattributed' }}<span class="sep">·</span>{{ c.event_type|replace('_', ' ') }}<span class="sep">·</span>{{ c.first_seen_at|day }}
+            {{ m.unconfirmed(c) }} {{ m.prior_badge(c.p_prior) }}
+            {% for a in c.alerts if a.status == 'open' and a.audience == aud %}{{ m.sev(a.severity) }}{% endfor %}
+          </div>
+          <div class="tickers">
+            {{ m.action(c.lens.action if c.lens else none) }}
+            {% if aud == 'investment' %}{% for t in c.tickers[:5] %}{{ m.ticker(t) }}{% endfor %}{{ m.lab_relations(c.lab_relations, c.lab_name) }}
+            {% else %}{% for a in c.artifacts[:3] %}<span class="art">{{ a }}</span>{% endfor %}{% endif %}
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="empty">Nothing above the feed's default bar in this window (the lens dismissed the rest, or nothing is scored yet: <code>fli pipeline</code> or <code>fli snapshot import</code>). <a href="/feed/{{ aud|slug }}?dismissed=1&amp;min_p=0">See everything</a>.</p>
+    {% endif %}
+    {% if o.top[aud].dismissed %}<p class="small muted">{{ o.top[aud].dismissed }} dismissed by the lens not shown · <a href="/feed/{{ aud|slug }}?dismissed=1{{ '&amp;week=all' if o.until }}">show</a></p>{% endif %}
+  </section>
+{% endfor %}
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <header class="sec-head"><h2>Open P1 / P2 alerts</h2><a href="/alerts">all alerts &rarr;</a></header>
+    {% if o.alerts %}
+    <ul class="alist">
+      {% for a in o.alerts %}
+      <li>
+        {{ m.sev(a.severity) }}
+        <div class="tl-body">
+          <a href="/developments/{{ a.development_id }}">{{ a.title }}</a>
+          <div class="meta">{{ a.audience|audl }}<span class="sep">·</span>{{ a.lab_name or '–' }}<span class="sep">·</span><span title="{{ a.created_at|dt }}">{{ a.created_at|ago }}</span></div>
+        </div>
+        {{ m.ack_form(a, '/') }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">No open P1/P2 alerts.</p>{% endif %}
+  </section>
+  <section class="card">
+    <header class="sec-head"><h2>Latest reports</h2><a href="/reports">all reports &rarr;</a></header>
+    {% if o.reports %}
+    <ul class="rlist">
+      {% for r in o.reports %}
+      <li><a href="/reports/{{ r.id }}">{{ r.title }}</a>
+        <div class="meta">{{ r.audience|audl }}<span class="sep">·</span>{{ r.period_start|date }} – {{ r.period_end|date }}<span class="sep">·</span>{{ r.n_items }} item{{ '' if r.n_items == 1 else 's' }}</div></li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="empty">No reports yet (<code>fli digest</code> writes the weekly digests).</p>{% endif %}
+  </section>
+</div>
+{% endblock %}

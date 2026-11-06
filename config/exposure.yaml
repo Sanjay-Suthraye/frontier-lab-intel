@@ -1,0 +1,184 @@
+# Exposure map: the closed list of public companies a lab development can be mapped to.
+# The LLM lens stage may only choose tickers from this file, so it cannot invent exposures.
+#
+# BIT holdings: top-10 positions of BIT Global Technology Leaders (flagship, EUR 1,557.5m)
+# per the HANSAINVEST factsheet "Angaben per 30.09.2026". Re-check monthly.
+as_of: "2026-09-30"
+holdings_source: "BIT Global Technology Leaders factsheet (HANSAINVEST), Angaben per 30.09.2026"
+
+bit_holdings:
+  - {symbol: AMZN, weight: 9.6, funds: [BIT Global Technology Leaders]}
+  - {symbol: IREN, weight: 9.2, funds: [BIT Global Technology Leaders]}
+  - {symbol: NVDA, weight: 8.0, funds: [BIT Global Technology Leaders]}
+  - {symbol: MU, weight: 6.5, funds: [BIT Global Technology Leaders]}
+  - {symbol: TSM, weight: 5.1, funds: [BIT Global Technology Leaders]}
+  - {symbol: META, weight: 4.6, funds: [BIT Global Technology Leaders]}
+  - {symbol: MSFT, weight: 4.4, funds: [BIT Global Technology Leaders]}
+  - {symbol: HNGE, weight: 4.0, funds: [BIT Global Technology Leaders]}
+  - {symbol: SIMO, weight: 3.9, funds: [BIT Global Technology Leaders]}
+  # "FT Inter" (4.0%) is listed in the factsheet top 10 but could not be mapped to a ticker; left out.
+
+themes:
+  - id: accelerators
+    name: AI accelerators and custom silicon
+    description: Demand for, and competition among, training/inference chips. Custom ASICs and TPUs compete with GPUs.
+    tickers: [NVDA, AMD, AVGO, MRVL, ARM, INTC]
+    event_types: [compute_deal, custom_silicon, model_release, capability_claim, open_weight_release]
+    keywords: [gpu, accelerator, tpu, trainium, asic, chip, blackwell, rubin, inference chip, cluster, h100, gb200, gb300]
+  - id: foundry_equipment
+    name: Foundry, packaging and equipment
+    description: Every accelerator, custom or not, is fabbed and packaged by a small set of suppliers.
+    tickers: [TSM, ASML, AMAT, LRCX, KLAC]
+    event_types: [custom_silicon, compute_deal]
+    keywords: [tsmc, wafer, packaging, cowos, 2nm, 3nm, foundry, tape-out, tapeout]
+  - id: memory_storage
+    name: Memory (HBM) and storage
+    description: Larger models, longer context and agentic inference raise HBM, DRAM and NAND demand.
+    tickers: [MU, "000660.KS", "005930.KS", SIMO, SNDK, WDC, STX]
+    event_types: [compute_deal, custom_silicon, model_release, open_weight_release, capability_claim, research_paper, technique]
+    # only unambiguous memory terms: 'context window' linked MU/SIMO to every launch, 'memory' matched agent memory,
+    # 'storage' matched data-retention changes
+    keywords: [hbm, high-bandwidth memory, memory bandwidth, dram, nand, ssd, kv cache]
+  - id: networking_optics
+    name: Networking and optics
+    description: Scale-out clusters need switches, interconnect and optical transceivers.
+    tickers: [ANET, AVGO, CRDO, ALAB, COHR, LITE]
+    event_types: [compute_deal, custom_silicon]
+    keywords: [interconnect, networking, optical, ethernet, infiniband, nvlink, scale-out, transceiver]
+  - id: neocloud_capacity
+    name: Neoclouds and AI datacenter capacity
+    description: Labs buy capacity from GPU clouds and converted bitcoin-mining sites; contracts re-rate these stocks.
+    tickers: [IREN, CRWV, NBIS, CIFR, WULF, HUT, CORZ, APLD, GLXY, AKAM, ORCL]
+    event_types: [compute_deal, energy_deal, funding_ipo, strategy_shift]
+    keywords: [datacenter, data center, gigawatt, gw, capacity, lease, colocation, gpu cloud, compute contract, campus]
+  - id: hyperscaler_partners
+    name: Hyperscalers and lab partners
+    description: Cloud partners and strategic investors whose economics move with their lab's fortunes.
+    tickers: [MSFT, AMZN, GOOGL, ORCL, META, BABA, "9984.T"]
+    event_types: [compute_deal, partnership, funding_ipo, model_release, product_launch, strategy_shift, talent_move]
+    keywords: [azure, aws, google cloud, bedrock, vertex, stake, investment, partnership, exclusive]
+  - id: power_energy
+    name: Power and datacenter infrastructure
+    description: Electricity, generation and cooling are the binding constraint on AI capacity.
+    tickers: [VST, CEG, TLN, NRG, GEV, BE, OKLO, SMR, VRT, ETN]
+    event_types: [energy_deal, compute_deal]
+    keywords: [power, energy, nuclear, gas turbine, grid, megawatt, mw, gigawatt, gw, cooling, ppa, electricity]
+  - id: software_disruption
+    name: Software exposed to AI substitution
+    description: Agentic products from labs compete with seat-based SaaS and information services.
+    tickers: [CRM, NOW, ADBE, INTU, WDAY, IBM, FDS, SPGI, TRI, RELX, TEAM, HUBS, DUOL]
+    event_types: [product_launch, model_release, capability_claim, strategy_shift, pricing_change, partnership]
+    keywords: [agent, agentic, automation, enterprise, legal, finance, coding, office, workflow, plugin, copilot, spreadsheet]
+  - id: cybersecurity
+    name: Cybersecurity
+    description: Frontier cyber capabilities are both a threat to and a product for security vendors.
+    tickers: [CRWD, PANW, ZS, OKTA, NET]
+    event_types: [product_launch, capability_claim, safety_policy, model_release]
+    keywords: [security, vulnerability, cyber, exploit, red team, malware, zero-day]
+  - id: ai_consumer_apps
+    name: Consumer and vertical AI applications
+    description: Consumer platforms and vertical apps whose products or moats depend on model capability and cost.
+    tickers: [META, GOOGL, RDDT, HNGE, HIMS, LMND, DUOL]
+    event_types: [product_launch, model_release, partnership, pricing_change, capability_claim]
+    keywords: [health, search, ads, social, data licensing, browser]  # 'consumer'/'assistant' matched almost everything
+  - id: lab_capital_markets
+    name: Lab financing, IPOs and stakes
+    description: Lab valuations flow through to holders of stakes and to the listing pipeline.
+    tickers: [ANT, MSFT, AMZN, GOOGL, NVDA, "9984.T"]
+    event_types: [funding_ipo, new_venture, talent_move]
+    keywords: [ipo, s-1, valuation, funding round, tender, secondary, stake, raise]
+  - id: china_ai
+    name: China AI and export controls
+    description: Cheap Chinese open-weight models pressure pricing; export controls shape accelerator demand.
+    tickers: [BABA, NVDA, AMD]
+    event_types: [open_weight_release, model_release, safety_policy, pricing_change]
+    keywords: [deepseek, qwen, kimi, china, export control, huawei, ascend]
+
+tickers:
+  # accelerators / semis
+  - {symbol: NVDA, company: NVIDIA, sector: Semiconductors}
+  - {symbol: AMD, company: Advanced Micro Devices, sector: Semiconductors}
+  - {symbol: AVGO, company: Broadcom, sector: Semiconductors}
+  - {symbol: MRVL, company: Marvell Technology, sector: Semiconductors}
+  - {symbol: ARM, company: Arm Holdings, sector: Semiconductors}
+  - {symbol: INTC, company: Intel, sector: Semiconductors}
+  - {symbol: ON, company: ON Semiconductor, sector: Semiconductors}
+  - {symbol: TSM, company: TSMC, sector: Semiconductors}
+  - {symbol: ASML, company: ASML, sector: Semiconductor equipment}
+  - {symbol: AMAT, company: Applied Materials, sector: Semiconductor equipment}
+  - {symbol: LRCX, company: Lam Research, sector: Semiconductor equipment}
+  - {symbol: KLAC, company: KLA, sector: Semiconductor equipment}
+  # memory / storage
+  - {symbol: MU, company: Micron Technology, sector: Memory}
+  - {symbol: "000660.KS", company: SK hynix, sector: Memory}
+  - {symbol: "005930.KS", company: Samsung Electronics, sector: Memory}
+  - {symbol: SIMO, company: Silicon Motion, sector: Storage controllers}
+  - {symbol: SNDK, company: SanDisk, sector: Storage}
+  - {symbol: WDC, company: Western Digital, sector: Storage}
+  - {symbol: STX, company: Seagate, sector: Storage}
+  # networking / optics
+  - {symbol: ANET, company: Arista Networks, sector: Networking}
+  - {symbol: CRDO, company: Credo Technology, sector: Networking}
+  - {symbol: ALAB, company: Astera Labs, sector: Networking}
+  - {symbol: COHR, company: Coherent, sector: Optics}
+  - {symbol: LITE, company: Lumentum, sector: Optics}
+  # neoclouds / datacenter capacity
+  - {symbol: IREN, company: IREN, sector: AI cloud / datacenters}
+  - {symbol: CRWV, company: CoreWeave, sector: AI cloud}
+  - {symbol: NBIS, company: Nebius, sector: AI cloud}
+  - {symbol: CIFR, company: Cipher, sector: AI datacenters}
+  - {symbol: WULF, company: TeraWulf, sector: AI datacenters}
+  - {symbol: HUT, company: Hut 8, sector: AI datacenters / mining}
+  - {symbol: CORZ, company: Core Scientific, sector: AI datacenters}
+  - {symbol: APLD, company: Applied Digital, sector: AI datacenters}
+  - {symbol: GLXY, company: Galaxy Digital, sector: Digital assets / datacenters}
+  - {symbol: AKAM, company: Akamai, sector: Edge cloud}
+  # hyperscalers / platforms
+  - {symbol: MSFT, company: Microsoft, sector: Software & cloud}
+  - {symbol: AMZN, company: Amazon, sector: Internet & cloud}
+  - {symbol: GOOGL, company: Alphabet, sector: Internet & cloud}
+  - {symbol: META, company: Meta Platforms, sector: Internet}
+  - {symbol: ORCL, company: Oracle, sector: Software & cloud}
+  - {symbol: BABA, company: Alibaba, sector: Internet & cloud}
+  - {symbol: "9984.T", company: SoftBank Group, sector: Holding company}
+  - {symbol: ANT, company: Anthropic, sector: AI lab, notes: "S-1 filed 2026-10-26 for a Nasdaq listing under ANT; not yet trading as of 2026-11-04"}
+  # power / infrastructure
+  - {symbol: VST, company: Vistra, sector: Power}
+  - {symbol: CEG, company: Constellation Energy, sector: Power}
+  - {symbol: TLN, company: Talen Energy, sector: Power}
+  - {symbol: NRG, company: NRG Energy, sector: Power}
+  - {symbol: GEV, company: GE Vernova, sector: Power equipment}
+  - {symbol: BE, company: Bloom Energy, sector: Power equipment}
+  - {symbol: OKLO, company: Oklo, sector: Nuclear}
+  - {symbol: SMR, company: NuScale Power, sector: Nuclear}
+  - {symbol: VRT, company: Vertiv, sector: Datacenter infrastructure}
+  - {symbol: ETN, company: Eaton, sector: Electrical equipment}
+  # software / information services
+  - {symbol: CRM, company: Salesforce, sector: Software}
+  - {symbol: NOW, company: ServiceNow, sector: Software}
+  - {symbol: ADBE, company: Adobe, sector: Software}
+  - {symbol: INTU, company: Intuit, sector: Software}
+  - {symbol: WDAY, company: Workday, sector: Software}
+  - {symbol: IBM, company: IBM, sector: Software & services}
+  - {symbol: FDS, company: FactSet, sector: Information services}
+  - {symbol: SPGI, company: S&P Global, sector: Information services}
+  - {symbol: TRI, company: Thomson Reuters, sector: Information services}
+  - {symbol: RELX, company: RELX, sector: Information services}
+  - {symbol: TEAM, company: Atlassian, sector: Software}
+  - {symbol: HUBS, company: HubSpot, sector: Software}
+  - {symbol: DUOL, company: Duolingo, sector: Consumer software}
+  # security
+  - {symbol: CRWD, company: CrowdStrike, sector: Cybersecurity}
+  - {symbol: PANW, company: Palo Alto Networks, sector: Cybersecurity}
+  - {symbol: ZS, company: Zscaler, sector: Cybersecurity}
+  - {symbol: OKTA, company: Okta, sector: Cybersecurity}
+  - {symbol: NET, company: Cloudflare, sector: Cybersecurity / edge}
+  # consumer / vertical apps
+  - {symbol: RDDT, company: Reddit, sector: Internet}
+  - {symbol: HNGE, company: Hinge Health, sector: Digital health}
+  - {symbol: HIMS, company: Hims & Hers Health, sector: Digital health}
+  - {symbol: LMND, company: Lemonade, sector: Insurtech}
+  # other
+  - {symbol: TSLA, company: Tesla, sector: Autos / robotics}
+  - {symbol: DELL, company: Dell Technologies, sector: AI servers}
+  - {symbol: SMCI, company: Super Micro Computer, sector: AI servers}

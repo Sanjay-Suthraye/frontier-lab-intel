@@ -1,0 +1,153 @@
+[
+ {
+  "paper": {
+   "id": "2610.08077",
+   "publishedAt": "2026-10-06T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-10-08T00:00:00.000Z",
+   "title": "Self-Retrospection Distillation: Turning Post-hoc Experiences into Prior Foresight",
+   "upvotes": 161,
+   "ai_summary": "Prospective learning via Self-Retrospection Distillation uses hindsight experience to train foresight predictions, improving reinforcement learning when outcome rewards are uniform.",
+   "githubRepo": "https://github.com/SalesforceAIResearch/SRD",
+   "githubStars": 13,
+   "organization": {
+    "_id": "5f6d64475e78cc6b0ed31e4c",
+    "name": "Salesforce",
+    "fullname": "Salesforce AI Research"
+   },
+   "summary": "Reinforcement learning with verifiable rewards (RLVR) turns agent experience into learning signals primarily through scalar outcome rewards after interaction. For group-relative objectives, however, this signal vanishes when all rollouts receive the same reward, even though their trajectories may reveal useful information about what the task requires and how the agent fails. We ask a complementary question: can hinds",
+   "authors": [
+    {
+     "_id": "6ac832844364a3d18a5cc623",
+     "name": "Haoxiang Zhang",
+     "hidden": false,
+     "user": {
+      "user": "IPF",
+      "fullname": "Haoxiang Zhang"
+     }
+    },
+    {
+     "_id": "6ac832844364a3d18a5cc624",
+     "name": "Qinglin Chen",
+     "hidden": false,
+     "user": {
+      "user": "QchenCatherine",
+      "fullname": "QINGLIN (Catherine) CHEN"
+     }
+    },
+    {
+     "_id": "6ac832844364a3d18a5cc625",
+     "name": "Hiroaki Hayashi",
+     "hidden": false
+    },
+    {
+     "_id": "6ac832844364a3d18a5cc626",
+     "name": "Zhuofeng Li",
+     "hidden": false,
+     "user": {
+      "user": "ZhuofengLi",
+      "fullname": "ZhuofengLi"
+     }
+    },
+    {
+     "_id": "6ac832844364a3d18a5cc627",
+     "name": "Siming Zhang",
+     "hidden": false,
+     "user": {
+      "user": "SimonDontLoveThis",
+      "fullname": "Siming Zhang"
+     }
+    },
+    {
+     "_id": "6ac832844364a3d18a5cc628",
+     "name": "Jiaxin Zhang",
+     "hidden": false,
+     "user": {
+      "user": "zhangjiaxin2012",
+      "fullname": "Jiaxin Zhang"
+     }
+    }
+   ],
+   "ai_keywords": [
+    "reinforcement learning with verifiable rewards",
+    "group-relative objectives",
+    "prospective learning"
+   ]
+  },
+  "publishedAt": "2026-10-05T20:00:00.000Z",
+  "title": "Self-Retrospection Distillation: Turning Post-hoc Experiences into Prior Foresight",
+  "numComments": 2,
+  "organization": {
+   "_id": "5f6d64475e78cc6b0ed31e4c",
+   "name": "Salesforce",
+   "fullname": "Salesforce AI Research"
+  }
+ },
+ {
+  "paper": {
+   "id": "2610.09484",
+   "publishedAt": "2026-10-07T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-10-08T00:00:00.000Z",
+   "title": "MIMESIS: Learning User Simulators as Training Environments for Interactive Agents",
+   "upvotes": 19,
+   "ai_summary": "MIMESIS is a specialized user simulator trained on human interactions that improves agent training via multi-turn reinforcement learning and self-distillation coaching, yielding stronger generalization across diverse simulated users.",
+   "githubRepo": "https://github.com/VietHoang1512/mimesis",
+   "githubStars": 11,
+   "projectPage": "https://github.com/VietHoang1512/mimesis",
+   "organization": {
+    "_id": "5e63d8713071d5be688861b8",
+    "name": "facebook",
+    "fullname": "AI at Meta"
+   },
+   "summary": "Training and evaluating interactive language agents typically requires rich user interactions, yet collecting human feedback is expensive and difficult to scale. Simulated users offer a scalable alternative, but they must both resemble real user behavior and provide useful learning experiences for agents. In contrast, most agent-training frameworks rely on off-the-shelf assistant LLMs, whose helpfulness can make them",
+   "authors": [
+    {
+     "_id": "6ac6e8a74eb8005165aed2b1",
+     "name": "Hoang Phan",
+     "hidden": false,
+     "user": {
+      "user": "phanviethoang1512",
+      "fullname": "Phan Hoang"
+     }
+    },
+    {
+     "_id": "6ac6e8a74eb8005165aed2b2",
+     "name": "Dat Huynh",
+     "hidden": false
+    },
+    {
+     "_id": "6ac6e8a74eb8005165aed2b3",
+     "name": "Andrey Zhmoginov",
+     "hidden": false
+    },
+    {
+     "_id": "6ac6e8a74eb8005165aed2b4",
+     "name": "Qi Zeng",
+     "hidden": false
+    },
+    {
+     "_id": "6ac6e8a74eb8005165aed2b5",
+     "name": "Wancen Mu",
+     "hidden": false
+    },
+    {
+     "_id": "6ac6e8a74eb8005165aed2b6",
+     "name": "Yue Cao",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "user simulator",
+    "multi-turn reinforcement learning",
+    "Coached On-Policy Self-Distillation"
+   ]
+  },
+  "publishedAt": "2026-10-06T20:00:00.000Z",
+  "title": "MIMESIS: Learning User Simulators as Training Environments for Interactive Agents",
+  "numComments": 2,
+  "organization": {
+   "_id": "5e63d8713071d5be688861b8",
+   "name": "facebook",
+   "fullname": "AI at Meta"
+  }
+ }
+]

@@ -1,0 +1,117 @@
+{
+ "departments": [
+  {
+   "id": 4042930007,
+   "name": "Data Center",
+   "parent_id": null,
+   "child_ids": [],
+   "jobs": [
+    {
+     "id": 4821683007,
+     "title": "Supervisor, Facility Operations - Memphis",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4821683007",
+     "location": {
+      "name": "Memphis, TN"
+     },
+     "first_published": "2025-08-06T23:30:52-04:00",
+     "updated_at": "2026-10-28T02:21:50-04:00",
+     "requisition_id": "374",
+     "company_name": "SpaceXSI"
+    },
+    {
+     "id": 4869805007,
+     "title": "Power Generation Engineer - Memphis",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4869805007",
+     "location": {
+      "name": " Southaven, MS; Memphis, TN"
+     },
+     "first_published": "2025-09-09T22:52:53-04:00",
+     "updated_at": "2026-10-29T11:05:13-04:00",
+     "requisition_id": "419",
+     "company_name": "SpaceXSI"
+    },
+    {
+     "id": 4939298007,
+     "title": "Facilities Maintenance Assistant - Memphis",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4939298007",
+     "location": {
+      "name": "Memphis, TN"
+     },
+     "first_published": "2025-11-03T17:40:20-05:00",
+     "updated_at": "2026-11-04T01:38:14-05:00",
+     "requisition_id": "523",
+     "company_name": "SpaceXSI"
+    }
+   ]
+  },
+  {
+   "id": 4024733007,
+   "name": "Engineering",
+   "parent_id": null,
+   "child_ids": [
+    4064385007,
+    4064292007,
+    4046295007,
+    4052172007,
+    4064383007,
+    4046294007
+   ],
+   "jobs": [
+    {
+     "id": 4703144007,
+     "title": "Machine Learning Engineer, Recommendation Systems",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4703144007",
+     "location": {
+      "name": " Palo Alto, CA"
+     },
+     "first_published": "2025-04-10T23:21:31-04:00",
+     "updated_at": "2026-11-03T21:02:15-05:00",
+     "requisition_id": "221",
+     "company_name": "SpaceXSI"
+    },
+    {
+     "id": 4946696007,
+     "title": "Software Engineer, Network Software & Services",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4946696007",
+     "location": {
+      "name": " Palo Alto, CA"
+     },
+     "first_published": "2025-10-15T14:47:39-04:00",
+     "updated_at": "2026-11-03T20:47:00-05:00",
+     "requisition_id": "163",
+     "company_name": "SpaceXSI"
+    }
+   ]
+  },
+  {
+   "id": 4064382007,
+   "name": "Go To Market",
+   "parent_id": null,
+   "child_ids": [
+    4060730007,
+    4059410007
+   ],
+   "jobs": []
+  },
+  {
+   "id": 4046295007,
+   "name": "Information Security",
+   "parent_id": 4024733007,
+   "child_ids": [],
+   "jobs": [
+    {
+     "id": 4559147007,
+     "title": "Application Security Engineer",
+     "absolute_url": "https://job-boards.greenhouse.io/xai/jobs/4559147007",
+     "location": {
+      "name": " Palo Alto, CA"
+     },
+     "first_published": "2024-11-14T18:04:42-05:00",
+     "updated_at": "2026-10-29T14:17:56-04:00",
+     "requisition_id": "103",
+     "company_name": "SpaceXSI"
+    }
+   ]
+  }
+ ]
+}

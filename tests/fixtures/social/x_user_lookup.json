@@ -1,0 +1,17 @@
+{
+ "data": {
+  "id": "1353836358901501952",
+  "name": "Anthropic",
+  "username": "AnthropicAI",
+  "created_at": "2021-01-25T19:21:11.000Z",
+  "verified_type": "business",
+  "public_metrics": {
+   "followers_count": 1100000,
+   "following_count": 42,
+   "tweet_count": 2900,
+   "listed_count": 8600,
+   "like_count": 1200,
+   "media_count": 700
+  }
+ }
+}

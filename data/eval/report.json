@@ -1,0 +1,3062 @@
+{
+  "generated_at": "2026-11-06T07:38:10",
+  "known_events": {
+    "events": 18,
+    "recall": 0.667,
+    "recall_high_confidence": 0.778,
+    "top10_in_week_primary_audience": 0.611,
+    "alerted_primary_audience": 0.611,
+    "pushed_primary_audience": 0.611,
+    "alert_predates_evidence": [
+      "openai-chatgpt-financial-services"
+    ],
+    "median_delay_days": 0.0,
+    "matching": "whole-word terms, every match_all group; best candidate by event type, title hits, primary-audience p, closeness in time; delay from the reporting insight's document date",
+    "details": [
+      {
+        "id": "gdm-reshuffle-and-dean-exit",
+        "title": "Jeff Dean leaves Google after 27 years to co-found Discovery Loop; DeepMind leadership reshuffle",
+        "confidence": "high",
+        "found": true,
+        "development_id": 478,
+        "development_title": "Jeff Dean, Ghemawat, Vinyals and Le co-found Discovery Loop",
+        "first_seen_at": "2026-08-05T00:00:00",
+        "evidence_insight_id": 684,
+        "evidence_title": "Jeff Dean, Ghemawat, Vinyals and Le co-found Discovery Loop",
+        "evidence_published_at": "2026-08-05T00:00:00",
+        "delay_days": 0.0,
+        "matched_developments": 1,
+        "rank_investment": 1,
+        "p_investment": 0.996,
+        "alert_investment": "P2",
+        "rank_ai_team": 25,
+        "p_ai_team": 0.44,
+        "alert_ai_team": null
+      },
+      {
+        "id": "gdm-leadership-change",
+        "title": "Hassabis becomes Google DeepMind chair and Alphabet chief scientist; Kavukcuoglu runs day-to-day",
+        "confidence": "high",
+        "found": true,
+        "development_id": 479,
+        "development_title": "Hassabis moves to Chair, Kavukcuoglu to SVP at Google DeepMind",
+        "first_seen_at": "2026-08-05T00:00:00",
+        "evidence_insight_id": 685,
+        "evidence_title": "Hassabis moves to Chair, Kavukcuoglu to SVP at Google DeepMind",
+        "evidence_published_at": "2026-08-05T00:00:00",
+        "delay_days": 0.0,
+        "matched_developments": 1,
+        "rank_investment": 2,
+        "p_investment": 0.988,
+        "alert_investment": "P2"
+      },
+      {
+        "id": "discovery-loop-funding",
+        "title": "Discovery Loop reportedly raising at ~$50B, weeks after talks at ~$10B",
+        "confidence": "medium",
+        "found": false
+      },
+      {
+        "id": "openai-jalapeno-benchmarks",
+        "title": "OpenAI's Broadcom-built Jalapeno inference chip claims 1.5-1.9x work per watt vs Nvidia GB200/GB300",
+        "confidence": "medium",
+        "found": true,
+        "development_id": 89,
+        "development_title": "OpenAI reports first results for custom inference chip Jalape\u00f1o",
+        "first_seen_at": "2026-08-25T07:00:00",
+        "evidence_insight_id": 131,
+        "evidence_title": "OpenAI reports first results for custom inference chip Jalape\u00f1o",
+        "evidence_published_at": "2026-08-25T07:00:00",
+        "delay_days": 0.29,
+        "matched_developments": 1,
+        "rank_investment": 2,
+        "p_investment": 0.994,
+        "alert_investment": "P2",
+        "rank_ai_team": 34,
+        "p_ai_team": 0.207,
+        "alert_ai_team": null
+      },
+      {
+        "id": "anthropic-fable-mythos-5-1",
+        "title": "Anthropic releases Claude Fable 5.1 (general) and Claude Mythos 5.1 (vetted cyber/life-science programmes)",
+        "confidence": "high",
+        "found": true,
+        "development_id": 120,
+        "development_title": "Anthropic launches Claude Fable 5.1 and Mythos 5.1 with cheaper cache reads",
+        "first_seen_at": "2026-09-01T00:00:00",
+        "evidence_insight_id": 173,
+        "evidence_title": "Anthropic launches Claude Fable 5.1 and Mythos 5.1 with cheaper cache reads",
+        "evidence_published_at": "2026-09-01T00:00:00",
+        "delay_days": 0.0,
+        "matched_developments": 1,
+        "rank_investment": 1,
+        "p_investment": 1.0,
+        "alert_investment": "P2",
+        "rank_ai_team": 10,
+        "p_ai_team": 0.8,
+        "alert_ai_team": "P1"
+      },
+      {
+        "id": "sb-energy-s1",
+        "title": "SB Energy files S-1 (Nasdaq SBE); prospectus says it is 'substantially dependent' on OpenAI",
+        "confidence": "high",
+        "found": false
+      },
+      {
+        "id": "openai-gpt6-astra",
+        "title": "OpenAI GPT-6 'Astra' staged rollout",
+        "confidence": "medium",
+        "found": true,
+        "development_id": 123,
+        "development_title": "OpenAI says Astra hits Critical cybersecurity threshold under Preparedness Framework",
+        "first_seen_at": "2026-09-01T13:00:00",
+        "evidence_insight_id": 178,
+        "evidence_title": "OpenAI says Astra hits Critical cybersecurity threshold under Preparedness Framework",
+        "evidence_published_at": "2026-09-01T13:00:00",
+        "delay_days": -1.46,
+        "matched_developments": 1,
+        "rank_investment": 2,
+        "p_investment": 0.999,
+        "alert_investment": "P1",
+        "rank_ai_team": 1,
+        "p_ai_team": 0.922,
+        "alert_ai_team": "P1"
+      },
+      {
+        "id": "openai-chatgpt-financial-services",
+        "title": "OpenAI launches ChatGPT for financial services with S&P Global / FactSet data integrations",
+        "confidence": "medium",
+        "found": true,
+        "development_id": 123,
+        "development_title": "OpenAI says Astra hits Critical cybersecurity threshold under Preparedness Framework",
+        "first_seen_at": "2026-09-01T13:00:00",
+        "evidence_insight_id": 245,
+        "evidence_title": "OpenAI launches ChatGPT for Financial Services with GPT-6 Astra",
+        "evidence_published_at": "2026-09-10T07:00:00",
+        "delay_days": 0.29,
+        "matched_developments": 1,
+        "rank_investment": 2,
+        "p_investment": 0.999,
+        "alert_investment": "P1",
+        "alert_investment_predates_evidence": true
+      },
+      {
+        "id": "openai-navier-stokes-claim",
+        "title": "OpenAI says an internal agent swarm produced a proof of finite-time blow-up for a forced Navier-Stokes variant",
+        "confidence": "medium",
+        "found": true,
+        "development_id": 149,
+        "development_title": "OpenAI shares AI-generated Navier\u2013Stokes Millennium Prize solution with Lean proof",
+        "first_seen_at": "2026-09-08T10:00:00",
+        "evidence_insight_id": 219,
+        "evidence_title": "OpenAI shares AI-generated Navier\u2013Stokes Millennium Prize solution with Lean proof",
+        "evidence_published_at": "2026-09-08T10:00:00",
+        "delay_days": -6.58,
+        "matched_developments": 1,
+        "rank_ai_team": 7,
+        "p_ai_team": 0.804,
+        "alert_ai_team": "P2",
+        "rank_investment": 9,
+        "p_investment": 0.596,
+        "alert_investment": null
+      },
+      {
+        "id": "anthropic-opus-5-5",
+        "title": "Anthropic releases Claude Opus 5.5 (lower price than Opus 5)",
+        "confidence": "medium",
+        "found": true,
+        "development_id": 209,
+        "development_title": "Anthropic launches Claude Opus 5.5 at lower price than Opus 5",
+        "first_seen_at": "2026-09-22T00:00:00",
+        "evidence_insight_id": 309,
+        "evidence_title": "Anthropic launches Claude Opus 5.5 at lower price than Opus 5",
+        "evidence_published_at": "2026-09-22T00:00:00",
+        "delay_days": 0.0,
+        "matched_developments": 1,
+        "rank_ai_team": 11,
+        "p_ai_team": 0.73,
+        "alert_ai_team": "P2",
+        "rank_investment": 1,
+        "p_investment": 0.999,
+        "alert_investment": null
+      },
+      {
+        "id": "qwen4-roadmap",
+        "title": "Alibaba Apsara: Qwen 4 in training; plans a 5-10T-parameter model",
+        "confidence": "medium",
+        "found": false
+      },
+      {
+        "id": "akamai-anthropic-compute",
+        "title": "Anthropic signs $11.6B, 7-year compute agreement with Akamai; AKAM +20% after hours",
+        "confidence": "high",
+        "found": false
+      },
+      {
+        "id": "openai-gpt61-shelved",
+        "title": "Reuters: OpenAI decided not to release GPT-6.1 Astra after internal testing raised safety concerns",
+        "confidence": "medium",
+        "found": false
+      },
+      {
+        "id": "white-house-accord",
+        "title": "White House voluntary AI accord signed by lab and chip CEOs",
+        "confidence": "medium",
+        "found": false
+      },
+      {
+        "id": "gemini-4-argon",
+        "title": "Google unveils Gemini 4 Argon",
+        "confidence": "high",
+        "found": true,
+        "development_id": 270,
+        "development_title": "Google DeepMind releases Gemini 4 Argon to trusted cyber defenders",
+        "first_seen_at": "2026-10-02T15:00:00",
+        "evidence_insight_id": 398,
+        "evidence_title": "Google DeepMind releases Gemini 4 Argon to trusted cyber defenders",
+        "evidence_published_at": "2026-10-02T15:00:00",
+        "delay_days": 2.62,
+        "matched_developments": 1,
+        "rank_ai_team": 2,
+        "p_ai_team": 0.931,
+        "alert_ai_team": null,
+        "rank_investment": 8,
+        "p_investment": 0.886,
+        "alert_investment": "P2"
+      },
+      {
+        "id": "openai-on-google-cloud",
+        "title": "OpenAI frontier models and Codex come to Google Cloud Model Garden (private preview)",
+        "confidence": "high",
+        "found": true,
+        "development_id": 375,
+        "development_title": "OpenAI models and Codex coming to Google Cloud Marketplace",
+        "first_seen_at": "2026-10-21T12:00:00",
+        "evidence_insight_id": 551,
+        "evidence_title": "OpenAI models and Codex coming to Google Cloud Marketplace",
+        "evidence_published_at": "2026-10-21T12:00:00",
+        "delay_days": 0.5,
+        "matched_developments": 2,
+        "rank_investment": 1,
+        "p_investment": 0.997,
+        "alert_investment": "P2",
+        "rank_ai_team": 54,
+        "p_ai_team": 0.25,
+        "alert_ai_team": null
+      },
+      {
+        "id": "anthropic-s1",
+        "title": "Anthropic files public S-1 for a Nasdaq listing (ANT); H1-2026 revenue ~$16.3B",
+        "confidence": "high",
+        "found": true,
+        "development_id": 405,
+        "development_title": "Anthropic files S-1 with SEC for proposed Nasdaq IPO",
+        "first_seen_at": "2026-10-26T00:00:00",
+        "evidence_insight_id": 593,
+        "evidence_title": "Anthropic files S-1 with SEC for proposed Nasdaq IPO",
+        "evidence_published_at": "2026-10-26T00:00:00",
+        "delay_days": 0.0,
+        "matched_developments": 1,
+        "rank_investment": 1,
+        "p_investment": 1.0,
+        "alert_investment": "P1"
+      },
+      {
+        "id": "gemini-4-carbon",
+        "title": "Google announces Gemini 4 Carbon (frontier, cyber focus, restricted access); #1 on AA Intelligence Index v5",
+        "confidence": "high",
+        "found": true,
+        "development_id": 425,
+        "development_title": "Google DeepMind announces Gemini 4 Carbon frontier model",
+        "first_seen_at": "2026-10-28T17:00:58",
+        "evidence_insight_id": 622,
+        "evidence_title": "Google DeepMind announces Gemini 4 Carbon frontier model",
+        "evidence_published_at": "2026-10-28T17:00:58",
+        "delay_days": 0.71,
+        "matched_developments": 1,
+        "rank_ai_team": 2,
+        "p_ai_team": 0.871,
+        "alert_ai_team": "P1",
+        "rank_investment": 10,
+        "p_investment": 0.942,
+        "alert_investment": "P2"
+      }
+    ]
+  },
+  "extraction": {
+    "insights": 689,
+    "quotes": 1267,
+    "quote_verification_rate": 0.9984,
+    "insights_all_quotes_verified": 0.9971,
+    "insights_at_least_one_verified": 1.0,
+    "citation_validity": 1.0,
+    "by_event_type": {
+      "product_launch": 134,
+      "research_paper": 132,
+      "model_release": 95,
+      "open_weight_release": 74,
+      "technique": 60,
+      "hiring_signal": 46,
+      "safety_policy": 42,
+      "partnership": 26,
+      "other": 20,
+      "capability_claim": 19,
+      "pricing_change": 17,
+      "talent_move": 9,
+      "strategy_shift": 8,
+      "custom_silicon": 4,
+      "funding_ipo": 2,
+      "new_venture": 1
+    },
+    "by_source_class": {
+      "official": 533,
+      "research": 103,
+      "market_data": 47,
+      "curated": 6
+    },
+    "unverified_examples": [
+      {
+        "insight_id": 10,
+        "claim": "Meta says its GEM ads recommendation foundation model now trains at LLM scale on several thousand latest-generation GPUs, doubling E2E training efficiency to 20-25% MFU while scaling training FLOPs 4x in 12 months.",
+        "quotes": [
+          "doubling end-to-end (E2E) training efficiency to 20\u201325% Model FLOPs Utilization (MFU) while scaling training FLOPs 4x in 12 months",
+          "Meta\\u2019s Generative Ads Recommendation Model (GEM), the foundation model behind ads recommendations across Instagram and Facebook, now trains at LLM scale on several thousand of the latest-generation GPUs."
+        ]
+      },
+      {
+        "insight_id": 483,
+        "claim": "Google DeepMind's MuJoCo 3.16.0 release, dated October 14, 2026, adds compile-time scaling of frame contents via new scale, scaling and massscale attributes.",
+        "quotes": [
+          "Release 3.16.0 of google-deepmind/mujoco",
+          "Frames can now scale their contents at compile time"
+        ]
+      }
+    ]
+  },
+  "noise": {
+    "documents_by_status": {
+      "duplicate": 3,
+      "extracted": 696,
+      "skipped": 309
+    },
+    "suppressed_share": 0.307,
+    "noise_reasons": {
+      "minor_update": 141,
+      "customer_story": 80,
+      "marketing": 48,
+      "off_topic": 25,
+      "opinion_chatter": 8,
+      "event_promo": 5,
+      "repost": 2
+    },
+    "relevant_share_by_source_class": {
+      "curated": 1.0,
+      "market_data": 0.959,
+      "official": 0.644,
+      "press": 0.0,
+      "research": 0.925
+    },
+    "audit_sample": "/Users/sanjaysuthraye/anaconda_projects/1. Jobs Take home Test/Bit-capital/frontier-lab-intel/data/eval/noise_audit_sample.csv"
+  },
+  "alerts": {
+    "alerts": 89,
+    "definitions": {
+      "pushed": "P1 or P2 (reaches a person in-app or on Slack); P3 is digest-only and not counted",
+      "per_week": "pushed alerts / weeks from the window start to the newest development (at least one week)",
+      "per_active_day": "pushed alerts / days on which at least one new development was first seen",
+      "per_push_day": "pushed alerts / days with at least one push (burst size, never below 1)",
+      "precision": "share of labelled pushed alerts whose development label is >= 1 (worth knowing) or == 2 (material); label_0 counts pushes labelled noise",
+      "label2_recall": "label-2 developments of the audience (in the window) that got a P1/P2 alert",
+      "holdout": "developments first seen on/after the scorer's time-split date (scoring_metrics.json split.test_from)",
+      "lens_dismissed": "pushed alerts whose own audience lens says no_action (investment) or hold (ai_team)"
+    },
+    "label_note": "One label per development: human annotators (majority) when present, else the latest LLM judge. LLM-judge precision is in-sample: `fli train` refits the deployed scorers on all labels after the time-split evaluation (hold-out window included), so treat it as optimistic until human labels exist.",
+    "investment": {
+      "count": 31,
+      "by_severity": {
+        "P2": 26,
+        "P1": 3,
+        "P3": 2
+      },
+      "duplicates": 0,
+      "pushed": {
+        "from": "2026-08-01 00:00:00",
+        "to": "2026-11-04 02:23:57",
+        "count": 29,
+        "by_severity": {
+          "P1": 3,
+          "P2": 26
+        },
+        "per_week": 2.13,
+        "per_active_day": 0.33,
+        "per_push_day": 1.32,
+        "max_per_day": 2,
+        "precision": {
+          "P1+P2": {
+            "n": 29,
+            "labelled": 19,
+            "label_ge1": 1.0,
+            "label_eq2": 0.368,
+            "label_0": 0
+          },
+          "P1": {
+            "n": 3,
+            "labelled": 3,
+            "label_ge1": 1.0,
+            "label_eq2": 1.0,
+            "label_0": 0
+          }
+        },
+        "label2_recall": {
+          "label2_developments": 10,
+          "pushed": 7,
+          "share": 0.7
+        },
+        "label_sources": {
+          "llm": 19
+        },
+        "in_sample": true,
+        "complete_actionable_share": 1.0,
+        "lens_dismissed": {
+          "n": 0,
+          "share": 0.0,
+          "P1": 0
+        }
+      },
+      "holdout": {
+        "from": "2026-10-13 16:00:29",
+        "to": "2026-11-04 02:23:57",
+        "count": 7,
+        "by_severity": {
+          "P1": 1,
+          "P2": 6
+        },
+        "per_week": 2.29,
+        "per_active_day": 0.3,
+        "per_push_day": 1.4,
+        "max_per_day": 2,
+        "precision": {
+          "P1+P2": {
+            "n": 7,
+            "labelled": 6,
+            "label_ge1": 1.0,
+            "label_eq2": 0.333,
+            "label_0": 0
+          },
+          "P1": {
+            "n": 1,
+            "labelled": 1,
+            "label_ge1": 1.0,
+            "label_eq2": 1.0,
+            "label_0": 0
+          }
+        },
+        "label2_recall": {
+          "label2_developments": 2,
+          "pushed": 2,
+          "share": 1.0
+        },
+        "label_sources": {
+          "llm": 6
+        },
+        "in_sample": true,
+        "complete_actionable_share": 1.0,
+        "lens_dismissed": {
+          "n": 0,
+          "share": 0.0,
+          "P1": 0
+        }
+      }
+    },
+    "ai_team": {
+      "count": 58,
+      "by_severity": {
+        "P2": 37,
+        "P1": 19,
+        "P3": 2
+      },
+      "duplicates": 0,
+      "pushed": {
+        "from": "2026-08-01 00:00:00",
+        "to": "2026-11-04 02:23:57",
+        "count": 56,
+        "by_severity": {
+          "P1": 19,
+          "P2": 37
+        },
+        "per_week": 4.12,
+        "per_active_day": 0.64,
+        "per_push_day": 1.4,
+        "max_per_day": 2,
+        "precision": {
+          "P1+P2": {
+            "n": 56,
+            "labelled": 34,
+            "label_ge1": 0.971,
+            "label_eq2": 0.529,
+            "label_0": 1
+          },
+          "P1": {
+            "n": 19,
+            "labelled": 14,
+            "label_ge1": 1.0,
+            "label_eq2": 0.857,
+            "label_0": 0
+          }
+        },
+        "label2_recall": {
+          "label2_developments": 22,
+          "pushed": 18,
+          "share": 0.818
+        },
+        "label_sources": {
+          "llm": 34
+        },
+        "in_sample": true,
+        "complete_actionable_share": 1.0,
+        "lens_dismissed": {
+          "n": 0,
+          "share": 0.0,
+          "P1": 0
+        }
+      },
+      "holdout": {
+        "from": "2026-10-13 16:00:29",
+        "to": "2026-11-04 02:23:57",
+        "count": 14,
+        "by_severity": {
+          "P1": 2,
+          "P2": 12
+        },
+        "per_week": 4.57,
+        "per_active_day": 0.61,
+        "per_push_day": 1.4,
+        "max_per_day": 2,
+        "precision": {
+          "P1+P2": {
+            "n": 14,
+            "labelled": 8,
+            "label_ge1": 0.875,
+            "label_eq2": 0.5,
+            "label_0": 1
+          },
+          "P1": {
+            "n": 2,
+            "labelled": 2,
+            "label_ge1": 1.0,
+            "label_eq2": 0.5,
+            "label_0": 0
+          }
+        },
+        "label2_recall": {
+          "label2_developments": 5,
+          "pushed": 4,
+          "share": 0.8
+        },
+        "label_sources": {
+          "llm": 8
+        },
+        "in_sample": true,
+        "complete_actionable_share": 1.0,
+        "lens_dismissed": {
+          "n": 0,
+          "share": 0.0,
+          "P1": 0
+        }
+      }
+    }
+  },
+  "scoring": {
+    "generated_at": "2026-11-04T15:52:35",
+    "target": "label >= 1 (worth knowing or material); label == 2 reported as roc_auc_material",
+    "label_policy": "per development: human labels (majority) preferred over the LLM judge",
+    "split": "time-ordered: first 70% by first_seen_at train, rest test",
+    "audiences": {
+      "investment": {
+        "n_labels": 300,
+        "label_sources": {
+          "llm": 300
+        },
+        "positives": 91,
+        "material": 11,
+        "status": "trained",
+        "version": "lr-investment-20261104-llm",
+        "label_source": "llm",
+        "split": {
+          "train": 210,
+          "test": 90,
+          "test_from": "2026-10-13 16:00:29",
+          "train_positives": 62,
+          "test_positives": 29
+        },
+        "C": 0.3,
+        "cv_by_C": {
+          "0.01": {
+            "roc_auc": 0.9027,
+            "log_loss": 0.482
+          },
+          "0.03": {
+            "roc_auc": 0.9044,
+            "log_loss": 0.4123
+          },
+          "0.1": {
+            "roc_auc": 0.9116,
+            "log_loss": 0.3635
+          },
+          "0.3": {
+            "roc_auc": 0.9078,
+            "log_loss": 0.3478
+          },
+          "1.0": {
+            "roc_auc": 0.9057,
+            "log_loss": 0.3574
+          },
+          "3.0": {
+            "roc_auc": 0.8993,
+            "log_loss": 0.38
+          }
+        },
+        "model": {
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.8694,
+          "auc_ci95": [
+            0.791,
+            0.935
+          ],
+          "average_precision": 0.7695,
+          "precision_at_10": 0.9,
+          "precision_at_20": 0.75,
+          "brier": 0.1453,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 53,
+              "mean_predicted": 0.0652,
+              "observed_rate": 0.0943
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 13,
+              "mean_predicted": 0.2926,
+              "observed_rate": 0.6154
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 5,
+              "mean_predicted": 0.5574,
+              "observed_rate": 0.4
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 10,
+              "mean_predicted": 0.6754,
+              "observed_rate": 0.5
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 9,
+              "mean_predicted": 0.9535,
+              "observed_rate": 1.0
+            }
+          ],
+          "material_n": 2,
+          "roc_auc_material": 0.9716,
+          "brier_without_intercept_correction": 0.1456
+        },
+        "baselines": {
+          "official_only": {
+            "n": 90,
+            "positives": 29,
+            "roc_auc": 0.5285,
+            "auc_ci95": [
+              0.435,
+              0.606
+            ],
+            "average_precision": 0.3353,
+            "precision_at_10": 0.338,
+            "precision_at_20": 0.338,
+            "material_n": 2,
+            "roc_auc_material": 0.608
+          },
+          "magnitude_only": {
+            "n": 90,
+            "positives": 29,
+            "roc_auc": 0.7213,
+            "auc_ci95": [
+              0.618,
+              0.816
+            ],
+            "average_precision": 0.5342,
+            "precision_at_10": 0.6826,
+            "precision_at_20": 0.6239,
+            "material_n": 2,
+            "roc_auc_material": 1.0
+          },
+          "n_sources_only": {
+            "n": 90,
+            "positives": 29,
+            "roc_auc": 0.4788,
+            "auc_ci95": [
+              0.419,
+              0.544
+            ],
+            "average_precision": 0.3421,
+            "precision_at_10": 0.2333,
+            "precision_at_20": 0.2833,
+            "material_n": 2,
+            "roc_auc_material": 0.6989
+          },
+          "prior-v0": {
+            "n": 90,
+            "positives": 29,
+            "roc_auc": 0.7999,
+            "auc_ci95": [
+              0.703,
+              0.877
+            ],
+            "average_precision": 0.6745,
+            "precision_at_10": 0.8,
+            "precision_at_20": 0.7,
+            "brier": 0.1698,
+            "calibration": [
+              {
+                "bin": "0.0-0.2",
+                "n": 47,
+                "mean_predicted": 0.1045,
+                "observed_rate": 0.1702
+              },
+              {
+                "bin": "0.2-0.4",
+                "n": 26,
+                "mean_predicted": 0.2799,
+                "observed_rate": 0.3462
+              },
+              {
+                "bin": "0.4-0.6",
+                "n": 11,
+                "mean_predicted": 0.5072,
+                "observed_rate": 0.6364
+              },
+              {
+                "bin": "0.6-0.8",
+                "n": 4,
+                "mean_predicted": 0.7428,
+                "observed_rate": 0.75
+              },
+              {
+                "bin": "0.8-1.0",
+                "n": 2,
+                "mean_predicted": 0.9322,
+                "observed_rate": 1.0
+              }
+            ],
+            "material_n": 2,
+            "roc_auc_material": 1.0
+          }
+        },
+        "ablation_without_llm_features": {
+          "dropped": [
+            "max_magnitude",
+            "mean_confidence"
+          ],
+          "C": 0.1,
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.7875,
+          "auc_ci95": [
+            0.692,
+            0.882
+          ],
+          "average_precision": 0.7015,
+          "precision_at_10": 0.8,
+          "precision_at_20": 0.7,
+          "brier": 0.1636,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 42,
+              "mean_predicted": 0.0994,
+              "observed_rate": 0.1429
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 22,
+              "mean_predicted": 0.2622,
+              "observed_rate": 0.2727
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 14,
+              "mean_predicted": 0.4721,
+              "observed_rate": 0.5714
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 4,
+              "mean_predicted": 0.6933,
+              "observed_rate": 0.5
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 8,
+              "mean_predicted": 0.9105,
+              "observed_rate": 0.875
+            }
+          ],
+          "material_n": 2,
+          "roc_auc_material": 0.8295
+        },
+        "coefficients_per_sd": [
+          {
+            "feature": "max_magnitude",
+            "label": "Extractor magnitude judgement (1-5)",
+            "coef": 1.3782
+          },
+          {
+            "feature": "exposure_bit",
+            "label": "BIT holdings the event itself links to (fund weight % x link confidence, / 10)",
+            "coef": 1.1568
+          },
+          {
+            "feature": "grp_hiring",
+            "label": "Hiring signal",
+            "coef": 0.6697
+          },
+          {
+            "feature": "grp_research",
+            "label": "Research paper / technique",
+            "coef": -0.4049
+          },
+          {
+            "feature": "attention",
+            "label": "Attention to the item itself (upvotes / likes / downloads, log)",
+            "coef": -0.4021
+          },
+          {
+            "feature": "grp_strategy",
+            "label": "Strategy, partnership, product or pricing",
+            "coef": 0.3911
+          },
+          {
+            "feature": "n_source_classes",
+            "label": "Kinds of source (official, personal, press ...)",
+            "coef": 0.3892
+          },
+          {
+            "feature": "mean_confidence",
+            "label": "Extractor confidence",
+            "coef": 0.3746
+          },
+          {
+            "feature": "max_novelty",
+            "label": "New relative to the lab's recent history",
+            "coef": 0.3271
+          },
+          {
+            "feature": "grp_infra",
+            "label": "Compute, energy or custom silicon",
+            "coef": 0.3121
+          },
+          {
+            "feature": "grp_people",
+            "label": "Talent move",
+            "coef": 0.2681
+          },
+          {
+            "feature": "grp_capital",
+            "label": "Funding, IPO or new venture",
+            "coef": 0.2144
+          },
+          {
+            "feature": "n_tickers",
+            "label": "Public companies the event itself links to (confidence-weighted)",
+            "coef": 0.1928
+          },
+          {
+            "feature": "lab_tier_3",
+            "label": "Tier-3 alumni startup",
+            "coef": -0.1663
+          },
+          {
+            "feature": "person_tier",
+            "label": "Involves a key person (A=1, B=0.6, C=0.3)",
+            "coef": -0.15
+          },
+          {
+            "feature": "lab_tier_1",
+            "label": "Tier-1 frontier lab",
+            "coef": 0.1407
+          },
+          {
+            "feature": "lab_tier_2",
+            "label": "Tier-2 lab (challenger / open-weight)",
+            "coef": -0.1257
+          },
+          {
+            "feature": "first_seen_artifact",
+            "label": "Names a model/product never seen before",
+            "coef": -0.1255
+          },
+          {
+            "feature": "grp_release",
+            "label": "Model release / capability claim",
+            "coef": 0.1119
+          },
+          {
+            "feature": "grp_policy",
+            "label": "Safety / policy",
+            "coef": 0.0956
+          },
+          {
+            "feature": "log_sources",
+            "label": "Independent sources (log)",
+            "coef": -0.0573
+          },
+          {
+            "feature": "has_official",
+            "label": "Published on an official lab channel",
+            "coef": -0.0537
+          },
+          {
+            "feature": "has_verified",
+            "label": "Evidence quotes verified against the source",
+            "coef": 0.0
+          },
+          {
+            "feature": "rumor_share",
+            "label": "Share of rumoured / unconfirmed claims",
+            "coef": 0.0
+          },
+          {
+            "feature": "press_only",
+            "label": "Reported only by press / aggregators",
+            "coef": 0.0
+          }
+        ],
+        "deployed": true,
+        "deploy_reason": "hold-out AUC 0.8694 vs prior-v0 0.7999",
+        "model_file": "/Users/sanjaysuthraye/anaconda_projects/1. Jobs Take home Test/Bit-capital/frontier-lab-intel/data/models/scoring_investment.json"
+      },
+      "ai_team": {
+        "n_labels": 300,
+        "label_sources": {
+          "llm": 300
+        },
+        "positives": 195,
+        "material": 23,
+        "status": "trained",
+        "version": "lr-ai_team-20261104-llm",
+        "label_source": "llm",
+        "split": {
+          "train": 210,
+          "test": 90,
+          "test_from": "2026-10-13 16:00:29",
+          "train_positives": 135,
+          "test_positives": 60
+        },
+        "C": 0.03,
+        "cv_by_C": {
+          "0.01": {
+            "roc_auc": 0.798,
+            "log_loss": 0.5882
+          },
+          "0.03": {
+            "roc_auc": 0.7891,
+            "log_loss": 0.5562
+          },
+          "0.1": {
+            "roc_auc": 0.7812,
+            "log_loss": 0.5453
+          },
+          "0.3": {
+            "roc_auc": 0.7758,
+            "log_loss": 0.5522
+          },
+          "1.0": {
+            "roc_auc": 0.7709,
+            "log_loss": 0.5679
+          },
+          "3.0": {
+            "roc_auc": 0.7669,
+            "log_loss": 0.5836
+          }
+        },
+        "model": {
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.8228,
+          "auc_ci95": [
+            0.742,
+            0.911
+          ],
+          "average_precision": 0.899,
+          "precision_at_10": 1.0,
+          "precision_at_20": 0.95,
+          "brier": 0.1637,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 1,
+              "mean_predicted": 0.1854,
+              "observed_rate": 0.0
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 9,
+              "mean_predicted": 0.3027,
+              "observed_rate": 0.2222
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 33,
+              "mean_predicted": 0.5218,
+              "observed_rate": 0.5152
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 27,
+              "mean_predicted": 0.6848,
+              "observed_rate": 0.8148
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 20,
+              "mean_predicted": 0.8566,
+              "observed_rate": 0.95
+            }
+          ],
+          "material_n": 5,
+          "roc_auc_material": 0.88,
+          "brier_without_intercept_correction": 0.1928
+        },
+        "baselines": {
+          "official_only": {
+            "n": 90,
+            "positives": 60,
+            "roc_auc": 0.3917,
+            "auc_ci95": [
+              0.324,
+              0.463
+            ],
+            "average_precision": 0.6229,
+            "precision_at_10": 0.6056,
+            "precision_at_20": 0.6056,
+            "material_n": 5,
+            "roc_auc_material": 0.2941
+          },
+          "magnitude_only": {
+            "n": 90,
+            "positives": 60,
+            "roc_auc": 0.5175,
+            "auc_ci95": [
+              0.43,
+              0.611
+            ],
+            "average_precision": 0.6762,
+            "precision_at_10": 0.7478,
+            "precision_at_20": 0.7217,
+            "material_n": 5,
+            "roc_auc_material": 0.8659
+          },
+          "n_sources_only": {
+            "n": 90,
+            "positives": 60,
+            "roc_auc": 0.575,
+            "auc_ci95": [
+              0.535,
+              0.621
+            ],
+            "average_precision": 0.7167,
+            "precision_at_10": 0.963,
+            "precision_at_20": 0.7963,
+            "material_n": 5,
+            "roc_auc_material": 0.5624
+          },
+          "prior-v0": {
+            "n": 90,
+            "positives": 60,
+            "roc_auc": 0.7494,
+            "auc_ci95": [
+              0.653,
+              0.846
+            ],
+            "average_precision": 0.8556,
+            "precision_at_10": 0.9,
+            "precision_at_20": 0.9,
+            "brier": 0.3156,
+            "calibration": [
+              {
+                "bin": "0.0-0.2",
+                "n": 29,
+                "mean_predicted": 0.1388,
+                "observed_rate": 0.5172
+              },
+              {
+                "bin": "0.2-0.4",
+                "n": 43,
+                "mean_predicted": 0.2968,
+                "observed_rate": 0.6744
+              },
+              {
+                "bin": "0.4-0.6",
+                "n": 11,
+                "mean_predicted": 0.49,
+                "observed_rate": 0.8182
+              },
+              {
+                "bin": "0.6-0.8",
+                "n": 3,
+                "mean_predicted": 0.6937,
+                "observed_rate": 1.0
+              },
+              {
+                "bin": "0.8-1.0",
+                "n": 4,
+                "mean_predicted": 0.947,
+                "observed_rate": 1.0
+              }
+            ],
+            "material_n": 5,
+            "roc_auc_material": 0.9082
+          }
+        },
+        "ablation_without_llm_features": {
+          "dropped": [
+            "max_magnitude",
+            "mean_confidence"
+          ],
+          "C": 0.1,
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.8356,
+          "auc_ci95": [
+            0.753,
+            0.915
+          ],
+          "average_precision": 0.9046,
+          "precision_at_10": 1.0,
+          "precision_at_20": 0.9,
+          "brier": 0.158,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 6,
+              "mean_predicted": 0.11,
+              "observed_rate": 0.0
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 11,
+              "mean_predicted": 0.3403,
+              "observed_rate": 0.2727
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 22,
+              "mean_predicted": 0.5276,
+              "observed_rate": 0.6364
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 30,
+              "mean_predicted": 0.6864,
+              "observed_rate": 0.8
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 21,
+              "mean_predicted": 0.89,
+              "observed_rate": 0.9048
+            }
+          ],
+          "material_n": 5,
+          "roc_auc_material": 0.8541
+        },
+        "coefficients_per_sd": [
+          {
+            "feature": "grp_release",
+            "label": "Model release / capability claim",
+            "coef": 0.343
+          },
+          {
+            "feature": "grp_hiring",
+            "label": "Hiring signal",
+            "coef": -0.3134
+          },
+          {
+            "feature": "exposure_bit",
+            "label": "BIT holdings the event itself links to (fund weight % x link confidence, / 10)",
+            "coef": -0.2293
+          },
+          {
+            "feature": "first_seen_artifact",
+            "label": "Names a model/product never seen before",
+            "coef": 0.2264
+          },
+          {
+            "feature": "lab_tier_1",
+            "label": "Tier-1 frontier lab",
+            "coef": -0.2043
+          },
+          {
+            "feature": "has_official",
+            "label": "Published on an official lab channel",
+            "coef": -0.1861
+          },
+          {
+            "feature": "log_sources",
+            "label": "Independent sources (log)",
+            "coef": 0.1704
+          },
+          {
+            "feature": "grp_people",
+            "label": "Talent move",
+            "coef": -0.1674
+          },
+          {
+            "feature": "grp_infra",
+            "label": "Compute, energy or custom silicon",
+            "coef": -0.1621
+          },
+          {
+            "feature": "max_magnitude",
+            "label": "Extractor magnitude judgement (1-5)",
+            "coef": 0.1317
+          },
+          {
+            "feature": "lab_tier_2",
+            "label": "Tier-2 lab (challenger / open-weight)",
+            "coef": 0.1317
+          },
+          {
+            "feature": "n_source_classes",
+            "label": "Kinds of source (official, personal, press ...)",
+            "coef": 0.1297
+          },
+          {
+            "feature": "attention",
+            "label": "Attention to the item itself (upvotes / likes / downloads, log)",
+            "coef": 0.1121
+          },
+          {
+            "feature": "grp_capital",
+            "label": "Funding, IPO or new venture",
+            "coef": -0.1048
+          },
+          {
+            "feature": "grp_research",
+            "label": "Research paper / technique",
+            "coef": 0.0988
+          },
+          {
+            "feature": "grp_policy",
+            "label": "Safety / policy",
+            "coef": -0.0497
+          },
+          {
+            "feature": "grp_strategy",
+            "label": "Strategy, partnership, product or pricing",
+            "coef": -0.0481
+          },
+          {
+            "feature": "n_tickers",
+            "label": "Public companies the event itself links to (confidence-weighted)",
+            "coef": -0.0433
+          },
+          {
+            "feature": "person_tier",
+            "label": "Involves a key person (A=1, B=0.6, C=0.3)",
+            "coef": -0.0214
+          },
+          {
+            "feature": "lab_tier_3",
+            "label": "Tier-3 alumni startup",
+            "coef": -0.0158
+          },
+          {
+            "feature": "max_novelty",
+            "label": "New relative to the lab's recent history",
+            "coef": -0.0148
+          },
+          {
+            "feature": "mean_confidence",
+            "label": "Extractor confidence",
+            "coef": 0.0017
+          },
+          {
+            "feature": "has_verified",
+            "label": "Evidence quotes verified against the source",
+            "coef": 0.0
+          },
+          {
+            "feature": "rumor_share",
+            "label": "Share of rumoured / unconfirmed claims",
+            "coef": 0.0
+          },
+          {
+            "feature": "press_only",
+            "label": "Reported only by press / aggregators",
+            "coef": 0.0
+          }
+        ],
+        "deployed": true,
+        "deploy_reason": "hold-out AUC 0.8228 vs prior-v0 0.7494",
+        "model_file": "/Users/sanjaysuthraye/anaconda_projects/1. Jobs Take home Test/Bit-capital/frontier-lab-intel/data/models/scoring_ai_team.json"
+      }
+    }
+  },
+  "er": {
+    "n": 58,
+    "tp": 37,
+    "fp": 1,
+    "fn": 3,
+    "tn": 17,
+    "precision": 0.974,
+    "recall": 0.925,
+    "f1": 0.949,
+    "gray_zone": 3,
+    "recall_if_gray_accepted": 1.0,
+    "errors": [
+      {
+        "id": "p39",
+        "label": "same",
+        "predicted": "gray"
+      },
+      {
+        "id": "p40",
+        "label": "same",
+        "predicted": "gray"
+      },
+      {
+        "id": "p41",
+        "label": "same",
+        "predicted": "gray"
+      },
+      {
+        "id": "p51",
+        "label": "different",
+        "predicted": "same"
+      }
+    ]
+  },
+  "costs": {
+    "by_workflow": {
+      "digest": {
+        "calls": 132,
+        "cached": 13,
+        "input_tokens": 657225,
+        "output_tokens": 210661,
+        "usd": 7.1429,
+        "models": [
+          "claude-opus-5-5",
+          "claude-sonnet-5-5"
+        ]
+      },
+      "digest_debug": {
+        "calls": 11,
+        "cached": 0,
+        "input_tokens": 68600,
+        "output_tokens": 14020,
+        "usd": 0.4921,
+        "models": [
+          "claude-opus-5-5",
+          "claude-sonnet-5-5"
+        ]
+      },
+      "extract": {
+        "calls": 719,
+        "cached": 23,
+        "input_tokens": 557265,
+        "output_tokens": 505221,
+        "usd": 0.3447,
+        "models": [
+          "claude-haiku-5-5"
+        ]
+      },
+      "judge": {
+        "calls": 301,
+        "cached": 0,
+        "input_tokens": 169074,
+        "output_tokens": 59905,
+        "usd": 2.0788,
+        "models": [
+          "claude-opus-5-5"
+        ]
+      },
+      "lens": {
+        "calls": 715,
+        "cached": 0,
+        "input_tokens": 593545,
+        "output_tokens": 249572,
+        "usd": 4.1645,
+        "models": [
+          "claude-sonnet-5-5"
+        ]
+      },
+      "triage": {
+        "calls": 1036,
+        "cached": 0,
+        "input_tokens": 741821,
+        "output_tokens": 128718,
+        "usd": 0.1772,
+        "models": [
+          "claude-haiku-5-5"
+        ]
+      }
+    },
+    "llm_total_usd": 14.4002,
+    "x_api_usd": 0.0,
+    "usd_per_triaged_document": 0.00018,
+    "usd_per_extracted_document": 0.0005
+  },
+  "lens": {
+    "definitions": {
+      "checked": "lenses on live developments whose Lens.checks carry a 'grounded' verdict (written by the lens stage, refreshed by `fli lens-recheck`)",
+      "grounded": "no figure in the headline, so-what or a ticker rationale that the lens input does not contain, and no official-wording flag (fli.deliver.lens.faithfulness_checks); a code check of figures and provenance wording, not a semantic entailment judge",
+      "unsupported_numbers": "figures (numbers, percentages, multiples, amounts) not written in the lens input, by field; figures in what_to_do are reported but do not make a lens ungrounded",
+      "headlines_replaced": "lenses whose model headline stated an unsupported figure or official wording and was replaced by the development title (the original is kept in the checks)",
+      "official_wording": "claims worded as official without an official source, or whose figures are not in the official evidence",
+      "tickers_dropped": "investment lenses that abstained (no_action) and had their tickers cleared",
+      "pushed": "the same counts for the lenses behind a P1/P2 alert of their own audience (the text a person is sent)"
+    },
+    "investment": {
+      "lenses": 253,
+      "checked": 253,
+      "grounded": 245,
+      "grounded_share": 0.968,
+      "with_unsupported_numbers": 8,
+      "unsupported_numbers": 10,
+      "unsupported_by_field": {
+        "so_what": 6,
+        "what_to_do": 3,
+        "tickers": 1
+      },
+      "headlines_replaced": 1,
+      "with_official_wording_flags": 2,
+      "official_wording_by_issue": {
+        "figures_not_in_official_evidence": 2
+      },
+      "tickers_dropped": 64,
+      "pushed": {
+        "lenses": 29,
+        "checked": 29,
+        "grounded": 27,
+        "grounded_share": 0.931,
+        "with_unsupported_numbers": 1,
+        "unsupported_numbers": 3,
+        "unsupported_by_field": {
+          "so_what": 1,
+          "what_to_do": 1,
+          "tickers": 1
+        },
+        "headlines_replaced": 1,
+        "with_official_wording_flags": 1,
+        "official_wording_by_issue": {
+          "figures_not_in_official_evidence": 1
+        },
+        "tickers_dropped": 0
+      }
+    },
+    "ai_team": {
+      "lenses": 451,
+      "checked": 451,
+      "grounded": 448,
+      "grounded_share": 0.993,
+      "with_unsupported_numbers": 5,
+      "unsupported_numbers": 6,
+      "unsupported_by_field": {
+        "so_what": 4,
+        "what_to_do": 2
+      },
+      "headlines_replaced": 0,
+      "with_official_wording_flags": 0,
+      "official_wording_by_issue": {},
+      "tickers_dropped": 0,
+      "pushed": {
+        "lenses": 56,
+        "checked": 56,
+        "grounded": 56,
+        "grounded_share": 1.0,
+        "with_unsupported_numbers": 1,
+        "unsupported_numbers": 1,
+        "unsupported_by_field": {
+          "what_to_do": 1
+        },
+        "headlines_replaced": 0,
+        "with_official_wording_flags": 0,
+        "official_wording_by_issue": {},
+        "tickers_dropped": 0
+      }
+    },
+    "all": {
+      "lenses": 704,
+      "checked": 704,
+      "grounded": 693,
+      "grounded_share": 0.984,
+      "with_unsupported_numbers": 13,
+      "unsupported_numbers": 16,
+      "unsupported_by_field": {
+        "so_what": 10,
+        "what_to_do": 5,
+        "tickers": 1
+      },
+      "headlines_replaced": 1,
+      "with_official_wording_flags": 2,
+      "official_wording_by_issue": {
+        "figures_not_in_official_evidence": 2
+      },
+      "tickers_dropped": 64
+    },
+    "checks_versions": {
+      "1": 704
+    },
+    "flagged": 12,
+    "examples": [
+      {
+        "development_id": 123,
+        "audience": "investment",
+        "alert": "P1",
+        "headline": "OpenAI's Astra hits Critical cyber tier; frontier demand and cyber-vendor disruption in focus",
+        "replaced_headline": null,
+        "unsupported_numbers": [],
+        "official_wording": [
+          "figures_not_in_official_evidence"
+        ]
+      },
+      {
+        "development_id": 242,
+        "audience": "investment",
+        "alert": "P2",
+        "headline": "OpenAI releases GPT-6.1 Sol (gpt-6.1-sol) via API",
+        "replaced_headline": "OpenAI cuts frontier-class token prices 80%: bullish volume, bearish pricing for compute resellers",
+        "unsupported_numbers": [],
+        "official_wording": []
+      },
+      {
+        "development_id": 312,
+        "audience": "investment",
+        "alert": "P2",
+        "headline": "Meta's Muse Wonder shows capex converting into frontier models; META and NVDA demand intact",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 1M",
+          "what_to_do: 27",
+          "tickers: 1M"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 34,
+        "audience": "investment",
+        "alert": null,
+        "headline": "Anthropic forgoes Sonnet 5 price hike, signaling competitive pricing and volume-over-margin strategy",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 50%"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 76,
+        "audience": "investment",
+        "alert": null,
+        "headline": "DeepSeek open-weight multimodal agent model near Opus-4.8 raises efficiency-shock questions for NVDA",
+        "replaced_headline": null,
+        "unsupported_numbers": [],
+        "official_wording": [
+          "figures_not_in_official_evidence"
+        ]
+      },
+      {
+        "development_id": 78,
+        "audience": "investment",
+        "alert": null,
+        "headline": "OpenAI plugin marketplace deepens Codex enterprise lock-in; little direct listed-equity read-through",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.14"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 112,
+        "audience": "investment",
+        "alert": null,
+        "headline": "Mistral OCR 4.1 GA: minor product update, negligible listed-equity read-through",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.71"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 156,
+        "audience": "investment",
+        "alert": null,
+        "headline": "OpenAI board adds safety expert Christiano; governance signal, negligible direct earnings impact",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.94"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 307,
+        "audience": "ai_team",
+        "alert": null,
+        "headline": "Qwen-Image-2.1-Turbo: 8-step open 7B image generation and editing checkpoint",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.87"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 327,
+        "audience": "ai_team",
+        "alert": null,
+        "headline": "MuJoCo 3.16.0 adds compile-time frame scaling; a physics simulator, not our stack",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.76"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 377,
+        "audience": "ai_team",
+        "alert": null,
+        "headline": "ChatGPT Ads expansion is ad distribution, with no new API or model capability",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 165",
+          "so_what: 100"
+        ],
+        "official_wording": []
+      },
+      {
+        "development_id": 451,
+        "audience": "investment",
+        "alert": null,
+        "headline": "Anthropic SDK adds enterprise admin controls; minor signal, no holding impact",
+        "replaced_headline": null,
+        "unsupported_numbers": [
+          "so_what: 0.05"
+        ],
+        "official_wording": []
+      }
+    ]
+  },
+  "holdings": {
+    "definitions": {
+      "window": "documents published (else fetched) and developments first seen on/after settings.backfill_start",
+      "documents": "collected documents in the window, duplicates excluded, whose title or text names the company or a brand it owns (the exposure rules' whole-word, case-sensitive names: fli.analyze.exposure.mention_names); documents_relevant passed triage",
+      "developments_event_specific": "live developments with an exposure link to the holding that is not lab-level (method != 'lab'); named = the development's own text names the company (the rest are theme-keyword links); at_policy_floor = confidence >= the materiality policy's exposure_min_confidence, i.e. what the alert rules count as exposure",
+      "developments_lab_only": "developments linked to the holding only through their lab's curated relations (context, not exposure)",
+      "pushed_alerts": "investment P1/P2 alerts whose Tickers line lists the holding (investment is the only audience whose alerts list tickers); pushed_lab_level = listed only as a lab-level link",
+      "coverage": "direct: at least one document names it; indirect: none does, but theme-keyword links exist; none: neither"
+    },
+    "window": {
+      "from": "2026-08-01",
+      "documents": 1002
+    },
+    "policy_exposure_min_confidence": 0.6,
+    "holdings": [
+      {
+        "symbol": "AMZN",
+        "company": "Amazon",
+        "weight": 9.6,
+        "names": [
+          "AWS",
+          "Amazon",
+          "Trainium"
+        ],
+        "documents": 14,
+        "documents_relevant": 12,
+        "documents_by_class": {
+          "official": 14
+        },
+        "developments_event_specific": 23,
+        "developments_named": 7,
+        "developments_at_policy_floor": 18,
+        "developments_lab_only": 148,
+        "pushed_alerts": 10,
+        "pushed_p1": 3,
+        "pushed_lab_level": 0,
+        "coverage": "direct"
+      },
+      {
+        "symbol": "IREN",
+        "company": "IREN",
+        "weight": 9.2,
+        "names": [
+          "IREN",
+          "Iris Energy"
+        ],
+        "documents": 0,
+        "documents_relevant": 0,
+        "documents_by_class": {},
+        "developments_event_specific": 1,
+        "developments_named": 0,
+        "developments_at_policy_floor": 0,
+        "developments_lab_only": 0,
+        "pushed_alerts": 0,
+        "pushed_p1": 0,
+        "pushed_lab_level": 0,
+        "coverage": "indirect"
+      },
+      {
+        "symbol": "NVDA",
+        "company": "NVIDIA",
+        "weight": 8.0,
+        "names": [
+          "NVIDIA",
+          "Nvidia"
+        ],
+        "documents": 19,
+        "documents_relevant": 16,
+        "documents_by_class": {
+          "official": 15,
+          "market_data": 3,
+          "research": 1
+        },
+        "developments_event_specific": 38,
+        "developments_named": 10,
+        "developments_at_policy_floor": 22,
+        "developments_lab_only": 267,
+        "pushed_alerts": 22,
+        "pushed_p1": 3,
+        "pushed_lab_level": 0,
+        "coverage": "direct"
+      },
+      {
+        "symbol": "MU",
+        "company": "Micron Technology",
+        "weight": 6.5,
+        "names": [
+          "Micron",
+          "Micron Technology"
+        ],
+        "documents": 0,
+        "documents_relevant": 0,
+        "documents_by_class": {},
+        "developments_event_specific": 10,
+        "developments_named": 0,
+        "developments_at_policy_floor": 0,
+        "developments_lab_only": 0,
+        "pushed_alerts": 7,
+        "pushed_p1": 2,
+        "pushed_lab_level": 0,
+        "coverage": "indirect"
+      },
+      {
+        "symbol": "TSM",
+        "company": "TSMC",
+        "weight": 5.1,
+        "names": [
+          "TSMC"
+        ],
+        "documents": 0,
+        "documents_relevant": 0,
+        "documents_by_class": {},
+        "developments_event_specific": 0,
+        "developments_named": 0,
+        "developments_at_policy_floor": 0,
+        "developments_lab_only": 163,
+        "pushed_alerts": 8,
+        "pushed_p1": 1,
+        "pushed_lab_level": 0,
+        "coverage": "none"
+      },
+      {
+        "symbol": "META",
+        "company": "Meta Platforms",
+        "weight": 4.6,
+        "names": [
+          "Meta",
+          "Meta Platforms"
+        ],
+        "documents": 85,
+        "documents_relevant": 50,
+        "documents_by_class": {
+          "official": 77,
+          "market_data": 7,
+          "curated": 1
+        },
+        "developments_event_specific": 110,
+        "developments_named": 78,
+        "developments_at_policy_floor": 78,
+        "developments_lab_only": 12,
+        "pushed_alerts": 5,
+        "pushed_p1": 0,
+        "pushed_lab_level": 0,
+        "coverage": "direct"
+      },
+      {
+        "symbol": "MSFT",
+        "company": "Microsoft",
+        "weight": 4.4,
+        "names": [
+          "Azure",
+          "Microsoft"
+        ],
+        "documents": 15,
+        "documents_relevant": 11,
+        "documents_by_class": {
+          "official": 15
+        },
+        "developments_event_specific": 26,
+        "developments_named": 9,
+        "developments_at_policy_floor": 23,
+        "developments_lab_only": 144,
+        "pushed_alerts": 14,
+        "pushed_p1": 3,
+        "pushed_lab_level": 0,
+        "coverage": "direct"
+      },
+      {
+        "symbol": "HNGE",
+        "company": "Hinge Health",
+        "weight": 4.0,
+        "names": [
+          "Hinge Health"
+        ],
+        "documents": 0,
+        "documents_relevant": 0,
+        "documents_by_class": {},
+        "developments_event_specific": 17,
+        "developments_named": 0,
+        "developments_at_policy_floor": 0,
+        "developments_lab_only": 0,
+        "pushed_alerts": 0,
+        "pushed_p1": 0,
+        "pushed_lab_level": 0,
+        "coverage": "indirect"
+      },
+      {
+        "symbol": "SIMO",
+        "company": "Silicon Motion",
+        "weight": 3.9,
+        "names": [
+          "Silicon Motion"
+        ],
+        "documents": 0,
+        "documents_relevant": 0,
+        "documents_by_class": {},
+        "developments_event_specific": 7,
+        "developments_named": 0,
+        "developments_at_policy_floor": 0,
+        "developments_lab_only": 0,
+        "pushed_alerts": 6,
+        "pushed_p1": 1,
+        "pushed_lab_level": 0,
+        "coverage": "indirect"
+      }
+    ],
+    "weight_total": 55.3,
+    "no_direct_coverage": [
+      "IREN",
+      "MU",
+      "TSM",
+      "HNGE",
+      "SIMO"
+    ],
+    "weight_no_direct_coverage": 28.7,
+    "never_pushed": [
+      "IREN",
+      "HNGE"
+    ],
+    "pushed_without_naming_document": {
+      "MU": 7,
+      "TSM": 8,
+      "SIMO": 6
+    }
+  },
+  "digests": {
+    "definitions": {
+      "writer": "model: the digest model wrote the sections; fallback: the deterministic renderer (no usable model output; provisional, regenerated on the next run); empty: no item reached the bar that week",
+      "cited": "selected items the published report cites anywhere (written sections, 'Also this week', holdings check)",
+      "written": "selected items cited by the written sections; the others were appended under 'Also this week'",
+      "model_written": "the same over model-written reports; the digest rejects model output citing fewer than min_coverage of the selected items",
+      "flags_missing": "items stored without the cited / also_this_week flags (legacy rows), left out of the shares",
+      "missing_weeks": "weeks from the backfill start to the last full week without a report",
+      "preview_reports": "reports generated before their week ended (regenerated on the next run)"
+    },
+    "min_coverage": 0.6,
+    "investment": {
+      "reports": 14,
+      "items": 115,
+      "flags_missing": 0,
+      "cited": 115,
+      "cited_share": 1.0,
+      "written": 115,
+      "written_share": 1.0,
+      "also_this_week": 0,
+      "reports_with_also_this_week": 0,
+      "by_writer": {
+        "model": 14,
+        "fallback": 0,
+        "empty": 0,
+        "unknown": 0
+      },
+      "model_share": 1.0,
+      "models": {
+        "claude-opus-5-5": 14
+      },
+      "fallback_weeks": [],
+      "preview_reports": 0,
+      "missing_weeks": [],
+      "model_written": {
+        "reports": 14,
+        "items": 115,
+        "flags_missing": 0,
+        "cited": 115,
+        "cited_share": 1.0,
+        "written": 115,
+        "written_share": 1.0,
+        "also_this_week": 0,
+        "reports_with_also_this_week": 0,
+        "min_report_written_share": 1.0,
+        "reports_below_min_coverage": 0
+      },
+      "weeks": [
+        {
+          "period_start": "2026-07-27",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 2,
+          "flags_missing": 0,
+          "cited": 2,
+          "written": 2,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-03",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 9,
+          "flags_missing": 0,
+          "cited": 9,
+          "written": 9,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-10",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 10,
+          "flags_missing": 0,
+          "cited": 10,
+          "written": 10,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-17",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 3,
+          "flags_missing": 0,
+          "cited": 3,
+          "written": 3,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-24",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 9,
+          "flags_missing": 0,
+          "cited": 9,
+          "written": 9,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-31",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 9,
+          "flags_missing": 0,
+          "cited": 9,
+          "written": 9,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-07",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-14",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 3,
+          "flags_missing": 0,
+          "cited": 3,
+          "written": 3,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-21",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 8,
+          "flags_missing": 0,
+          "cited": 8,
+          "written": 8,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-28",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 9,
+          "flags_missing": 0,
+          "cited": 9,
+          "written": 9,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-05",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 6,
+          "flags_missing": 0,
+          "cited": 6,
+          "written": 6,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-12",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 11,
+          "flags_missing": 0,
+          "cited": 11,
+          "written": 11,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-19",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-26",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        }
+      ]
+    },
+    "ai_team": {
+      "reports": 14,
+      "items": 159,
+      "flags_missing": 0,
+      "cited": 159,
+      "cited_share": 1.0,
+      "written": 159,
+      "written_share": 1.0,
+      "also_this_week": 0,
+      "reports_with_also_this_week": 0,
+      "by_writer": {
+        "model": 13,
+        "fallback": 1,
+        "empty": 0,
+        "unknown": 0
+      },
+      "model_share": 0.929,
+      "models": {
+        "claude-opus-5-5": 13
+      },
+      "fallback_weeks": [
+        "2026-08-31"
+      ],
+      "preview_reports": 0,
+      "missing_weeks": [],
+      "model_written": {
+        "reports": 13,
+        "items": 147,
+        "flags_missing": 0,
+        "cited": 147,
+        "cited_share": 1.0,
+        "written": 147,
+        "written_share": 1.0,
+        "also_this_week": 0,
+        "reports_with_also_this_week": 0,
+        "min_report_written_share": 1.0,
+        "reports_below_min_coverage": 0
+      },
+      "weeks": [
+        {
+          "period_start": "2026-07-27",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 3,
+          "flags_missing": 0,
+          "cited": 3,
+          "written": 3,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-03",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-10",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-17",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-24",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-08-31",
+          "writer": "fallback",
+          "model": "fallback",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-07",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-14",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-21",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-09-28",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-05",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-12",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-19",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        },
+        {
+          "period_start": "2026-10-26",
+          "writer": "model",
+          "model": "claude-opus-5-5",
+          "items": 12,
+          "flags_missing": 0,
+          "cited": 12,
+          "written": 12,
+          "also_this_week": 0,
+          "preview": false
+        }
+      ]
+    }
+  },
+  "sources": {
+    "definitions": {
+      "documents": "every collected document, duplicates included, by the document's source class, its source's kind and its lab (the document's, else its source's); relevant = passed triage",
+      "silent_sources": "registered sources that never produced a document; reason: disabled, never_run (no run recorded), failing (the last run failed), no_items (ran without collecting anything)",
+      "active_weeks": "weeks of the window (backfill start to the newest document) with at least one document"
+    },
+    "window": {
+      "from": "2026-08-01",
+      "to": "2026-11-04 12:31:40",
+      "weeks": 15
+    },
+    "documents": 1008,
+    "before_window": 3,
+    "duplicates": 3,
+    "sources": 98,
+    "enabled": 95,
+    "with_documents": 49,
+    "silent": 49,
+    "silent_by_reason": {
+      "never_run": 46,
+      "disabled": 3
+    },
+    "silent_by_kind": {
+      "x_account": 36,
+      "hf_org": 5,
+      "press": 3,
+      "bluesky_account": 1,
+      "github_org": 1,
+      "job_board": 1,
+      "sec": 1,
+      "research_blog": 1
+    },
+    "by_source_class": {
+      "official": {
+        "sources": 64,
+        "with_documents": 44,
+        "documents": 826,
+        "relevant": 532
+      },
+      "research": {
+        "sources": 2,
+        "with_documents": 2,
+        "documents": 123,
+        "relevant": 111
+      },
+      "market_data": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 49,
+        "relevant": 47
+      },
+      "curated": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 6,
+        "relevant": 6
+      },
+      "press": {
+        "sources": 4,
+        "with_documents": 1,
+        "documents": 4,
+        "relevant": 0
+      },
+      "filing": {
+        "sources": 1,
+        "with_documents": 0,
+        "documents": 0,
+        "relevant": 0
+      },
+      "personal": {
+        "sources": 25,
+        "with_documents": 0,
+        "documents": 0,
+        "relevant": 0
+      }
+    },
+    "by_kind": {
+      "official_blog": {
+        "sources": 9,
+        "with_documents": 9,
+        "documents": 311,
+        "relevant": 159
+      },
+      "github_org": {
+        "sources": 12,
+        "with_documents": 11,
+        "documents": 263,
+        "relevant": 139
+      },
+      "docs_changelog": {
+        "sources": 7,
+        "with_documents": 7,
+        "documents": 112,
+        "relevant": 98
+      },
+      "hf_papers": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 111,
+        "relevant": 100
+      },
+      "job_board": {
+        "sources": 7,
+        "with_documents": 6,
+        "documents": 71,
+        "relevant": 71
+      },
+      "model_index": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 49,
+        "relevant": 47
+      },
+      "engineering_blog": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 27,
+        "relevant": 23
+      },
+      "hf_org": {
+        "sources": 11,
+        "with_documents": 6,
+        "documents": 25,
+        "relevant": 25
+      },
+      "research_blog": {
+        "sources": 4,
+        "with_documents": 3,
+        "documents": 13,
+        "relevant": 13
+      },
+      "arxiv": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 12,
+        "relevant": 11
+      },
+      "register": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 6,
+        "relevant": 6
+      },
+      "press": {
+        "sources": 4,
+        "with_documents": 1,
+        "documents": 4,
+        "relevant": 0
+      },
+      "release_notes": {
+        "sources": 1,
+        "with_documents": 1,
+        "documents": 4,
+        "relevant": 4
+      },
+      "bluesky_account": {
+        "sources": 1,
+        "with_documents": 0,
+        "documents": 0,
+        "relevant": 0
+      },
+      "sec": {
+        "sources": 1,
+        "with_documents": 0,
+        "documents": 0,
+        "relevant": 0
+      },
+      "x_account": {
+        "sources": 36,
+        "with_documents": 0,
+        "documents": 0,
+        "relevant": 0
+      }
+    },
+    "by_lab": {
+      "anthropic": {
+        "name": "Anthropic",
+        "tier": 1,
+        "sources": 9,
+        "silent_sources": 2,
+        "documents": 146,
+        "relevant": 93,
+        "active_weeks": 15,
+        "last_document": "2026-11-04 01:30:00"
+      },
+      "google-deepmind": {
+        "name": "Google DeepMind",
+        "tier": 1,
+        "sources": 7,
+        "silent_sources": 1,
+        "documents": 127,
+        "relevant": 106,
+        "active_weeks": 14,
+        "last_document": "2026-11-04 12:31:40"
+      },
+      "meta-ai": {
+        "name": "Meta AI (Superintelligence Labs / FAIR)",
+        "tier": 1,
+        "sources": 7,
+        "silent_sources": 3,
+        "documents": 169,
+        "relevant": 116,
+        "active_weeks": 14,
+        "last_document": "2026-11-03 17:00:35"
+      },
+      "openai": {
+        "name": "OpenAI",
+        "tier": 1,
+        "sources": 7,
+        "silent_sources": 2,
+        "documents": 310,
+        "relevant": 185,
+        "active_weeks": 15,
+        "last_document": "2026-11-04 03:22:14"
+      },
+      "xai": {
+        "name": "xAI",
+        "tier": 1,
+        "sources": 5,
+        "silent_sources": 2,
+        "documents": 39,
+        "relevant": 33,
+        "active_weeks": 15,
+        "last_document": "2026-11-03 23:11:06"
+      },
+      "deepseek": {
+        "name": "DeepSeek",
+        "tier": 2,
+        "sources": 5,
+        "silent_sources": 1,
+        "documents": 28,
+        "relevant": 26,
+        "active_weeks": 9,
+        "last_document": "2026-10-31 09:32:46"
+      },
+      "mistral": {
+        "name": "Mistral AI",
+        "tier": 2,
+        "sources": 6,
+        "silent_sources": 2,
+        "documents": 49,
+        "relevant": 26,
+        "active_weeks": 11,
+        "last_document": "2026-11-04 08:16:43"
+      },
+      "moonshot": {
+        "name": "Moonshot AI (Kimi)",
+        "tier": 2,
+        "sources": 4,
+        "silent_sources": 2,
+        "documents": 12,
+        "relevant": 5,
+        "active_weeks": 7,
+        "last_document": "2026-10-30 09:50:16"
+      },
+      "qwen": {
+        "name": "Qwen (Alibaba)",
+        "tier": 2,
+        "sources": 3,
+        "silent_sources": 1,
+        "documents": 55,
+        "relevant": 46,
+        "active_weeks": 13,
+        "last_document": "2026-11-04 04:03:01"
+      },
+      "discovery-loop": {
+        "name": "Discovery Loop",
+        "tier": 3,
+        "sources": 0,
+        "silent_sources": 0,
+        "documents": 1,
+        "relevant": 1,
+        "active_weeks": 1,
+        "last_document": "2026-08-05 00:00:00"
+      },
+      "periodic-labs": {
+        "name": "Periodic Labs",
+        "tier": 3,
+        "sources": 2,
+        "silent_sources": 0,
+        "documents": 11,
+        "relevant": 11,
+        "active_weeks": 8,
+        "last_document": "2026-10-11 23:59:59"
+      },
+      "reflection-ai": {
+        "name": "Reflection AI",
+        "tier": 3,
+        "sources": 4,
+        "silent_sources": 1,
+        "documents": 15,
+        "relevant": 15,
+        "active_weeks": 10,
+        "last_document": "2026-11-01 23:59:59"
+      },
+      "ssi": {
+        "name": "Safe Superintelligence (SSI)",
+        "tier": 3,
+        "sources": 0,
+        "silent_sources": 0,
+        "documents": 0,
+        "relevant": 0,
+        "active_weeks": 0,
+        "last_document": null
+      },
+      "thinking-machines": {
+        "name": "Thinking Machines Lab",
+        "tier": 3,
+        "sources": 6,
+        "silent_sources": 3,
+        "documents": 22,
+        "relevant": 16,
+        "active_weeks": 12,
+        "last_document": "2026-11-01 23:59:59"
+      },
+      "unattributed": {
+        "name": "unattributed",
+        "tier": null,
+        "sources": 33,
+        "silent_sources": 29,
+        "documents": 24,
+        "relevant": 17,
+        "active_weeks": 13,
+        "last_document": "2026-11-04 12:31:40"
+      }
+    },
+    "labs_without_documents": [
+      "ssi"
+    ],
+    "silent_sources": [
+      {
+        "id": "anthropic:bluesky",
+        "kind": "bluesky_account",
+        "source_class": "official",
+        "lab_id": "anthropic",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "anthropic:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "anthropic",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "deepseek:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "deepseek",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "google-deepmind:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "google-deepmind",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "meta-ai:github-llama",
+        "kind": "github_org",
+        "source_class": "official",
+        "lab_id": "meta-ai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "meta-ai:hf-llama",
+        "kind": "hf_org",
+        "source_class": "official",
+        "lab_id": "meta-ai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "meta-ai:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "meta-ai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "mistral:jobs",
+        "kind": "job_board",
+        "source_class": "official",
+        "lab_id": "mistral",
+        "enabled": false,
+        "reason": "disabled",
+        "last_error": null
+      },
+      {
+        "id": "mistral:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "mistral",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "moonshot:hf",
+        "kind": "hf_org",
+        "source_class": "official",
+        "lab_id": "moonshot",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "moonshot:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "moonshot",
+        "enabled": false,
+        "reason": "disabled",
+        "last_error": null
+      },
+      {
+        "id": "openai:hf",
+        "kind": "hf_org",
+        "source_class": "official",
+        "lab_id": "openai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "openai:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "openai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "press:gdelt-alumni",
+        "kind": "press",
+        "source_class": "press",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "press:gdelt-frontier-deals",
+        "kind": "press",
+        "source_class": "press",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "press:gdelt-talent",
+        "kind": "press",
+        "source_class": "press",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "qwen:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "qwen",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "reflection-ai:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "reflection-ai",
+        "enabled": false,
+        "reason": "disabled",
+        "last_error": null
+      },
+      {
+        "id": "sec:edgar-fts",
+        "kind": "sec",
+        "source_class": "filing",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "thinking-machines:blog",
+        "kind": "research_blog",
+        "source_class": "official",
+        "lab_id": "thinking-machines",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "thinking-machines:hf",
+        "kind": "hf_org",
+        "source_class": "official",
+        "lab_id": "thinking-machines",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "thinking-machines:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "thinking-machines",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:alexandr_wang",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:barret_zoph",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:bcherny",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:ch402",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:demishassabis",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:gdb",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:ilyasut",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:jackclarksf",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:janleike",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:jeffdean",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:johnschulman2",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:karpathy",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:liamfedus",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:lilianweng",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:markchen90",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:merettm",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:miramurati",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:mishalaskin",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:noamshazeer",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:officiallogank",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:oriolvinyalsml",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:polynoamial",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:sama",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:shengjia_zhao",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "x:soumithchintala",
+        "kind": "x_account",
+        "source_class": "personal",
+        "lab_id": null,
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "xai:hf",
+        "kind": "hf_org",
+        "source_class": "official",
+        "lab_id": "xai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      },
+      {
+        "id": "xai:x",
+        "kind": "x_account",
+        "source_class": "official",
+        "lab_id": "xai",
+        "enabled": true,
+        "reason": "never_run",
+        "last_error": null
+      }
+    ]
+  },
+  "suite_generated_at": {
+    "known_events": "2026-11-06T07:37:36",
+    "extraction": "2026-11-06T07:37:36",
+    "noise": "2026-11-06T07:37:36",
+    "alerts": "2026-11-06T07:37:36",
+    "scoring": "2026-11-06T07:37:36",
+    "er": "2026-11-06T07:37:36",
+    "costs": "2026-11-06T07:38:10",
+    "lens": "2026-11-06T07:37:36",
+    "holdings": "2026-11-06T07:37:36",
+    "digests": "2026-11-06T07:38:10",
+    "sources": "2026-11-06T07:37:36"
+  }
+}

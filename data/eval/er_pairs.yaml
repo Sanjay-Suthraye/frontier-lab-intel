@@ -1,0 +1,89 @@
+# Hand-labelled entity-resolution pairs: (tracked person, one mention) -> same | different.
+# Scored by fli.register.entity_resolution.evaluate_er (`fli eval --suite er`) against config/people.yaml.
+#
+# Each pair is one author mention in its document context, because context is what the matcher uses:
+#   person      register id (config/people.yaml)
+#   mention     the author string as printed, or a handle when `platform` is set
+#   lab         the document's lab when it is independent evidence (an org account or an official
+#               source, never a lab inferred from the same name match)
+#   coauthors   other author strings on the same document
+#   categories  arXiv categories (non cs./stat./eess. papers make every name need corroboration)
+#   source      observed = taken from the Aug-Oct 2026 dev corpus (HF daily papers, arXiv feed);
+#               constructed = written to probe a known failure mode (namesakes, initials, order)
+# Labels were assigned by hand from the person's public record; "same" pairs that the deterministic
+# matcher can only place in the gray zone (initials) count against recall here, because evaluate_er
+# does not call the LLM.
+pairs:
+  # ------------------------------------------------------------------ exact names (observed)
+  - {id: p01, person: jakob-foerster, mention: "Jakob N. Foerster", lab: meta-ai, coauthors: ["Shimon Whiteson", "Matthew T. Jackson"], categories: ["cs.LG"], label: same, source: observed, note: "arXiv-printed form with middle initial"}
+  - {id: p02, person: jakob-foerster, mention: "Jakob Nicolaus Foerster", lab: meta-ai, coauthors: ["Jason Weston"], categories: ["cs.AI"], label: same, source: observed, note: "full middle name vs register name: middle-name variant"}
+  - {id: p03, person: rob-fergus, mention: "Rob Fergus", lab: meta-ai, coauthors: ["Michael Hassid"], categories: ["cs.CL"], label: same, source: observed, note: "Muse Glimmer 30B report (org: Meta)"}
+  - {id: p04, person: dayiheng-liu, mention: "Dayiheng Liu", lab: qwen, coauthors: ["Haoran Lian", "Chengruidong Zhang"], categories: ["cs.CL"], label: same, source: observed, note: "Qwen3.8-Next architecture report (org: Qwen)"}
+  - {id: p05, person: damai-dai, mention: "Damai Dai", lab: deepseek, coauthors: ["Chenqi Zhao"], categories: ["cs.CL"], label: same, source: observed, note: "DeepSeek-V4.1-Flash (org: deepseek-ai)"}
+  - {id: p06, person: nicholas-carlini, mention: "Nicholas Carlini", lab: anthropic, categories: ["cs.LG"], label: same, source: observed, note: "Anthropic-org paper"}
+  - {id: p07, person: noam-shazeer, mention: "Noam Shazeer", lab: openai, coauthors: ["Jakub Pachocki"], categories: ["cs.CL"], label: same, source: constructed, note: "distinctive name, exact"}
+  - {id: p08, person: andrej-karpathy, mention: "Andrej Karpathy", categories: ["cs.LG"], label: same, source: constructed, note: "distinctive name, no lab context needed"}
+  - {id: p09, person: ilya-sutskever, mention: "Ilya Sutskever", categories: ["cs.LG"], label: same, source: constructed, note: "distinctive name, SSI publishes without an org account"}
+
+  # ------------------------------------------------------- normalisation: accents, order, typos
+  - {id: p10, person: lukasz-kaiser, mention: "Łukasz Kaiser", lab: openai, categories: ["cs.LG"], label: same, source: constructed, note: "Polish ł folded to l"}
+  - {id: p11, person: timothee-lacroix, mention: "Timothee Lacroix", lab: mistral, categories: ["cs.CL"], label: same, source: constructed, note: "accent dropped by the source"}
+  - {id: p12, person: yang-zhilin, mention: "Zhilin Yang", lab: moonshot, categories: ["cs.CL"], label: same, source: constructed, note: "given-name-first arXiv form (arxiv_name identity)"}
+  - {id: p13, person: yang-zhilin, mention: "Yang Zhilin", categories: ["cs.CL"], label: same, source: constructed, note: "family-name-first form = register name"}
+  - {id: p14, person: zhihong-shao, mention: "Shao Zhihong", lab: deepseek, categories: ["cs.CL"], label: same, source: constructed, note: "reversed order: token_sort_ratio 100, needs lab agreement"}
+  - {id: p15, person: liang-wenfeng, mention: "Wenfeng Liang", lab: deepseek, coauthors: ["Damai Dai", "Zhihong Shao"], categories: ["cs.CL"], label: same, source: constructed, note: "DeepSeek report author list form"}
+  - {id: p16, person: guillaume-lample, mention: "Guilaume Lample", lab: mistral, categories: ["cs.CL"], label: same, source: constructed, note: "typo in the source: fuzzy >= 93 with lab agreement"}
+
+  # ------------------------------------------------------ arXiv name forms differ from the register
+  - {id: p17, person: liam-fedus, mention: "William Fedus", coauthors: ["Barret Zoph", "Noam Shazeer"], categories: ["cs.LG"], label: same, source: constructed, note: "Switch Transformers author list; 'Liam' in the register"}
+  - {id: p18, person: misha-laskin, mention: "Michael Laskin", lab: google-deepmind, categories: ["cs.LG"], label: same, source: constructed, note: "'Misha' in the register"}
+  - {id: p19, person: ekin-dogus-cubuk, mention: "Ekin D. Cubuk", lab: google-deepmind, categories: ["cond-mat.mtrl-sci", "cs.LG"], label: same, source: constructed, note: "GNoME-style paper with a cs.LG cross-list"}
+  - {id: p20, person: jeff-dean, mention: "Jeffrey Dean", lab: google-deepmind, categories: ["cs.LG"], label: same, source: constructed, note: "formal first name"}
+  - {id: p21, person: jack-rae, mention: "Jack W. Rae", lab: google-deepmind, categories: ["cs.CL"], label: same, source: constructed, note: "pre-move paper attributed via affiliation history"}
+  - {id: p22, person: sam-bowman, mention: "Samuel R. Bowman", lab: anthropic, categories: ["cs.CL"], label: same, source: constructed, note: "arXiv form"}
+  - {id: p23, person: sam-bowman, mention: "Samuel Bowman", lab: anthropic, categories: ["cs.CL"], label: same, source: constructed, note: "middle initial dropped: middle-initial variant (95)"}
+  - {id: p24, person: shengjia-zhao, mention: "Shengjia Zhao", lab: openai, categories: ["cs.LG"], label: same, source: constructed, note: "pre-move OpenAI paper"}
+
+  # --------------------------------------------- common names: corroborated by lab or co-author
+  - {id: p25, person: quoc-le, mention: "Quoc V. Le", lab: google-deepmind, categories: ["cs.LG"], label: same, source: constructed, note: "common name, lab agrees"}
+  - {id: p26, person: quoc-le, mention: "Quoc Le", coauthors: ["Jeff Dean"], categories: ["cs.LG"], label: same, source: constructed, note: "no lab; a distinctive tracked co-author supplies the lab context"}
+  - {id: p27, person: mark-chen, mention: "Mark Chen", lab: openai, coauthors: ["Jerry Tworek"], categories: ["cs.CL"], label: same, source: constructed, note: "common name, lab agrees"}
+  - {id: p28, person: jason-wei, mention: "Jason Wei", coauthors: ["Hyung Won Chung"], categories: ["cs.CL"], label: same, source: constructed, note: "common name, tracked co-author corroborates"}
+  - {id: p29, person: daniel-levy, mention: "Daniel Levy", lab: ssi, categories: ["cs.LG"], label: same, source: constructed, note: "common name, lab agrees"}
+  - {id: p30, person: david-silver, mention: "David Silver", coauthors: ["Ioannis Antonoglou", "Demis Hassabis"], categories: ["cs.AI"], label: same, source: constructed, note: "common name, two tracked co-authors"}
+  - {id: p31, person: greg-yang, mention: "Greg Yang", coauthors: ["Jimmy Ba"], categories: ["cs.LG"], label: same, source: constructed, note: "common name, xAI co-founder co-author"}
+  - {id: p32, person: wu-yuxin, mention: "Yuxin Wu", lab: moonshot, coauthors: ["Zhilin Yang"], categories: ["cs.CL"], label: same, source: constructed, note: "common name, lab and co-author agree"}
+  - {id: p33, person: alexander-kolesnikov, mention: "Alexander Kolesnikov", coauthors: ["Lucas Beyer", "Xiaohua Zhai"], categories: ["cs.CV"], label: same, source: constructed, note: "ViT-team author list"}
+
+  # ------------------------------------------------------------------------------- handles
+  - {id: p34, person: sam-altman, mention: "@sama", platform: x, label: same, source: constructed, note: "X handle with @"}
+  - {id: p35, person: demis-hassabis, mention: "DemisHassabis", platform: x, label: same, source: constructed, note: "handles are case-insensitive"}
+  - {id: p36, person: andrej-karpathy, mention: "karpathy", platform: github, label: same, source: constructed, note: "GitHub release author login"}
+  - {id: p37, person: greg-brockman, mention: "gdb", platform: x, label: same, source: constructed, note: "short handle"}
+  - {id: p38, person: sam-altman, mention: "sama", platform: github, label: different, source: constructed, note: "same string on another platform is not his account"}
+
+  # ----------------------------------------------------- initials: gray zone (LLM adjudication)
+  - {id: p39, person: jeff-dean, mention: "J. Dean", lab: google-deepmind, categories: ["cs.LG"], label: same, source: constructed, note: "first initial only: 88, gray zone"}
+  - {id: p40, person: john-schulman, mention: "J. Schulman", lab: openai, categories: ["cs.LG"], label: same, source: constructed, note: "first initial only"}
+  - {id: p41, person: jan-leike, mention: "J. Leike", lab: openai, categories: ["cs.AI"], label: same, source: constructed, note: "first initial only, pre-move OpenAI paper"}
+
+  # ---------------------------------------- hard negatives: same or similar name, different person
+  - {id: p42, person: mark-chen, mention: "Mark Chen", coauthors: ["Wei Li", "Yu Zhang"], categories: ["q-bio.BM"], label: different, source: constructed, note: "namesake in structural biology"}
+  - {id: p43, person: mark-chen, mention: "Mark Chen", coauthors: ["Lei Zhang"], categories: ["cs.CV"], label: different, source: constructed, note: "namesake inside cs: no lab or co-author support"}
+  - {id: p44, person: jason-wei, mention: "Jason Wei", coauthors: ["Wei Wang", "Hui Xiong"], categories: ["cs.IR"], label: different, source: constructed, note: "namesake in recommender systems"}
+  - {id: p45, person: daniel-levy, mention: "Daniel Levy", categories: ["econ.GN"], label: different, source: constructed, note: "economist namesake"}
+  - {id: p46, person: david-silver, mention: "David Silver", categories: ["physics.optics"], label: different, source: constructed, note: "physicist namesake"}
+  - {id: p47, person: jeff-dean, mention: "Jeff Dean", coauthors: ["Maria Lopez"], categories: ["q-bio.PE"], label: different, source: constructed, note: "distinctive-looking name on an off-domain paper"}
+  - {id: p48, person: quoc-le, mention: "Quoc Le", coauthors: ["Minh Nguyen", "Thanh Tran"], categories: ["cs.NI"], label: different, source: constructed, note: "very common Vietnamese name in networking"}
+  - {id: p49, person: greg-yang, mention: "Greg Yang", coauthors: ["Susan Miller"], categories: ["cs.HC"], label: different, source: constructed, note: "HCI namesake"}
+  - {id: p50, person: alexander-kolesnikov, mention: "Alexander Kolesnikov", categories: ["math.PR"], label: different, source: constructed, note: "real namesake: the probabilist/geometer"}
+  - {id: p51, person: zhihong-shao, mention: "Zhihong Shao", coauthors: ["Yan Wang", "Jun Li"], categories: ["cs.NI"], label: different, source: constructed, note: "pinyin names collide more often than the common_name list captures (known failure mode)"}
+
+  # --------------------------------------------- near-miss names seen in the real corpus (observed)
+  - {id: p52, person: jason-wei, mention: "Jason Weston", lab: meta-ai, coauthors: ["Rob Fergus"], categories: ["cs.CL"], label: different, source: observed, note: "different FAIR researcher, shares first name and lab"}
+  - {id: p53, person: junyang-lin, mention: "Junming Lin", lab: qwen, categories: ["cs.CV"], label: different, source: observed, note: "Qwen-org paper, similar name, same lab"}
+  - {id: p54, person: shengjia-zhao, mention: "Hejia Zhao", categories: ["cs.SD"], label: different, source: observed, note: "music-generation paper; 87 similarity but no context"}
+  - {id: p55, person: zhou-xinyu, mention: "Xin Zhou", lab: qwen, categories: ["cs.CV"], label: different, source: observed, note: "Qwen-org paper; Moonshot co-founder never at Qwen"}
+  - {id: p56, person: guodong-zhang, mention: "Guofeng Zhang", lab: qwen, categories: ["cs.CV"], label: different, source: observed, note: "one letter off, unrelated lab"}
+  - {id: p57, person: junyang-lin, mention: "J. Lin", categories: ["cs.AI"], label: different, source: observed, note: "60-author agent report without org: initials alone"}
+  - {id: p58, person: haoran-wei, mention: "Haoran Li", categories: ["cs.RO"], label: different, source: observed, note: "robotics paper, shares given name"}

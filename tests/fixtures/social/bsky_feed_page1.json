@@ -1,0 +1,187 @@
+{
+ "feed": [
+  {
+   "post": {
+    "uri": "at://did:plc:c2mjfv2a7judclufinscuyid/app.bsky.feed.post/3ldeuep2obs2t",
+    "cid": "bafyreig6aczwmehayutpgxwsd2y5sgg4lw57jp4llf7ebv7blnv55rv44m",
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2024-12-15T22:28:29.260Z",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "description": "YouTube video by Lex Clips",
+       "thumb": {
+        "$type": "blob",
+        "ref": {
+         "$link": "bafkreicaj4bl3ez6mv5zh54smakf7rw4k5ynwqnnyhd7nqvbedebjritai"
+        },
+        "mimeType": "image/jpeg",
+        "size": 360413
+       },
+       "title": "Yann LeCun is a controversial visionary | Aravind Srinivas and Lex Fridman",
+       "uri": "https://youtu.be/mnGUfkMt9fE?si=1weR1Csu0G8OqJNU"
+      }
+     },
+     "facets": [
+      {
+       "features": [
+        {
+         "$type": "app.bsky.richtext.facet#link",
+         "uri": "https://youtu.be/mnGUfkMt9fE?si=1weR1Csu0G8OqJNU"
+        }
+       ],
+       "index": {
+        "byteEnd": 295,
+        "byteStart": 271
+       }
+      }
+     ],
+     "langs": [
+      "en"
+     ],
+     "text": "Aravind Srinivas (Perplexity) tells Lex all the ways in which I was right against the prevalent ideas of the time: DL, ConvNets, energy-based models, SSL, the limitation of RL, and now the limitations of auto-regressive generative models including LLMs.\nThanks Aravind!\n\nyoutu.be/mnGUfkMt9fE?..."
+    },
+    "replyCount": 19,
+    "repostCount": 22,
+    "likeCount": 237,
+    "quoteCount": 1,
+    "indexedAt": "2024-12-15T22:28:30.857Z",
+    "author": {
+     "did": "did:plc:c2mjfv2a7judclufinscuyid",
+     "handle": "yann-lecun.bsky.social",
+     "displayName": "Yann LeCun"
+    }
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:c2mjfv2a7judclufinscuyid/app.bsky.feed.post/3lc4mte5uyc2b",
+    "cid": "bafyreicrt4a4i3ya7seq2mcid3p6hc4ej5a23ihvvcamu7h2feteqj2cma",
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2024-11-29T22:27:01.677Z",
+     "embed": {
+      "$type": "app.bsky.embed.external",
+      "external": {
+       "description": "More accurate predictions will lead to better policy-making",
+       "title": "Artificial intelligence is helping improve climate models",
+       "uri": "https://www.economist.com/science-and-technology/2024/11/13/artificial-intelligence-is-helping-improve-climate-models"
+      }
+     },
+     "facets": [
+      {
+       "features": [
+        {
+         "$type": "app.bsky.richtext.facet#link",
+         "uri": "https://www.economist.com/science-and-technology/2024/11/13/artificial-intelligence-is-helping-improve-climate-models"
+        }
+       ],
+       "index": {
+        "byteEnd": 140,
+        "byteStart": 107
+       }
+      },
+      {
+       "features": [
+        {
+         "$type": "app.bsky.richtext.facet#link",
+         "uri": "https://archive.org"
+        }
+       ],
+       "index": {
+        "byteEnd": 167,
+        "byteStart": 156
+       }
+      },
+      {
+       "features": [
+        {
+         "$type": "app.bsky.richtext.facet#link",
+         "uri": "https://archive.is/N9uaF"
+        }
+       ],
+       "index": {
+        "byteEnd": 185,
+        "byteStart": 169
+       }
+      }
+     ],
+     "langs": [
+      "en"
+     ],
+     "text": "Another thing to be thankful for: the use of AI to help improve climate change models.\nFrom The Economist: www.economist.com/science-and-...\nFree access on archive.org: archive.is/N9uaF"
+    },
+    "replyCount": 8,
+    "repostCount": 14,
+    "likeCount": 150,
+    "quoteCount": 3,
+    "indexedAt": "2024-11-29T22:27:01.961Z",
+    "author": {
+     "did": "did:plc:c2mjfv2a7judclufinscuyid",
+     "handle": "yann-lecun.bsky.social",
+     "displayName": "Yann LeCun"
+    }
+   }
+  },
+  {
+   "post": {
+    "uri": "at://did:plc:c2mjfv2a7judclufinscuyid/app.bsky.feed.post/3lbzttqchv22v",
+    "cid": "bafyreigudwc7xuwigit3tia376a5hejhkpxw4crt5ljc5uw3ca5x7vyrlu",
+    "record": {
+     "$type": "app.bsky.feed.post",
+     "createdAt": "2024-11-28T19:54:31.388Z",
+     "embed": {
+      "$type": "app.bsky.embed.images",
+      "images": [
+       {
+        "alt": "",
+        "aspectRatio": {
+         "height": 2000,
+         "width": 1432
+        },
+        "image": {
+         "$type": "blob",
+         "ref": {
+          "$link": "bafkreibfauxdvsfs7sszu4vm5p4wusn4batrsdqhwr3cl6i23ol3h6wvpy"
+         },
+         "mimeType": "image/jpeg",
+         "size": 387734
+        }
+       }
+      ]
+     },
+     "facets": [
+      {
+       "features": [
+        {
+         "$type": "app.bsky.richtext.facet#link",
+         "uri": "https://www.washingtonpost.com/opinions/2024/11/27/ai-medicine-health-care-thanksgiving/"
+        }
+       ],
+       "index": {
+        "byteEnd": 299,
+        "byteStart": 261
+       }
+      }
+     ],
+     "langs": [
+      "en"
+     ],
+     "text": "WaPo Edito: Be thankful for the applications of AI in medicine.\nMore accurate detection of cancers (breast, prostate, skin, brain), faster diagnosis of strokes, sepsis, heart attacks, faster MRIs, full-body in 40 minutes.\nMuch more to come over the next years.\nwww.washingtonpost.com/opinions/202..."
+    },
+    "replyCount": 3,
+    "repostCount": 13,
+    "likeCount": 103,
+    "quoteCount": 0,
+    "indexedAt": "2024-11-28T19:54:33.361Z",
+    "author": {
+     "did": "did:plc:c2mjfv2a7judclufinscuyid",
+     "handle": "yann-lecun.bsky.social",
+     "displayName": "Yann LeCun"
+    }
+   }
+  }
+ ],
+ "cursor": "2024-11-28T19:54:33.361Z"
+}

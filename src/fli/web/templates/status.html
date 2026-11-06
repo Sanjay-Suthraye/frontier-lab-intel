@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Status{% endblock %}
+{% block content %}
+{% set h = st.health %}
+<div class="page-head">
+  <h1>System status {{ m.state(h.status) }}</h1>
+  {% if h.reasons %}<p class="note">{{ h.reasons|join(' · ') }}</p>{% endif %}
+  <p class="muted">{% if h.last_ingest_basis == 'documents' %}No ingest has run in this database (imported data); newest document fetched {{ h.last_ingest_at|ago }} ({{ h.last_ingest_at|dt }}), so source freshness below is judged from each source's newest document{% else %}Last successful ingest {{ h.last_ingest_at|ago }} ({{ h.last_ingest_at|dt }}){% endif %} · last new document {{ h.last_document_at|ago }} · {{ h.counts.open_alerts }} open alerts · machine-readable at <a href="/api/health">/api/health</a></p>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Budgets (hard stops)</h2>
+    {{ m.budget_bar(h.budgets.llm_total, "LLM total") }}
+    {{ m.budget_bar(h.budgets.llm_today, "LLM today (UTC)") }}
+    {{ m.budget_bar(h.budgets.x_total, "X API total") }}
+    <p class="small muted">The LLM gateway refuses calls that would cross a cap; stages stop cleanly with a budget ops event.</p>
+  </section>
+  <section class="card">
+    <h2>Sources</h2>
+    <p class="strip-counts">{% for k, v in h.sources.items() %}<span class="st st-{{ k }}">{{ v }} {{ k }}</span> {% endfor %}</p>
+    <p class="small muted">failing = 2+ consecutive errors (or never succeeded); stale = no successful poll or no new item within the source's freshness SLO; pending = not polled successfully yet (e.g. missing credentials). A source that never ran in this database but has documents (imported data) is judged by its newest document.</p>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Open ops events ({{ st.ops|length }})</h2>
+  {% if st.ops %}
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Severity</th><th>Kind</th><th>Subject</th><th>Message</th><th>Since</th></tr></thead>
+    <tbody>{% for e in st.ops %}<tr><td><span class="st st-{{ 'failing' if e.severity == 'crit' else ('stale' if e.severity == 'warn' else 'pending') }}">{{ e.severity }}</span></td><td>{{ e.kind|replace('_', ' ') }}</td><td>{{ e.subject }}</td><td class="small">{{ e.message }}</td><td class="small nowrap" title="{{ e.created_at|dt }}">{{ e.created_at|ago }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}<p class="muted">No open ops events.</p>{% endif %}
+</section>
+
+<section class="card" id="sources">
+  <h2>Sources ({{ st.sources|length }})</h2>
+  {{ m.source_table(st.sources, show_lab=True) }}
+</section>
+
+<section class="card">
+    <h2>LLM cost by purpose and model</h2>
+    {% set llm_total = st.llm|sum(attribute='usd') %}
+    <div class="scroll"><table class="tbl compact">
+      <thead><tr><th>Purpose</th><th>Model</th><th>Calls</th><th>Cached</th><th>Errors</th><th>In tok</th><th>Out tok</th><th>USD</th><th>Avg ms</th></tr></thead>
+      <tbody>
+      {% for r in st.llm %}
+        <tr><td>{{ r.purpose }}</td><td class="small nowrap">{{ r.model }}</td><td class="num">{{ r.calls }}</td><td class="num">{{ r.cached }}</td>
+          <td class="num {{ 'bad' if r.errors }}">{{ r.errors }}</td><td class="num">{{ '{:,}'.format(r.input_tokens) }}</td><td class="num">{{ '{:,}'.format(r.output_tokens) }}</td>
+          <td class="num">{{ r.usd|money }}</td><td class="num">{{ r.avg_latency_ms|round|int }}</td></tr>
+      {% else %}<tr><td colspan="9" class="empty">No LLM calls recorded yet.</td></tr>{% endfor %}
+      </tbody>
+      {% if st.llm %}<tfoot><tr><th colspan="7">Total</th><th class="num">{{ llm_total|money }}</th><th></th></tr></tfoot>{% endif %}
+    </table></div>
+</section>
+<section class="card">
+    <h2>Metered API spend (X reads are pay-per-use)</h2>
+    <div class="scroll"><table class="tbl compact">
+      <thead><tr><th>Provider</th><th>Endpoint</th><th>Calls</th><th>Units</th><th>USD</th></tr></thead>
+      <tbody>
+      {% for r in st.api %}<tr><td>{{ r.provider }}</td><td class="small">{{ r.endpoint }}</td><td class="num">{{ r.calls }}</td><td class="num">{{ '{:,}'.format(r.units) }}</td><td class="num">{{ r.usd|money }}</td></tr>
+      {% else %}<tr><td colspan="5" class="empty">No metered API usage recorded.</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+</section>
+
+<section class="card">
+  <h2>Recent job runs</h2>
+  <div class="scroll"><table class="tbl compact">
+    <thead><tr><th>Job</th><th>Started</th><th>Duration</th><th>Status</th><th>In</th><th>New</th><th>Failed</th><th>Error</th></tr></thead>
+    <tbody>
+    {% for r in st.runs %}
+      <tr><td class="small">{{ r.job }}</td><td class="small nowrap">{{ r.started_at|dt }}</td>
+        <td class="num">{{ '%.1f s'|format(r.seconds) if r.seconds is not none else '–' }}</td>
+        <td><span class="st st-{{ {'ok': 'ok', 'error': 'failing', 'partial': 'stale', 'running': 'pending'}.get(r.status, 'disabled') }}">{{ r.status }}</span></td>
+        <td class="num">{{ r.items_in }}</td><td class="num">{{ r.items_new }}</td><td class="num">{{ r.items_failed }}</td>
+        <td class="small">{% if r.error %}<span title="{{ r.error }}">{{ r.error|truncate(90) }}</span>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="8" class="empty">No job runs yet.</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

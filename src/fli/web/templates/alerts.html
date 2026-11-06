@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Alerts{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Alerts</h1>
+  <p class="muted">P1 = act today, P2 = look this week, P3 = digest only. Each alert says why it was flagged (the materiality rules that fire, the facts they matched, the rules that did not fire and the score), where it was delivered (in-app, Slack) and whether it was pushed live or backfilled as history; ack once you have read it. Tickers are the BIT holdings the rules count as exposed.</p>
+</div>
+<form class="filters card" method="get" action="/alerts" data-autosubmit>
+  <label>Audience <select name="audience"><option value="">Both</option>{% for a in audiences %}<option value="{{ a }}"{{ ' selected' if filt.audience == a }}>{{ a|audl }}</option>{% endfor %}</select></label>
+  <label>Severity <select name="severity"><option value="">Any</option>{% for s in ['P1', 'P2', 'P3'] %}<option value="{{ s }}"{{ ' selected' if filt.severity == s }}>{{ s }}</option>{% endfor %}</select></label>
+  <label>Status <select name="status">{% for s in ['open', 'acked', 'suppressed', 'all'] %}<option value="{{ s }}"{{ ' selected' if filt.status == s }}>{{ s }}</option>{% endfor %}</select></label>
+  <noscript><button type="submit" class="btn">Apply</button></noscript>
+  <a href="/alerts" class="reset">reset</a>
+</form>
+
+{% set here = request.url.path ~ ('?' ~ request.url.query if request.url.query else '') %}
+{% for a in alerts %}
+<article class="card alert sev-border-{{ a.severity }}">
+  <header class="alert-head">
+    {{ m.sev(a.severity) }}
+    <a href="/developments/{{ a.development_id }}" class="alert-title">{{ a.title }}</a>
+    <span class="grow"></span>
+    {{ m.ack_form(a, here) }}
+  </header>
+  <div class="meta">{{ a.audience|audl }}<span class="sep">·</span>{% if a.lab_id %}<a href="/register/labs/{{ a.lab_id }}">{{ a.lab_name }}</a><span class="sep">·</span>{% endif %}<span title="{{ a.created_at|dt }}">{{ a.created_at|dt }}</span><span class="sep">·</span><span{% if a.acked_by %} title="by {{ a.acked_by }}"{% endif %}>{{ a.status }}</span>
+    {{ m.delivery(a) }}</div>
+  {% if a.action or a.held_tickers or a.relevance is not none %}
+  <div class="tickers">
+    {{ m.score(a.relevance, prior=a.relevance_model_version == 'prior-v0') }} {{ m.action(a.action) }}{% if a.horizon %} <span class="muted small">· {{ a.horizon|replace('_', ' ') }}</span>{% endif %}
+    {% for t in a.tickers if t.symbol in a.held_tickers %}{{ m.ticker(t) }}{% endfor %}
+  </div>
+  {% endif %}
+  <section class="why-box" aria-label="Why flagged">
+    <h3 class="why-title">Why flagged <span class="small muted">· evaluated now</span></h3>
+    {{ m.why_flagged(a.why_flagged) }}
+  </section>
+  {% if a.rules and (a.rules_changed or not a.why_flagged) %}<div class="rules"><span class="small muted">recorded when raised:</span>{% for r in a.rules %}<span class="rule" title="{{ r.description or r.detail }}"><code>{{ r.name }}</code>{% if r.detail %} {{ r.detail|truncate(80) }}{% endif %}</span>{% endfor %}</div>{% endif %}
+  {% if a.body_md %}<details><summary>Alert text</summary><div class="md">{{ a.body_md|md }}</div></details>{% endif %}
+</article>
+{% else %}
+<p class="empty card">No alerts match these filters.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,120 @@
+# Social, hiring, market, press and filings sources (collectors in src/fli/ingest/collectors/).
+# Loaded by `fli register`; ids are stable keys for documents, health checks and the job ledger.
+#
+# X BUDGET: X API v2 reads are pay-per-use ($0.005 per post read, $0.010 per user lookup) and come out
+# of the EUR 100 case budget, so X_BUDGET_TOTAL_USD (default $10) is a hard cap enforced in code: each
+# request reserves its worst case in api_usage before it is sent. Planned spend: backfill
+# 3 x 100 + 6 x 60 = 660 posts ($3.30) + 9 one-time handle lookups ($0.09); after that `since_id` reads
+# only new posts (~2/day/account, about $0.09/day). That is about $6 in the first month, leaving headroom
+# for person accounts (people.yaml `track: true`). Only official lab accounts are polled: they carry the
+# highest signal per paid post. Replies and reposts are excluded at the API, so they are never billed.
+sources:
+  # ---------------------------------------------------------------- X: official lab accounts (metered)
+  - {id: "openai:x", lab: openai, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: OpenAI, max_posts: 100}}
+     # tier 1; most launches (models, pricing, devices) land here first
+  - {id: "anthropic:x", lab: anthropic, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: AnthropicAI, max_posts: 100}}
+     # tier 1; IPO pending (ANT), and AMZN/GOOGL partner news flows through it
+  - {id: "google-deepmind:x", lab: google-deepmind, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: GoogleDeepMind, max_posts: 100}}
+     # tier 1; Gemini and TPU-native research, which reaches GOOGL, AVGO and TSM
+  - {id: "meta-ai:x", lab: meta-ai, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: AIatMeta, max_posts: 60}}
+     # tier 1; META is a BIT holding, and the Muse/Llama releases come out here
+  - {id: "xai:x", lab: xai, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: xai, max_posts: 60}}
+     # tier 1; Grok releases and Colossus capacity (NVDA, DELL, SMCI)
+  - {id: "mistral:x", lab: mistral, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: MistralAI, max_posts: 60}}
+     # European open-weight leader; often ships on X before its blog
+  - {id: "deepseek:x", lab: deepseek, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 336, config: {handle: deepseek_ai, max_posts: 60}}
+     # efficiency shocks move accelerator sentiment (NVDA); low volume, high signal
+  - {id: "qwen:x", lab: qwen, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, config: {handle: Alibaba_Qwen, max_posts: 60}}
+     # most-downloaded open-weight base models; AI-team adoption candidates
+  - {id: "thinking-machines:x", lab: thinking-machines, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 720, config: {handle: thinkymachines, max_posts: 60}}
+     # alumni startup with rare posts; each one (product, research, hire) is material
+  - {id: "moonshot:x", lab: moonshot, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 168, enabled: false, config: {handle: Kimi_Moonshot, max_posts: 60}}
+     # off: OpenRouter and Hugging Face already catch Kimi releases for free; enable if the budget allows
+  - {id: "reflection-ai:x", lab: reflection-ai, adapter: x_timeline, kind: x_account, source_class: official,
+     cadence_minutes: 720, freshness_slo_hours: 720, enabled: false, config: {handle: reflection_ai, max_posts: 60}}
+     # off: the job board and OpenRouter cover it today; enable if the budget allows
+
+  # ---------------------------------------------------------------- Bluesky (free public AppView)
+  - {id: "anthropic:bluesky", lab: anthropic, adapter: bluesky_feed, kind: bluesky_account, source_class: official,
+     cadence_minutes: 1440, freshness_slo_hours: 8760, config: {handle: anthropic.com, max_posts: 100}}
+     # only tracked lab with a verified (domain) handle; 0 posts on 2026-11-04, polled free so its first post
+     # is caught (lax SLO: dormant by design). The other lab-like handles are empty or not the lab, so they are left out.
+
+  # ---------------------------------------------------------------- Job boards (public ATS posting APIs)
+  - {id: "anthropic:jobs", lab: anthropic, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://job-boards.greenhouse.io/anthropic", cadence_minutes: 1440, freshness_slo_hours: 336,
+     config: {ats: greenhouse, board: anthropic}}
+     # Greenhouse, 680 postings; the Compute dept (power, gas supply, country compute leads) is a capex tell
+  - {id: "openai:jobs", lab: openai, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://jobs.ashbyhq.com/openai", cadence_minutes: 1440, freshness_slo_hours: 336,
+     config: {ats: ashby, board: openai}}
+     # Ashby, 813 postings; Hardware/silicon, Consumer Devices, Robotics and Datacenter Design teams
+  - {id: "xai:jobs", lab: xai, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://job-boards.greenhouse.io/xai", cadence_minutes: 1440, freshness_slo_hours: 336,
+     config: {ats: greenhouse, board: xai}}
+     # Greenhouse, 300 postings, 59% data-center roles (Memphis/Southaven build-out)
+  - {id: "thinking-machines:jobs", lab: thinking-machines, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://jobs.ashbyhq.com/thinkingmachines", cadence_minutes: 1440, freshness_slo_hours: 720,
+     config: {ats: ashby, board: thinkingmachines}}
+     # Ashby, 54 postings; for a stealthy startup, hiring is one of the few public signals
+  - {id: "reflection-ai:jobs", lab: reflection-ai, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://jobs.ashbyhq.com/reflectionai", cadence_minutes: 1440, freshness_slo_hours: 720,
+     config: {ats: ashby, board: reflectionai}}
+     # Ashby, 45 postings (pre-training, data acquisition, "Sovereign")
+  - {id: "periodic-labs:jobs", lab: periodic-labs, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://jobs.ashbyhq.com/periodic-labs", cadence_minutes: 1440, freshness_slo_hours: 720,
+     config: {ats: ashby, board: periodic-labs}}
+     # Ashby, 32 postings; AI-for-science lab with almost no other public output
+  - {id: "mistral:jobs", lab: mistral, adapter: job_board, kind: job_board, source_class: official,
+     url: "https://jobs.lever.co/mistral", cadence_minutes: 1440, freshness_slo_hours: 720, enabled: false,
+     config: {ats: lever, board: mistral}}
+     # off: the Lever board exists but listed 0 postings on 2026-11-04 (the ATS has likely moved). No public
+     # posting API was found for Google DeepMind, Meta, SSI or the Chinese labs, so they have no board here.
+
+  # ---------------------------------------------------------------- Market data
+  - {id: "openrouter:models", adapter: openrouter_models, kind: model_index, source_class: market_data,
+     url: "https://openrouter.ai/api/v1/models", cadence_minutes: 720, freshness_slo_hours: 336,
+     config: {extra_providers: [z-ai, minimax, nvidia]}}
+     # one free request covers 455 models: dated launches plus list prices. Extra providers are untracked
+     # open-weight leaders the AI team benchmarks against (NVIDIA's Nemotron also touches the NVDA holding).
+
+  # ---------------------------------------------------------------- Press (GDELT DOC 2.0, headlines only)
+  - {id: "press:gdelt-anthropic-ipo", lab: anthropic, adapter: gdelt_news, kind: press, source_class: press,
+     cadence_minutes: 360, freshness_slo_hours: 72,
+     config: {queries: ['"Anthropic" (IPO OR "S-1" OR Nasdaq OR listing OR valuation OR deal OR agreement OR funding OR acquires OR hires OR leaves)'],
+              chunk_days: 14, max_per_query: 150, max_per_chunk: 40}}
+     # the pending ANT listing is the most material near-term event for AMZN/GOOGL exposure
+  - {id: "press:gdelt-frontier-deals", adapter: gdelt_news, kind: press, source_class: press,
+     cadence_minutes: 360, freshness_slo_hours: 72,
+     config: {queries: ['("OpenAI" OR "DeepMind" OR "xAI" OR "Meta Superintelligence") (deal OR agreement OR partnership OR acquires OR funding OR valuation OR datacenter OR gigawatt OR chips)'],
+              chunk_days: 14, max_per_query: 150, max_per_chunk: 40}}
+     # compute, energy and funding deals that labs leave to their partners or the press; lab taken from the headline
+  - {id: "press:gdelt-talent", adapter: gdelt_news, kind: press, source_class: press,
+     cadence_minutes: 360, freshness_slo_hours: 72,
+     config: {queries: ['("OpenAI" OR "Anthropic" OR "DeepMind" OR "xAI" OR "Meta Superintelligence") (hires OR hired OR joins OR poached OR departs OR leaves OR "steps down" OR "new startup")'],
+              chunk_days: 14, max_per_query: 120, max_per_chunk: 30}}
+     # talent moves are rarely announced by the lab losing the person
+  - {id: "press:gdelt-alumni", adapter: gdelt_news, kind: press, source_class: press,
+     cadence_minutes: 360, freshness_slo_hours: 168,
+     config: {queries: ['("Thinking Machines Lab" OR "Safe Superintelligence" OR "Reflection AI" OR "Periodic Labs" OR "Discovery Loop" OR "Mira Murati" OR "Ilya Sutskever")'],
+              chunk_days: 30, max_per_query: 100, max_per_chunk: 40}}
+     # alumni startups publish almost nothing themselves; their rounds and hires surface in the press
+
+  # ---------------------------------------------------------------- Filings (skipped until SEC_USER_AGENT is set)
+  - {id: "sec:edgar-fts", adapter: edgar_fts, kind: sec, source_class: filing,
+     cadence_minutes: 1440, freshness_slo_hours: 720,
+     config: {forms: "8-K,S-1,S-1/A,10-Q,10-K", max_per_query: 200,
+              queries: [{q: '"Anthropic"', lab: anthropic}, {q: '"OpenAI"', lab: openai}, {q: '"xAI"', lab: xai},
+                        {q: '"Thinking Machines Lab"', lab: thinking-machines},
+                        {q: '"Safe Superintelligence"', lab: ssi}]}}
+     # public companies disclose lab contracts (compute, stakes) under liability; this also tracks the ANT S-1 amendments

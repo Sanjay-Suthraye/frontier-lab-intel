@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Alignment Research Blog</title>
+    <link>https://alignment.openai.com/</link>
+    <description>Informal updates from the OpenAI team.</description>
+    <language>en-us</language>
+
+    <!-- When adding a new post, not only add a new <item>
+      <title>Meet LASER: Recursive sampling for safer conversations</title>
+      <link>https://alignment.openai.com/laser/</link>
+      <guid isPermaLink="true">https://alignment.openai.com/laser/</guid>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 -0700</pubDate>
+      <dc:creator>Isak Czeresnia Etinger</dc:creator>
+      <description>LASER (Logistic Augmented Sampling over Embeddings, Recursively) helps us evaluate model safety more efficiently by combining logistic classifiers with reasoning models to identify high-value data for evaluation.</description>
+    </item>
+
+    <item> but also update the date here. -->
+    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 -0800</lastBuildDate>
+    <atom:link href="https://alignment.openai.com/rss.xml" rel="self" type="application/rss+xml"/>
+
+    <!-- When adding a new post, add a new <item> below please. -->
+
+    <item>
+      <title>Eval-production behavior gaps in agent safety and the role of eval-awareness</title>
+      <link>https://alignment.openai.com/eval-production-behavior-gap/</link>
+      <guid isPermaLink="true">https://alignment.openai.com/eval-production-behavior-gap/</guid>
+      <pubDate>Tue, 03 Nov 2026 00:00:00 -0800</pubDate>
+      <dc:creator>Joy Hsu, Sam Arnesen</dc:creator>
+      <description>We study agent behavior in safety evaluations and in production, and explore how models' interpretations of evaluation objectives relate to eval-production performance gaps.</description>
+    </item>
+
+    <item>
+      <title>How we detect frontier model misalignment</title>
+      <link>https://alignment.openai.com/how-we-detect-frontier-model-misalignment/</link>
+      <guid isPermaLink="true">https://alignment.openai.com/how-we-detect-frontier-model-misalignment/</guid>
+      <pubDate>Thu, 29 Oct 2026 09:00:00 -0700</pubDate>
+      <dc:creator>Marcus Williams, Phillip Guo, David Oks, Doug Bemis, Kerrick Staley, William Wong, Aleksandra Spyra, Shantanu Jain, Ian Kivlichan, Micah Carroll</dc:creator>
+      <description>How we monitor frontier models, investigate concerning behavior, and test the limits of our safeguards.</description>
+    </item>
+
+    <item>
+      <title>Hello World</title>
+      <link>https://alignment.openai.com/hello-world/</link>
+      <guid isPermaLink="true">https://alignment.openai.com/hello-world/</guid>
+      <pubDate>Mon, 01 Dec 2025 14:00:00 -0800</pubDate>
+      <dc:creator>OpenAI</dc:creator>
+      <description>Introducing our blog on alignment research.</description>
+    </item>
+
+  </channel>
+</rss>

@@ -1,0 +1,258 @@
+[
+ {
+  "paper": {
+   "id": "2609.15818",
+   "publishedAt": "2026-09-14T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-09-15T00:00:00.000Z",
+   "title": "Atria Dawn: The Dawn of Agentic Superintelligence",
+   "upvotes": 248,
+   "ai_summary": "Atria Dawn Preview is a foundation agentic language model trained through verified tool interactions that achieves strong benchmark results and demonstrates a shift toward human-AI project-level collaboration in scientific research.",
+   "githubRepo": "https://github.com/atria-asi/Atria-Dawn-Preview",
+   "githubStars": 637,
+   "projectPage": "https://atria-asi.ai",
+   "organization": {
+    "_id": "64a2d5fa81252883206f24c9",
+    "name": "internlm",
+    "fullname": "Intern Large Models"
+   },
+   "summary": "As AI agents become participants in the development of their successors, they reshape both the production of intelligence and the role of human researchers. We introduce Atria Dawn Preview, a foundation agentic language model designed for scientific research and engineering workflows, with the goal of expanding the frontier of agent productivity in the real world. This model is trained via a Verifiable Experience Pip",
+   "authors": [
+    {
+     "_id": "6aa8b9965dd4cb9b4cc0263c",
+     "name": "Honglin Guo",
+     "hidden": false,
+     "user": {
+      "user": "KYLN24",
+      "fullname": "Honglin Guo"
+     }
+    },
+    {
+     "_id": "6aa8b9965dd4cb9b4cc0263d",
+     "name": "Tao Gui",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8b9965dd4cb9b4cc0263e",
+     "name": "Yicheng Chen",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8b9965dd4cb9b4cc0263f",
+     "name": "Guanting Dong",
+     "hidden": false,
+     "user": {
+      "user": "dongguanting",
+      "fullname": "KABI"
+     }
+    },
+    {
+     "_id": "6aa8b9965dd4cb9b4cc02640",
+     "name": "Qiming Ge",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8b9965dd4cb9b4cc02641",
+     "name": "Yuyang Hu",
+     "hidden": false,
+     "user": {
+      "user": "namespace-ERI",
+      "fullname": "Yuyang Hu"
+     }
+    }
+   ],
+   "ai_keywords": [
+    "foundation agentic language model",
+    "Verifiable Experience Pipeline",
+    "tool-mediated interactions"
+   ]
+  },
+  "publishedAt": "2026-09-13T20:00:00.000Z",
+  "title": "Atria Dawn: The Dawn of Agentic Superintelligence",
+  "numComments": 3,
+  "organization": {
+   "_id": "64a2d5fa81252883206f24c9",
+   "name": "internlm",
+   "fullname": "Intern Large Models"
+  }
+ },
+ {
+  "paper": {
+   "id": "2609.14858",
+   "publishedAt": "2026-09-14T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-09-15T00:00:00.000Z",
+   "title": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds",
+   "upvotes": 143,
+   "ai_summary": "Dream-RSI enables scalable recursive self-improvement by using historical discovery replay to evaluate exploration policies offline, reducing costly online evaluations.",
+   "githubRepo": "https://github.com/zhengkid/Dream-RSI",
+   "githubStars": 1555,
+   "projectPage": "https://dream-rsi.com/",
+   "organization": {
+    "_id": "5e6aca39878b8b2bf9806447",
+    "name": "google",
+    "fullname": "Google"
+   },
+   "summary": "Recursive self-improvement is becoming increasingly vital for autonomous AI agents, where progress hinges on discovering high-value solutions across complex domains. The driver of this process is effective exploration, however, managing and improving exploration strategies remains a major bottleneck. Current systems face a fundamental dilemma: fixed strategies fail to adapt as search spaces scale, while online policy",
+   "authors": [
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024aa",
+     "name": "Tong Zheng",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024ab",
+     "name": "Xidong Wu",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024ac",
+     "name": "Zheng Zhang",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024ad",
+     "name": "Zhankui He",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024ae",
+     "name": "Chaoyi Zhang",
+     "hidden": false
+    },
+    {
+     "_id": "6aa8a7435dd4cb9b4cc024af",
+     "name": "Benjamin Coleman",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "recursive self-improvement",
+    "exploration strategies",
+    "replay simulator"
+   ]
+  },
+  "publishedAt": "2026-09-13T20:00:00.000Z",
+  "title": "Dream-RSI: Recursive Self-Improvement through Evolving Worlds",
+  "numComments": 3,
+  "organization": {
+   "_id": "5e6aca39878b8b2bf9806447",
+   "name": "google",
+   "fullname": "Google"
+  }
+ },
+ {
+  "paper": {
+   "id": "2609.14708",
+   "publishedAt": "2026-09-13T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-09-15T00:00:00.000Z",
+   "title": "Lightning Weave: Improving the Accuracy-Efficiency Frontier of Reasoning Models through Capability Composition",
+   "upvotes": 4,
+   "ai_summary": "Lightning Weave composes independently trained reasoning capabilities into a single efficient student via on-policy distillation, improving both accuracy and token efficiency across math and code benchmarks.",
+   "summary": "A core goal of efficient reasoning is to improve the accuracy-efficiency frontier. However, jointly improving reasoning accuracy and inference efficiency can be challenging, as the two objectives can favor different reasoning behaviors. Independently post-trained models already offer distinct strengths in accuracy and efficiency. We introduce Lightning Weave, a post-training framework that extracts and composes these",
+   "authors": [
+    {
+     "_id": "6aa9c1cdf6668522fbb07f45",
+     "name": "Yecheng Wu",
+     "hidden": false,
+     "user": {
+      "user": "gbcfchc",
+      "fullname": "Yecheng Wu"
+     }
+    },
+    {
+     "_id": "6aa9c1cdf6668522fbb07f46",
+     "name": "Song Han",
+     "hidden": false
+    },
+    {
+     "_id": "6aa9c1cdf6668522fbb07f47",
+     "name": "Han Cai",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "on-policy distillation",
+    "policy shift",
+    "log-ratio shifts"
+   ]
+  },
+  "publishedAt": "2026-09-12T20:00:00.000Z",
+  "title": "Lightning Weave: Improving the Accuracy-Efficiency Frontier of Reasoning Models through Capability Composition",
+  "numComments": 2
+ },
+ {
+  "paper": {
+   "id": "2609.14302",
+   "publishedAt": "2026-09-13T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-09-15T00:00:00.000Z",
+   "title": "E2A-Bench: Benchmarking Evidence-to-Action Reliability in Financial Chart Reasoning",
+   "upvotes": 3,
+   "ai_summary": "A benchmark for financial chart reasoning reveals that vision-language models often fail to maintain traceable evidence-to-action reliability, highlighting the need to evaluate the full reasoning chain rather than single hallucination scores.",
+   "summary": "Can financial vision-language models (VLMs) turn chart evidence into reliable action recommendations? Existing hallucination evaluations are mostly claim-centric; they assess whether generated statements are supported, but not whether evidence remains traceable through rationale, confidence, and final action. We introduce E2A-Bench, a 969-query benchmark for financial chart reasoning, constructed from 323 HS300 const",
+   "authors": [
+    {
+     "_id": "6aa945f0f6668522fbb07c8e",
+     "name": "Xiaoya Wang",
+     "hidden": false
+    },
+    {
+     "_id": "6aa945f0f6668522fbb07c8f",
+     "name": "Yutong Xu",
+     "hidden": false
+    },
+    {
+     "_id": "6aa945f0f6668522fbb07c90",
+     "name": "Junjie Wang",
+     "hidden": false,
+     "user": {
+      "user": "wanng",
+      "fullname": "wangjunjie"
+     }
+    }
+   ],
+   "ai_keywords": [
+    "financial vision-language models",
+    "E2A-Bench",
+    "OHLCV"
+   ]
+  },
+  "publishedAt": "2026-09-12T20:00:00.000Z",
+  "title": "E2A-Bench: Benchmarking Evidence-to-Action Reliability in Financial Chart Reasoning",
+  "numComments": 2
+ },
+ {
+  "paper": {
+   "id": "2609.01430",
+   "publishedAt": "2026-09-01T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-09-15T00:00:00.000Z",
+   "title": "Learning Sparse Decision Trees via Transformer Variational Auto-Encoders",
+   "upvotes": 3,
+   "ai_summary": "TREVIS learns decision trees by optimizing continuous latent representations via a tree transformer variational autoencoder to jointly improve predictive accuracy and structural sparsity.",
+   "summary": "Decision trees are among the most widely used models in machine learning, largely due to their transparent decision logic, making them well-suited for high-stakes decision-making contexts. However, most existing learning algorithms focus on predictive performance, overlooking the joint optimization of other desirable properties, such as structural sparsity. In this work we propose TREVIS, an approach for learning dec",
+   "authors": [
+    {
+     "_id": "6aa945f7f6668522fbb07c94",
+     "name": "Giacomo Fidone",
+     "hidden": false
+    },
+    {
+     "_id": "6aa945f7f6668522fbb07c95",
+     "name": "Alessio Cascione",
+     "hidden": false
+    },
+    {
+     "_id": "6aa945f7f6668522fbb07c96",
+     "name": "Riccardo Guidotti",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "decision trees",
+    "Tree Transformer Variational Auto-Encoder",
+    "TTVAE"
+   ]
+  },
+  "publishedAt": "2026-08-31T20:00:00.000Z",
+  "title": "Learning Sparse Decision Trees via Transformer Variational Auto-Encoders",
+  "numComments": 2
+ }
+]

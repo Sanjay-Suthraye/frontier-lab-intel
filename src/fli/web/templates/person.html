@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% set p = d.person %}
+{% block title %}{{ p.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="crumbs"><a href="/register/people">People</a> · {{ p.id }}</p>
+  <h1>{{ p.name }} <span class="tier p{{ p.tier }}">tier {{ p.tier }}</span></h1>
+  <p class="muted">{{ p.title or 'no title on record' }}{% if p.lab_id %} · <a href="/register/labs/{{ p.lab_id }}">{{ p.lab_name or p.lab_id }}</a>{% endif %} · status {{ p.status|replace('_', ' ') }}</p>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Why tracked</h2>
+    <p>{{ p.why_key or 'No rationale recorded.' }}</p>
+    <p class="small muted">Inclusion rule: <code>{{ p.inclusion_rule or 'none' }}</code></p>
+    <h3>Contributor score {% if p.contributor_score is not none %}<span class="score s-mid">{{ '%.2f'|format(p.contributor_score) }}</span>{% endif %}</h3>
+    {% if d.features %}
+    <table class="tbl compact">{% for k, v in d.features %}<tr><td>{{ k|replace('_', ' ') }}</td><td class="num">{{ v|num }}</td></tr>{% endfor %}</table>
+    {% else %}<p class="muted small">Not scored yet (<code>fli contributors</code>).</p>{% endif %}
+  </section>
+  <section class="card">
+    <h2>Affiliation timeline</h2>
+    {% if d.affiliations %}
+    <ol class="timeline">
+      {% for a in d.affiliations %}
+      <li>
+        <b>{% if a.lab_id %}<a href="/register/labs/{{ a.lab_id }}">{{ a.org }}</a>{% else %}{{ a.org or 'unknown org' }}{% endif %}</b>{% if a.role %} · {{ a.role }}{% endif %}
+        <div class="small muted">{{ a.start|date if a.start else '?' }} – {{ a.end|date if a.end else 'present' }}{% if a.confidence is not none and a.confidence < 1 %} · confidence {{ '%.2f'|format(a.confidence) }}{% endif %}
+          {% if a.source_url %} · {{ m.ext(a.source_url, 'source') }}{% endif %}</div>
+        {% if a.evidence %}<div class="small">{{ a.evidence }}</div>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}<p class="muted">No affiliation history recorded.</p>{% endif %}
+  </section>
+</div>
+
+<section class="card">
+  <h2>Identities (entity resolution)</h2>
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Platform</th><th>Handle / name</th><th>Method</th><th>Confidence</th><th>Status</th><th>Evidence</th></tr></thead>
+    <tbody>
+    {% for i in d.identities %}
+      <tr class="{{ 'dim' if i.status == 'rejected' }}">
+        <td>{{ i.platform }}</td><td>{% if i.url %}{{ m.ext(i.url, i.handle) }}{% else %}{{ i.handle }}{% endif %}</td>
+        <td><code>{{ i.method }}</code></td><td class="num">{{ '%.2f'|format(i.confidence or 0) }}</td>
+        <td><span class="st st-{{ 'ok' if i.status == 'confirmed' else ('pending' if i.status == 'candidate' else 'disabled') }}">{{ i.status }}</span></td>
+        <td class="small">{{ i.evidence or '–' }}</td>
+      </tr>
+    {% else %}<tr><td colspan="6" class="empty">No identities.</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+  <p class="small muted">Only confirmed identities attribute documents to this person; candidates await adjudication.</p>
+</section>
+
+{% if d.sources %}
+<section class="card">
+  <h2>Personal sources polled</h2>
+  {{ m.source_table(d.sources) }}
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Developments involving {{ p.name }}</h2>
+  {{ m.dev_table(d.developments) }}
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Attributed insights ({{ d.insights|length }})</h2>
+    <ul class="rlist">
+    {% for i in d.insights %}
+      <li>{% if i.development_id %}<a href="/developments/{{ i.development_id }}">{{ i.title }}</a>{% else %}{{ i.title }}{% endif %}
+        <div class="meta">{{ i.event_type|replace('_', ' ') }}<span class="sep">·</span>{{ i.published_at|date }}<span class="sep">·</span>{{ m.ext(i.doc.url, i.doc.title|truncate(50)) }} {{ m.verified(i.quotes_verified) }}</div></li>
+    {% else %}<li class="empty">No insights attributed yet.</li>{% endfor %}
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Attributed documents ({{ d.documents|length }})</h2>
+    <ul class="rlist">
+    {% for doc in d.documents %}
+      <li>{{ m.ext(doc.url, doc.title|truncate(90)) }}
+        <div class="meta">{{ doc.published_at|date }}<span class="sep">·</span>{{ m.source_badge(doc) }}<span class="sep">·</span>{{ doc.source_id }}<span class="sep">·</span>{{ doc.status }}</div></li>
+    {% else %}<li class="empty">No documents attributed yet.</li>{% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

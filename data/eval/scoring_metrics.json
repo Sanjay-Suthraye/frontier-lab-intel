@@ -1,0 +1,740 @@
+{
+  "generated_at": "2026-11-04T15:52:35",
+  "target": "label >= 1 (worth knowing or material); label == 2 reported as roc_auc_material",
+  "label_policy": "per development: human labels (majority) preferred over the LLM judge",
+  "split": "time-ordered: first 70% by first_seen_at train, rest test",
+  "audiences": {
+    "investment": {
+      "n_labels": 300,
+      "label_sources": {
+        "llm": 300
+      },
+      "positives": 91,
+      "material": 11,
+      "status": "trained",
+      "version": "lr-investment-20261104-llm",
+      "label_source": "llm",
+      "split": {
+        "train": 210,
+        "test": 90,
+        "test_from": "2026-10-13 16:00:29",
+        "train_positives": 62,
+        "test_positives": 29
+      },
+      "C": 0.3,
+      "cv_by_C": {
+        "0.01": {
+          "roc_auc": 0.9027,
+          "log_loss": 0.482
+        },
+        "0.03": {
+          "roc_auc": 0.9044,
+          "log_loss": 0.4123
+        },
+        "0.1": {
+          "roc_auc": 0.9116,
+          "log_loss": 0.3635
+        },
+        "0.3": {
+          "roc_auc": 0.9078,
+          "log_loss": 0.3478
+        },
+        "1.0": {
+          "roc_auc": 0.9057,
+          "log_loss": 0.3574
+        },
+        "3.0": {
+          "roc_auc": 0.8993,
+          "log_loss": 0.38
+        }
+      },
+      "model": {
+        "n": 90,
+        "positives": 29,
+        "roc_auc": 0.8694,
+        "auc_ci95": [
+          0.791,
+          0.935
+        ],
+        "average_precision": 0.7695,
+        "precision_at_10": 0.9,
+        "precision_at_20": 0.75,
+        "brier": 0.1453,
+        "calibration": [
+          {
+            "bin": "0.0-0.2",
+            "n": 53,
+            "mean_predicted": 0.0652,
+            "observed_rate": 0.0943
+          },
+          {
+            "bin": "0.2-0.4",
+            "n": 13,
+            "mean_predicted": 0.2926,
+            "observed_rate": 0.6154
+          },
+          {
+            "bin": "0.4-0.6",
+            "n": 5,
+            "mean_predicted": 0.5574,
+            "observed_rate": 0.4
+          },
+          {
+            "bin": "0.6-0.8",
+            "n": 10,
+            "mean_predicted": 0.6754,
+            "observed_rate": 0.5
+          },
+          {
+            "bin": "0.8-1.0",
+            "n": 9,
+            "mean_predicted": 0.9535,
+            "observed_rate": 1.0
+          }
+        ],
+        "material_n": 2,
+        "roc_auc_material": 0.9716,
+        "brier_without_intercept_correction": 0.1456
+      },
+      "baselines": {
+        "official_only": {
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.5285,
+          "auc_ci95": [
+            0.435,
+            0.606
+          ],
+          "average_precision": 0.3353,
+          "precision_at_10": 0.338,
+          "precision_at_20": 0.338,
+          "material_n": 2,
+          "roc_auc_material": 0.608
+        },
+        "magnitude_only": {
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.7213,
+          "auc_ci95": [
+            0.618,
+            0.816
+          ],
+          "average_precision": 0.5342,
+          "precision_at_10": 0.6826,
+          "precision_at_20": 0.6239,
+          "material_n": 2,
+          "roc_auc_material": 1.0
+        },
+        "n_sources_only": {
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.4788,
+          "auc_ci95": [
+            0.419,
+            0.544
+          ],
+          "average_precision": 0.3421,
+          "precision_at_10": 0.2333,
+          "precision_at_20": 0.2833,
+          "material_n": 2,
+          "roc_auc_material": 0.6989
+        },
+        "prior-v0": {
+          "n": 90,
+          "positives": 29,
+          "roc_auc": 0.7999,
+          "auc_ci95": [
+            0.703,
+            0.877
+          ],
+          "average_precision": 0.6745,
+          "precision_at_10": 0.8,
+          "precision_at_20": 0.7,
+          "brier": 0.1698,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 47,
+              "mean_predicted": 0.1045,
+              "observed_rate": 0.1702
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 26,
+              "mean_predicted": 0.2799,
+              "observed_rate": 0.3462
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 11,
+              "mean_predicted": 0.5072,
+              "observed_rate": 0.6364
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 4,
+              "mean_predicted": 0.7428,
+              "observed_rate": 0.75
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 2,
+              "mean_predicted": 0.9322,
+              "observed_rate": 1.0
+            }
+          ],
+          "material_n": 2,
+          "roc_auc_material": 1.0
+        }
+      },
+      "ablation_without_llm_features": {
+        "dropped": [
+          "max_magnitude",
+          "mean_confidence"
+        ],
+        "C": 0.1,
+        "n": 90,
+        "positives": 29,
+        "roc_auc": 0.7875,
+        "auc_ci95": [
+          0.692,
+          0.882
+        ],
+        "average_precision": 0.7015,
+        "precision_at_10": 0.8,
+        "precision_at_20": 0.7,
+        "brier": 0.1636,
+        "calibration": [
+          {
+            "bin": "0.0-0.2",
+            "n": 42,
+            "mean_predicted": 0.0994,
+            "observed_rate": 0.1429
+          },
+          {
+            "bin": "0.2-0.4",
+            "n": 22,
+            "mean_predicted": 0.2622,
+            "observed_rate": 0.2727
+          },
+          {
+            "bin": "0.4-0.6",
+            "n": 14,
+            "mean_predicted": 0.4721,
+            "observed_rate": 0.5714
+          },
+          {
+            "bin": "0.6-0.8",
+            "n": 4,
+            "mean_predicted": 0.6933,
+            "observed_rate": 0.5
+          },
+          {
+            "bin": "0.8-1.0",
+            "n": 8,
+            "mean_predicted": 0.9105,
+            "observed_rate": 0.875
+          }
+        ],
+        "material_n": 2,
+        "roc_auc_material": 0.8295
+      },
+      "coefficients_per_sd": [
+        {
+          "feature": "max_magnitude",
+          "label": "Extractor magnitude judgement (1-5)",
+          "coef": 1.3782
+        },
+        {
+          "feature": "exposure_bit",
+          "label": "BIT holdings the event itself links to (fund weight % x link confidence, / 10)",
+          "coef": 1.1568
+        },
+        {
+          "feature": "grp_hiring",
+          "label": "Hiring signal",
+          "coef": 0.6697
+        },
+        {
+          "feature": "grp_research",
+          "label": "Research paper / technique",
+          "coef": -0.4049
+        },
+        {
+          "feature": "attention",
+          "label": "Attention to the item itself (upvotes / likes / downloads, log)",
+          "coef": -0.4021
+        },
+        {
+          "feature": "grp_strategy",
+          "label": "Strategy, partnership, product or pricing",
+          "coef": 0.3911
+        },
+        {
+          "feature": "n_source_classes",
+          "label": "Kinds of source (official, personal, press ...)",
+          "coef": 0.3892
+        },
+        {
+          "feature": "mean_confidence",
+          "label": "Extractor confidence",
+          "coef": 0.3746
+        },
+        {
+          "feature": "max_novelty",
+          "label": "New relative to the lab's recent history",
+          "coef": 0.3271
+        },
+        {
+          "feature": "grp_infra",
+          "label": "Compute, energy or custom silicon",
+          "coef": 0.3121
+        },
+        {
+          "feature": "grp_people",
+          "label": "Talent move",
+          "coef": 0.2681
+        },
+        {
+          "feature": "grp_capital",
+          "label": "Funding, IPO or new venture",
+          "coef": 0.2144
+        },
+        {
+          "feature": "n_tickers",
+          "label": "Public companies the event itself links to (confidence-weighted)",
+          "coef": 0.1928
+        },
+        {
+          "feature": "lab_tier_3",
+          "label": "Tier-3 alumni startup",
+          "coef": -0.1663
+        },
+        {
+          "feature": "person_tier",
+          "label": "Involves a key person (A=1, B=0.6, C=0.3)",
+          "coef": -0.15
+        },
+        {
+          "feature": "lab_tier_1",
+          "label": "Tier-1 frontier lab",
+          "coef": 0.1407
+        },
+        {
+          "feature": "lab_tier_2",
+          "label": "Tier-2 lab (challenger / open-weight)",
+          "coef": -0.1257
+        },
+        {
+          "feature": "first_seen_artifact",
+          "label": "Names a model/product never seen before",
+          "coef": -0.1255
+        },
+        {
+          "feature": "grp_release",
+          "label": "Model release / capability claim",
+          "coef": 0.1119
+        },
+        {
+          "feature": "grp_policy",
+          "label": "Safety / policy",
+          "coef": 0.0956
+        },
+        {
+          "feature": "log_sources",
+          "label": "Independent sources (log)",
+          "coef": -0.0573
+        },
+        {
+          "feature": "has_official",
+          "label": "Published on an official lab channel",
+          "coef": -0.0537
+        },
+        {
+          "feature": "has_verified",
+          "label": "Evidence quotes verified against the source",
+          "coef": 0.0
+        },
+        {
+          "feature": "rumor_share",
+          "label": "Share of rumoured / unconfirmed claims",
+          "coef": 0.0
+        },
+        {
+          "feature": "press_only",
+          "label": "Reported only by press / aggregators",
+          "coef": 0.0
+        }
+      ],
+      "deployed": true,
+      "deploy_reason": "hold-out AUC 0.8694 vs prior-v0 0.7999",
+      "model_file": "/Users/sanjaysuthraye/anaconda_projects/1. Jobs Take home Test/Bit-capital/frontier-lab-intel/data/models/scoring_investment.json"
+    },
+    "ai_team": {
+      "n_labels": 300,
+      "label_sources": {
+        "llm": 300
+      },
+      "positives": 195,
+      "material": 23,
+      "status": "trained",
+      "version": "lr-ai_team-20261104-llm",
+      "label_source": "llm",
+      "split": {
+        "train": 210,
+        "test": 90,
+        "test_from": "2026-10-13 16:00:29",
+        "train_positives": 135,
+        "test_positives": 60
+      },
+      "C": 0.03,
+      "cv_by_C": {
+        "0.01": {
+          "roc_auc": 0.798,
+          "log_loss": 0.5882
+        },
+        "0.03": {
+          "roc_auc": 0.7891,
+          "log_loss": 0.5562
+        },
+        "0.1": {
+          "roc_auc": 0.7812,
+          "log_loss": 0.5453
+        },
+        "0.3": {
+          "roc_auc": 0.7758,
+          "log_loss": 0.5522
+        },
+        "1.0": {
+          "roc_auc": 0.7709,
+          "log_loss": 0.5679
+        },
+        "3.0": {
+          "roc_auc": 0.7669,
+          "log_loss": 0.5836
+        }
+      },
+      "model": {
+        "n": 90,
+        "positives": 60,
+        "roc_auc": 0.8228,
+        "auc_ci95": [
+          0.742,
+          0.911
+        ],
+        "average_precision": 0.899,
+        "precision_at_10": 1.0,
+        "precision_at_20": 0.95,
+        "brier": 0.1637,
+        "calibration": [
+          {
+            "bin": "0.0-0.2",
+            "n": 1,
+            "mean_predicted": 0.1854,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": "0.2-0.4",
+            "n": 9,
+            "mean_predicted": 0.3027,
+            "observed_rate": 0.2222
+          },
+          {
+            "bin": "0.4-0.6",
+            "n": 33,
+            "mean_predicted": 0.5218,
+            "observed_rate": 0.5152
+          },
+          {
+            "bin": "0.6-0.8",
+            "n": 27,
+            "mean_predicted": 0.6848,
+            "observed_rate": 0.8148
+          },
+          {
+            "bin": "0.8-1.0",
+            "n": 20,
+            "mean_predicted": 0.8566,
+            "observed_rate": 0.95
+          }
+        ],
+        "material_n": 5,
+        "roc_auc_material": 0.88,
+        "brier_without_intercept_correction": 0.1928
+      },
+      "baselines": {
+        "official_only": {
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.3917,
+          "auc_ci95": [
+            0.324,
+            0.463
+          ],
+          "average_precision": 0.6229,
+          "precision_at_10": 0.6056,
+          "precision_at_20": 0.6056,
+          "material_n": 5,
+          "roc_auc_material": 0.2941
+        },
+        "magnitude_only": {
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.5175,
+          "auc_ci95": [
+            0.43,
+            0.611
+          ],
+          "average_precision": 0.6762,
+          "precision_at_10": 0.7478,
+          "precision_at_20": 0.7217,
+          "material_n": 5,
+          "roc_auc_material": 0.8659
+        },
+        "n_sources_only": {
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.575,
+          "auc_ci95": [
+            0.535,
+            0.621
+          ],
+          "average_precision": 0.7167,
+          "precision_at_10": 0.963,
+          "precision_at_20": 0.7963,
+          "material_n": 5,
+          "roc_auc_material": 0.5624
+        },
+        "prior-v0": {
+          "n": 90,
+          "positives": 60,
+          "roc_auc": 0.7494,
+          "auc_ci95": [
+            0.653,
+            0.846
+          ],
+          "average_precision": 0.8556,
+          "precision_at_10": 0.9,
+          "precision_at_20": 0.9,
+          "brier": 0.3156,
+          "calibration": [
+            {
+              "bin": "0.0-0.2",
+              "n": 29,
+              "mean_predicted": 0.1388,
+              "observed_rate": 0.5172
+            },
+            {
+              "bin": "0.2-0.4",
+              "n": 43,
+              "mean_predicted": 0.2968,
+              "observed_rate": 0.6744
+            },
+            {
+              "bin": "0.4-0.6",
+              "n": 11,
+              "mean_predicted": 0.49,
+              "observed_rate": 0.8182
+            },
+            {
+              "bin": "0.6-0.8",
+              "n": 3,
+              "mean_predicted": 0.6937,
+              "observed_rate": 1.0
+            },
+            {
+              "bin": "0.8-1.0",
+              "n": 4,
+              "mean_predicted": 0.947,
+              "observed_rate": 1.0
+            }
+          ],
+          "material_n": 5,
+          "roc_auc_material": 0.9082
+        }
+      },
+      "ablation_without_llm_features": {
+        "dropped": [
+          "max_magnitude",
+          "mean_confidence"
+        ],
+        "C": 0.1,
+        "n": 90,
+        "positives": 60,
+        "roc_auc": 0.8356,
+        "auc_ci95": [
+          0.753,
+          0.915
+        ],
+        "average_precision": 0.9046,
+        "precision_at_10": 1.0,
+        "precision_at_20": 0.9,
+        "brier": 0.158,
+        "calibration": [
+          {
+            "bin": "0.0-0.2",
+            "n": 6,
+            "mean_predicted": 0.11,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": "0.2-0.4",
+            "n": 11,
+            "mean_predicted": 0.3403,
+            "observed_rate": 0.2727
+          },
+          {
+            "bin": "0.4-0.6",
+            "n": 22,
+            "mean_predicted": 0.5276,
+            "observed_rate": 0.6364
+          },
+          {
+            "bin": "0.6-0.8",
+            "n": 30,
+            "mean_predicted": 0.6864,
+            "observed_rate": 0.8
+          },
+          {
+            "bin": "0.8-1.0",
+            "n": 21,
+            "mean_predicted": 0.89,
+            "observed_rate": 0.9048
+          }
+        ],
+        "material_n": 5,
+        "roc_auc_material": 0.8541
+      },
+      "coefficients_per_sd": [
+        {
+          "feature": "grp_release",
+          "label": "Model release / capability claim",
+          "coef": 0.343
+        },
+        {
+          "feature": "grp_hiring",
+          "label": "Hiring signal",
+          "coef": -0.3134
+        },
+        {
+          "feature": "exposure_bit",
+          "label": "BIT holdings the event itself links to (fund weight % x link confidence, / 10)",
+          "coef": -0.2293
+        },
+        {
+          "feature": "first_seen_artifact",
+          "label": "Names a model/product never seen before",
+          "coef": 0.2264
+        },
+        {
+          "feature": "lab_tier_1",
+          "label": "Tier-1 frontier lab",
+          "coef": -0.2043
+        },
+        {
+          "feature": "has_official",
+          "label": "Published on an official lab channel",
+          "coef": -0.1861
+        },
+        {
+          "feature": "log_sources",
+          "label": "Independent sources (log)",
+          "coef": 0.1704
+        },
+        {
+          "feature": "grp_people",
+          "label": "Talent move",
+          "coef": -0.1674
+        },
+        {
+          "feature": "grp_infra",
+          "label": "Compute, energy or custom silicon",
+          "coef": -0.1621
+        },
+        {
+          "feature": "max_magnitude",
+          "label": "Extractor magnitude judgement (1-5)",
+          "coef": 0.1317
+        },
+        {
+          "feature": "lab_tier_2",
+          "label": "Tier-2 lab (challenger / open-weight)",
+          "coef": 0.1317
+        },
+        {
+          "feature": "n_source_classes",
+          "label": "Kinds of source (official, personal, press ...)",
+          "coef": 0.1297
+        },
+        {
+          "feature": "attention",
+          "label": "Attention to the item itself (upvotes / likes / downloads, log)",
+          "coef": 0.1121
+        },
+        {
+          "feature": "grp_capital",
+          "label": "Funding, IPO or new venture",
+          "coef": -0.1048
+        },
+        {
+          "feature": "grp_research",
+          "label": "Research paper / technique",
+          "coef": 0.0988
+        },
+        {
+          "feature": "grp_policy",
+          "label": "Safety / policy",
+          "coef": -0.0497
+        },
+        {
+          "feature": "grp_strategy",
+          "label": "Strategy, partnership, product or pricing",
+          "coef": -0.0481
+        },
+        {
+          "feature": "n_tickers",
+          "label": "Public companies the event itself links to (confidence-weighted)",
+          "coef": -0.0433
+        },
+        {
+          "feature": "person_tier",
+          "label": "Involves a key person (A=1, B=0.6, C=0.3)",
+          "coef": -0.0214
+        },
+        {
+          "feature": "lab_tier_3",
+          "label": "Tier-3 alumni startup",
+          "coef": -0.0158
+        },
+        {
+          "feature": "max_novelty",
+          "label": "New relative to the lab's recent history",
+          "coef": -0.0148
+        },
+        {
+          "feature": "mean_confidence",
+          "label": "Extractor confidence",
+          "coef": 0.0017
+        },
+        {
+          "feature": "has_verified",
+          "label": "Evidence quotes verified against the source",
+          "coef": 0.0
+        },
+        {
+          "feature": "rumor_share",
+          "label": "Share of rumoured / unconfirmed claims",
+          "coef": 0.0
+        },
+        {
+          "feature": "press_only",
+          "label": "Reported only by press / aggregators",
+          "coef": 0.0
+        }
+      ],
+      "deployed": true,
+      "deploy_reason": "hold-out AUC 0.8228 vs prior-v0 0.7494",
+      "model_file": "/Users/sanjaysuthraye/anaconda_projects/1. Jobs Take home Test/Bit-capital/frontier-lab-intel/data/models/scoring_ai_team.json"
+    }
+  }
+}

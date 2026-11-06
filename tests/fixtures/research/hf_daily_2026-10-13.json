@@ -1,0 +1,136 @@
+[
+ {
+  "paper": {
+   "id": "2610.09326",
+   "publishedAt": "2026-10-07T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-10-13T00:00:00.000Z",
+   "title": "VIS-Ground: Video Interactive Storytelling with Contextual Grounding",
+   "upvotes": 33,
+   "ai_summary": "VIS-Ground transforms heterogeneous inputs into executable constraints for interactive video generation by recovering cross-context dependencies and enforcing them through planning, verification, and rendering.",
+   "githubRepo": "https://github.com/vis-ground/code",
+   "githubStars": 13,
+   "projectPage": "https://vis-ground.github.io",
+   "organization": {
+    "_id": "6697e8e64a352ad17648a89a",
+    "name": "GoogIe",
+    "fullname": "Google"
+   },
+   "summary": "Video interactive storytelling enables viewers to actively steer how a video unfolds. However, once we allow viewers to intervene during generation, a new challenge arises: The viewer's request can have latent dependencies on both the grounding source and the current rendered video state. These dependencies may not be explicitly stated in any individual input, but emerge only when the source, rendered history, and ne",
+   "authors": [
+    {
+     "_id": "6acdd48cead72e0d3c44fea3",
+     "name": "Bingxuan Li",
+     "hidden": false,
+     "user": {
+      "user": "bx6d",
+      "fullname": "bingxuan li"
+     }
+    },
+    {
+     "_id": "6acdd48cead72e0d3c44fea4",
+     "name": "Yiwen Song",
+     "hidden": false
+    },
+    {
+     "_id": "6acdd48cead72e0d3c44fea5",
+     "name": "Xueqing Wu",
+     "hidden": false
+    },
+    {
+     "_id": "6acdd48cead72e0d3c44fea6",
+     "name": "Yanzhou Pan",
+     "hidden": false
+    },
+    {
+     "_id": "6acdd48cead72e0d3c44fea7",
+     "name": "Yang Li",
+     "hidden": false
+    },
+    {
+     "_id": "6acdd48cead72e0d3c44fea8",
+     "name": "Kuang Su",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "interactive video generation",
+    "contextual grounding",
+    "structured context abstraction"
+   ]
+  },
+  "publishedAt": "2026-10-06T20:00:00.000Z",
+  "title": "VIS-Ground: Video Interactive Storytelling with Contextual Grounding",
+  "numComments": 2,
+  "organization": {
+   "_id": "6697e8e64a352ad17648a89a",
+   "name": "GoogIe",
+   "fullname": "Google"
+  }
+ },
+ {
+  "paper": {
+   "id": "2610.13166",
+   "publishedAt": "2026-10-09T00:00:00.000Z",
+   "submittedOnDailyAt": "2026-10-13T00:00:00.000Z",
+   "title": "Scaling Agentic Data for Long-Horizon Terminal Intelligence",
+   "upvotes": 128,
+   "ai_summary": "TerminalHorizon automates long-horizon terminal agent data synthesis by reconstructing environments around omitted work and progressively expanding tasks, yielding substantial gains across coding, production, and reasoning benchmarks.",
+   "projectPage": "https://zs1314.github.io/TerminalHorizon",
+   "organization": {
+    "_id": "68be41370a3fcebdcad6516a",
+    "name": "alibabagroup",
+    "fullname": "alibaba"
+   },
+   "summary": "Terminal agents are moving beyond local operations toward completing real-world professional tasks. Short trajectories can demonstrate commands and tool calls, but they do not fully show how agents accumulate evidence through exploration, use it to inform judgments, continually adjust strategies based on feedback, and turn intermediate results into final deliverables. High-quality long-horizon trajectories capture th",
+   "authors": [
+    {
+     "_id": "6acc50ce0ee6ff34004fde8d",
+     "name": "Shun Zou",
+     "hidden": false,
+     "user": {
+      "user": "shunzou05",
+      "fullname": "Shun Zou"
+     }
+    },
+    {
+     "_id": "6acc50ce0ee6ff34004fde8e",
+     "name": "Ziyu Ma",
+     "hidden": false
+    },
+    {
+     "_id": "6acc50ce0ee6ff34004fde8f",
+     "name": "Yi Zou",
+     "hidden": false
+    },
+    {
+     "_id": "6acc50ce0ee6ff34004fde90",
+     "name": "Yong Wang",
+     "hidden": false
+    },
+    {
+     "_id": "6acc50ce0ee6ff34004fde91",
+     "name": "Lin Chen",
+     "hidden": false
+    },
+    {
+     "_id": "6acc50ce0ee6ff34004fde92",
+     "name": "Zehui Chen",
+     "hidden": false
+    }
+   ],
+   "ai_keywords": [
+    "long-horizon terminal agents",
+    "environment synthesis",
+    "supervised fine-tuning"
+   ]
+  },
+  "publishedAt": "2026-10-08T20:00:00.000Z",
+  "title": "Scaling Agentic Data for Long-Horizon Terminal Intelligence",
+  "numComments": 2,
+  "organization": {
+   "_id": "68be41370a3fcebdcad6516a",
+   "name": "alibabagroup",
+   "fullname": "alibaba"
+  }
+ }
+]

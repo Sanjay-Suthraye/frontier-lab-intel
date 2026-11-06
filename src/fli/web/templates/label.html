@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Label{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Labelling queue</h1>
+  <p class="tabs">{% for a in audiences %}<a href="/label?audience={{ a|slug }}{{ '&others=1' if others }}"{% if a == audience %} class="on"{% endif %}>{{ a|audl }}</a>{% endfor %}</p>
+  <p class="muted small">
+    {{ data.remaining }} left without {{ 'your' if others else 'a human' }} label · {{ data.human_labels }} human label{{ '' if data.human_labels == 1 else 's' }} for {{ audience|audl }} so far
+    {% if name %} · you: {% for v in [0, 1, 2] %}<span class="lblv lbl{{ v }}">{{ v }}</span>&times;{{ data.mine.get(v, 0) }} {% endfor %}
+      · <a href="/label?audience={{ audience|slug }}{{ '' if others else '&others=1' }}">{{ 'back to unlabelled items' if others else 'include items others labelled (agreement check)' }}</a>{% endif %}
+  </p>
+</div>
+
+<div class="label-layout">
+  <section>
+  {% set d = data.item %}
+  {% if d %}
+    <article class="card">
+      <h2 class="label-title"><a href="/developments/{{ d.id }}" target="_blank" rel="noopener">{{ d.title }}</a></h2>
+      {{ m.dev_meta(d) }}
+      {% if d.summary %}<p class="summary">{{ d.summary }}</p>{% endif %}
+      {% for i in d.insights[:4] %}
+      <div class="insight compact">
+        <p><b>{{ i.title }}</b> — {{ i.claim }}</p>
+        {% for qt in i.quotes[:2] %}<blockquote class="{{ 'ok' if qt.verified else 'bad' }}">&ldquo;{{ qt.text|truncate(260) }}&rdquo; {{ m.verified(qt.verified) }}</blockquote>{% endfor %}
+        <p class="small muted">{{ m.ext(i.doc.url, i.doc.title|truncate(80)) }} {{ m.source_badge(i.doc) }} · {{ i.published_at|date }}</p>
+      </div>
+      {% endfor %}
+      {% if d.insights|length > 4 %}<p class="small muted">+{{ d.insights|length - 4 }} more insights on the <a href="/developments/{{ d.id }}" target="_blank" rel="noopener">development page</a>.</p>{% endif %}
+      <details class="model-take">
+        <summary>Model's take (hidden by default so it does not anchor your label)</summary>
+        {% set lens = d.lenses[audience] %}
+        <p>{{ m.score(d.scores[audience].p_material if d.scores[audience] else none, prior=d.scores[audience].prior if d.scores[audience] else False) }}
+          {% if lens %}<b>{{ lens.headline }}</b>{% endif %}</p>
+        {% if lens %}<dl class="lens"><dt>So what</dt><dd>{{ lens.so_what }}</dd><dt>What to do</dt><dd>{{ lens.what_to_do }} {{ m.action(lens.action) }}</dd></dl>{% endif %}
+        {% if audience == 'investment' and (d.tickers or d.lab_relations) %}<div class="tickers">{% for t in d.tickers[:8] %}{{ m.ticker(t) }}{% endfor %}{{ m.lab_relations(d.lab_relations, d.lab_name) }}</div>{% endif %}
+      </details>
+    </article>
+
+    <form method="post" action="/api/labels" class="card label-form" data-label-form>
+      <input type="hidden" name="development_id" value="{{ d.id }}">
+      <input type="hidden" name="audience" value="{{ audience }}">
+      <input type="hidden" name="next" value="/label?audience={{ audience|slug }}&pos={{ data.pos }}{{ '&others=1' if others }}">
+      <div class="form-row">
+        {% if auth_on %}<p class="small muted">Labelling as <b>{{ name or 'your login' }}</b> (the authenticated login is recorded).</p>
+        {% else %}<label><span>Your name</span> <input type="text" name="annotator" value="{{ name }}" required maxlength="40" placeholder="e.g. anna" autocomplete="nickname"></label>{% endif %}
+        <label class="grow"><span>Reason (optional, <kbd>r</kbd>)</span> <input type="text" name="reason" maxlength="500" placeholder="why this label?" data-reason></label>
+      </div>
+      <div class="form-row buttons">
+        <button class="btn big lbl0" name="label" value="0" data-key="0"><kbd>0</kbd> noise</button>
+        <button class="btn big lbl1" name="label" value="1" data-key="1"><kbd>1</kbd> worth knowing</button>
+        <button class="btn big lbl2" name="label" value="2" data-key="2"><kbd>2</kbd> material</button>
+        <a class="btn big ghost" href="/label?audience={{ audience|slug }}&pos={{ data.pos + 1 }}{{ '&others=1' if others }}" data-skip><kbd>s</kbd> skip</a>
+      </div>
+      <p class="small muted">Saved as <code>human:{{ name or ('&lt;login&gt;' if auth_on else '&lt;name&gt;')|safe }}</code>, rubric {{ rubric }}. Item {{ data.pos + 1 }} of {{ data.remaining }}; the queue mixes high, low and uncertain scores.</p>
+    </form>
+  {% else %}
+    <p class="empty card">Nothing left to label for {{ audience|audl }}{{ ' that you have not labelled' if others }}. Nice work.</p>
+  {% endif %}
+  </section>
+
+  <aside class="card rubric">
+    <h2>Rubric {{ rubric }} · {{ audience|audl }}</h2>
+    {% if audience == 'investment' %}
+    <dl>
+      <dt><span class="lblv lbl2">2</span> material</dt><dd>Could change a position, thesis or risk view this week: a deal or capability that moves a holding's economics (compute, chips, memory, neoclouds, hyperscalers), a frontier release that shifts the competitive map, a key departure or new venture. Would justify a P1/P2 alert.</dd>
+      <dt><span class="lblv lbl1">1</span> worth knowing</dt><dd>Useful context for the weekly digest; no action now.</dd>
+      <dt><span class="lblv lbl0">0</span> noise</dt><dd>Marketing, customer stories, minor updates, chatter, or nothing that reaches public equities.</dd>
+    </dl>
+    {% else %}
+    <dl>
+      <dt><span class="lblv lbl2">2</span> material</dt><dd>We should adopt, trial or seriously assess it now: a model, tool or technique that changes how we would build our own pipelines (agents, evals, orchestration, inference cost).</dd>
+      <dt><span class="lblv lbl1">1</span> worth knowing</dt><dd>Worth reading or tracking; no immediate change.</dd>
+      <dt><span class="lblv lbl0">0</span> noise</dt><dd>Not technically relevant to us, or a minor / promotional update.</dd>
+    </dl>
+    {% endif %}
+    <p class="small muted">Keys: <kbd>0</kbd> <kbd>1</kbd> <kbd>2</kbd> label · <kbd>s</kbd> skip · <kbd>r</kbd> reason · <kbd>Esc</kbd> leave a field</p>
+    {% if data.recent %}
+    <h3>Your recent labels</h3>
+    <ul class="rlist">{% for x in data.recent %}<li><span class="lblv lbl{{ x.label }}">{{ x.label }}</span> <a href="/developments/{{ x.development_id }}">{{ x.title|truncate(70) }}</a> <span class="small muted">{{ x.audience|audl }}</span></li>{% endfor %}</ul>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

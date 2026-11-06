@@ -1,0 +1,124 @@
+# Small people register for tests/test_register.py (same schema as config/people.yaml).
+people:
+  - id: sam-altman
+    name: Sam Altman
+    lab: openai
+    title: Co-founder and CEO
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    why_key: "Test fixture."
+    affiliations:
+      - {lab: openai, role: "Co-founder and CEO", source_url: "https://example.org/sama"}
+    identities:
+      - {platform: x, handle: "@SamA", track: true}
+    meta: {profile: leadership, roles: [founder, ceo], revealed_preference: false}
+
+  - id: mark-chen
+    name: Mark Chen
+    lab: openai
+    title: Chief Research Officer
+    tier: A
+    status: active
+    inclusion_rule: lab_leadership
+    affiliations:
+      - {lab: openai, role: "Chief Research Officer", start: 2025-03-24}
+    identities: []
+    meta: {profile: research, roles: [research_lead], revealed_preference: false, common_name: true}
+
+  - id: jeff-dean
+    name: Jeff Dean
+    lab: discovery-loop
+    title: Co-founder
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    affiliations:
+      - {lab: google-deepmind, role: "Chief Scientist", end: 2026-08-05}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05, source_url: "https://example.org/dl"}
+    identities:
+      - {platform: x, handle: JeffDean}
+      - {platform: arxiv_name, handle: "Jeffrey Dean"}
+    meta: {profile: research, roles: [chief_scientist], revealed_preference: true, revealed_preference_source: "https://example.org/dl"}
+
+  - id: quoc-le
+    name: Quoc Le
+    lab: discovery-loop
+    title: Co-founder
+    tier: A
+    status: founded_startup
+    inclusion_rule: alumni_founder
+    affiliations:
+      - {lab: google-deepmind, role: "Google Fellow", end: 2026-08-05}
+      - {lab: discovery-loop, role: "Co-founder", start: 2026-08-05}
+    identities:
+      - {platform: arxiv_name, handle: "Quoc V. Le"}
+    meta: {profile: research, roles: [research_lead], revealed_preference: true, common_name: true}
+
+  - id: anca-dragan
+    name: Anca Dragan
+    lab: google-deepmind
+    title: Head of AI Safety and Alignment
+    tier: B
+    status: active
+    inclusion_rule: flagship_lead
+    affiliations:
+      - {lab: google-deepmind, role: "Head of AI Safety and Alignment"}
+    identities:
+      - {platform: arxiv_name, handle: "Anca D. Dragan"}
+    meta: {profile: research, roles: [safety_lead], revealed_preference: false}
+
+  - id: neel-nanda
+    name: Neel Nanda
+    lab: google-deepmind
+    title: Mechanistic interpretability team lead
+    tier: C
+    status: active
+    inclusion_rule: high_signal_poster
+    affiliations:
+      - {lab: google-deepmind, role: "Mech interp lead"}
+    identities:
+      - {platform: github, handle: neelnanda-io}
+      - {platform: arxiv_name, handle: "Neel Nanda"}
+    meta: {profile: research, roles: [interpretability_lead], revealed_preference: false}
+
+  - id: andrej-karpathy
+    name: Andrej Karpathy
+    lab: anthropic
+    title: Pretraining research
+    tier: A
+    status: active
+    inclusion_rule: high_signal_poster
+    affiliations:
+      - {org: "Eureka Labs", role: "Founder", start: 2024-07-16, end: 2026-05-19}
+      - {lab: anthropic, role: "Pretraining research", start: 2026-05-19}
+    identities:
+      - {platform: github, handle: karpathy}
+      - {platform: x, handle: karpathy, track: true}
+    meta: {profile: research, roles: [founder], revealed_preference: null}
+
+  - id: chris-olah
+    name: Chris Olah
+    lab: anthropic
+    title: Co-founder
+    tier: A
+    status: active
+    inclusion_rule: seed_founder
+    affiliations:
+      - {lab: anthropic, role: "Co-founder"}
+    identities:
+      - {platform: github, handle: colah}
+    meta: {profile: research, roles: [founder, interpretability_lead], revealed_preference: false}
+
+  - id: jerry-tworek
+    name: Jerry Tworek
+    lab: null
+    title: Former VP Research, OpenAI
+    tier: B
+    status: departed
+    inclusion_rule: talent_watch
+    affiliations:
+      - {lab: openai, role: "VP Research", end: 2026-01-06}
+    identities:
+      - {platform: arxiv_name, handle: "Jerry Tworek"}
+    meta: {profile: research, roles: [reasoning_lead], revealed_preference: false}
