@@ -105,7 +105,7 @@
           <a href="/developments/{{ a.development_id }}">{{ a.title }}</a>
           <div class="meta">{{ a.audience|audl }}<span class="sep">·</span>{{ a.lab_name or '–' }}<span class="sep">·</span><span title="{{ a.created_at|dt }}">{{ a.created_at|ago }}</span></div>
         </div>
-        {{ m.ack_form(a, '/') }}
+        {{ m.ack_form(a, '/', read_only) }}
       </li>
       {% endfor %}
     </ul>

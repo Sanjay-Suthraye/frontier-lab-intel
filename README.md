@@ -1,57 +1,150 @@
 # Frontier Lab Intelligence
 
-Tracks what frontier AI labs and their key people publish, turns it into cited, scored insights, and
-delivers alerts and weekly digests to two audiences at BIT Capital:
+Tracks what the frontier AI labs and their key people publish, and turns it into cited, scored
+developments, alerts and weekly digests for two audiences at BIT Capital:
 
-- **Investment team** - what a lab development means for positions and theses, mapped to a closed
-  list of public tickers (BIT's top holdings flagged with their fund weights).
-- **AI team** - what to adopt, trial, assess or ignore, framed technically.
+- **Investment team**: what a development means for positions and theses, mapped to a closed list of
+  public tickers, with BIT's top holdings flagged by fund weight.
+- **AI team**: what to adopt, trial, assess or hold, framed technically.
 
-One shared core (register -> ingestion -> extraction -> events -> scoring) feeds two last-mile lenses.
-The design document is in [docs/DESIGN.md](docs/DESIGN.md); the evaluation report is
-[data/eval/report.md](data/eval/report.md).
+One shared core (register → ingestion → extraction → developments → scoring) feeds two audience
+lenses, rather than two separate systems. Built for the BIT Capital AI Engineer case study.
 
-## Run it in three commands (no API keys needed)
+**Documents:** [System design](docs/DESIGN.md) · [Evaluation report](data/eval/report.md) ·
+[Database schema](docs/schema.sql)
 
-The repo ships a snapshot of the real database (`data/snapshot/fli_snapshot.sqlite.gz`), so the UI is
-useful immediately:
+## Live demo
+
+| URL | What it is |
+|---|---|
+| https://63-186-176-99.sslip.io | AWS (EC2, Postgres). Persistent: labels and alert acks are saved |
+| https://frontier-lab-intel.vercel.app | Vercel. Read-only copy of the same data (labelling switched off) |
+
+The login is in the submission email. Both serve the real data collected from 1 Aug to 4 Nov 2026.
+Collection is paused, so a banner on every page dates the snapshot and the "last 7 days" views count
+back from the newest data.
+
+## A five-minute tour
+
+1. **Overview** (`/`): the latest week for each audience, open P1/P2 alerts, a radar of BIT's
+   holdings, the latest digests and system health.
+2. **Investment feed** (`/feed/investment`) and **AI-team feed** (`/feed/ai-team`): developments
+   ranked for that audience (pushed alerts first, then the lens's recommended action, then relevance).
+   Each card has the audience's *so what*, *what to do* and tickers or radar ring. Filter by week, lab,
+   event type, ticker or relevance.
+3. **A development page**, for example `/developments/405` (Anthropic files its S-1, the investment
+   team's P1 alert):
+   - every insight with its verbatim evidence quote, marked verified or not against the stored source;
+   - the sources;
+   - the score with its top contributing features;
+   - **why it was flagged**: which materiality rules fired on which facts, and which did not;
+   - the ticker exposure and both audience lenses.
+4. **Alerts** (`/alerts`): P1/P2 pushes and P3 digest-only items per audience, each with the rule
+   that fired.
+5. **Reports** (`/reports`): the 28 weekly digests (14 per audience), every claim cited to a
+   development. Start with the week of 26 Oct 2026.
+6. **Register** (`/register/labs`, `/register/people`): the 14 labs and 103 people tracked and why,
+   with identities across platforms and how each link was established.
+7. **Status** (`/status`): source freshness against each source's SLO, failures, job runs, and LLM
+   spend against the hard budgets.
+8. **Label** (`/label`): the labelling queue that produces human ground truth for the scorer (AWS
+   or local only).
+
+Developments worth opening, all from the real data:
+
+| ID | Development | Why it matters |
+|---|---|---|
+| 405 | Anthropic files S-1 for a Nasdaq IPO | Pushed as the investment team's P1: it will mark AMZN's Anthropic stake |
+| 160 | DeepSeek V4.1-Flash cuts KV-cache memory per token | Tests the memory thesis behind MU and SIMO; cheaper long-context agents |
+| 408 | Meta's Tahan scale-up switch for its MTIA chip | Custom-ASIC path at an NVDA customer; AVGO switch silicon |
+| 46 | DeepSeek peak/off-peak API pricing | A compute-rationing signal; schedule batch work off-peak |
+| 443 | Google re-routes Gemini 2.5 Pro to Gemini 3.x | Migration deadline for the AI team, found in a changelog |
+| 478 | Jeff Dean and others co-found Discovery Loop | Tier-A talent move, through the curated register |
+
+The JSON API (`/api/developments`, `/api/alerts`, `/api/health`; reference page at `/api`) is meant
+for integration with an existing signals layer.
+
+## Run it locally (no API keys needed)
+
+The repo ships a snapshot of the real database (`data/snapshot/fli_snapshot.sqlite.gz`). With
+[uv](https://docs.astral.sh/uv/) installed (it also installs Python 3.12):
 
 ```bash
-git clone <this repo> && cd frontier-lab-intel
-uv sync --python 3.12          # https://docs.astral.sh/uv/ ; installs everything incl. Python 3.12
+git clone https://github.com/Sanjay-Suthraye/frontier-lab-intel.git && cd frontier-lab-intel
+uv sync --python 3.12
 uv run fli db init && uv run fli snapshot import && uv run fli serve
 ```
 
-Open http://127.0.0.1:8000 . `make demo` does the same.
+Open http://127.0.0.1:8000. `make demo` does the same. From your own machine, labelling and alert
+acks work without a login.
 
-Hosted copies (same login for both; credentials are shared with the submission):
-
-- https://63-186-176-99.sslip.io - AWS (Postgres, persistent: labels and alert acks are kept)
-- https://frontier-lab-intel.vercel.app - Vercel free tier, read-only view of the same snapshot
-
-Production-like stack (Postgres + web + scheduler worker), seeded from the same snapshot:
+A production-like stack (Postgres, web, and an optional scheduler worker), seeded from the same snapshot:
 
 ```bash
 docker compose up -d --build   # web on http://localhost:8000
 ```
 
-## What you can look at
+## How it works
 
-| Page | What it answers |
+```
+config/*.yaml: labs, people, sources, ticker exposure map, materiality policy
+      |
+collectors (official APIs and published feeds) -> idempotent upsert, dedup, job ledger, source health
+      |
+document -> near-dup (MinHash) -> triage (Haiku) -> extraction (Haiku) -> quote verification (code)
+      |
+insight -> embeddings (local bge-small) -> clustered into developments -> novelty
+      |
+development -> ticker exposure -> features -> score per audience (logistic regression)
+      |
+lens per audience (Sonnet) -> faithfulness checks (code) -> materiality rules (YAML) -> alerts
+                                                                                      -> weekly digests (Opus)
+```
+
+- **The development is the unit of value.** A launch seen on a blog, a changelog, Hugging Face and
+  OpenRouter is one development, with one score, one lens and at most one alert per audience.
+- **Deterministic spine, models at the leaves.** Each model call is a single schema-constrained step
+  that can be cached, costed and evaluated. Code verifies every evidence quote against the stored
+  source.
+- **Alerting is a written policy, not a model.** [`config/materiality.yaml`](config/materiality.yaml)
+  says what is material and for whom. Every alert records the rule and facts that fired it. The
+  audience lens can veto an alert but never promote one.
+- **Scoring is validated, not hand-weighted.** One logistic regression per audience, trained on labels
+  and checked on a time-split hold-out. It is deployed only if it beats the policy prior.
+- **Built to be run.** Every stage is idempotent and the scheduler re-runs it. There are freshness
+  SLOs per source, hard LLM and API budgets enforced in code, a cost ledger per call, and a status
+  page with a JSON health probe.
+- **Sources** are official APIs and published feeds only, with robots.txt respected.
+
+| Task | Model | Fallback |
+|---|---|---|
+| Triage, extraction, entity-resolution gray zone | Claude Haiku 5.5 | 3 attempts, then dead-letter (`status=failed`); gray-zone pairs stay `candidate` |
+| Audience lens | Claude Sonnet 5.5 | Server-side fallback; deterministic summary |
+| Weekly digest | Claude Opus 5.5 | Retry on Sonnet 5.5, then a deterministic, cited digest |
+| Silver labels (LLM judge) | Claude Opus 5.5 | Kept separate; human labels override |
+| Embeddings | bge-small (local, fastembed) | n/a |
+
+The reasoning behind each choice, and the alternatives rejected, are in [docs/DESIGN.md](docs/DESIGN.md).
+
+## Results
+
+Full detail is in [data/eval/report.md](data/eval/report.md) (generated by `fli eval`).
+
+| | |
 |---|---|
-| `/` | This week's top developments per audience, open alerts, latest reports, system health |
-| `/feed/investment`, `/feed/ai-team` | Ranked developments with the audience lens: so-what, what to do, tickers / action |
-| `/developments/{id}` | Every insight with its verbatim evidence (verified or not), sources, score and *why flagged*, exposure links, both lenses, label buttons |
-| `/register/labs`, `/register/people` | Who is tracked and why, identities with how each link was established, affiliation history, contributor score |
-| `/alerts`, `/reports` | Material alerts and weekly digests per audience |
-| `/label` | Labelling queue (human ground truth for the scorer) |
-| `/status` | Source freshness vs SLO, failures, job runs, ops events, LLM and API spend vs budget |
-| `/api/developments`, `/api/alerts`, `/api/health` | JSON for integration with BIT's existing Signals & Alerts layer |
+| Corpus | 1,008 documents (incl. 6 curated talent moves), 1 Aug - 4 Nov 2026 → 689 insights → 477 developments |
+| Citations | 99.8% of 1,255 evidence quotes verified verbatim in the stored source |
+| Scoring (time-split hold-out) | AUC 0.87 investment / 0.82 AI team, vs 0.80 / 0.75 for the policy prior |
+| Alerts | 29 investment pushes (2.1 a week), 56 AI-team pushes (4.1 a week); daily cap of 2 pushes per audience (P1 is never demoted) |
+| Known events | 12 of 18 recalled, from a list written before seeing any output; 11 alerted their primary audience |
+| Entity resolution | precision 0.974, recall 0.925 |
+| Digests | 27 of 28 written by the model; 1 deterministic fallback |
+| Cost | $14.40 of LLM spend for the whole window incl. all re-runs and debugging; about $0.60 a week steady state |
 
 ## Running the pipeline yourself
 
-Copy `.env.example` to `.env` and add keys (only `ANTHROPIC_API_KEY` is needed for the LLM stages;
-every other key is optional and its sources are skipped cleanly when missing).
+Copy `.env.example` to `.env` and add keys. Only `ANTHROPIC_API_KEY` is needed for the model stages;
+every other key is optional, and sources without one are skipped cleanly.
 
 ```bash
 uv run fli db init && uv run fli register     # load config/*.yaml (labs, people, sources, exposure map)
@@ -69,12 +162,12 @@ uv run fli worker                             # scheduler: cadenced ingest, pipe
 Hard budget stops are enforced in code (`LLM_BUDGET_TOTAL_USD`, `LLM_BUDGET_DAILY_USD`,
 `X_BUDGET_TOTAL_USD`).
 
-## Layout
+## Repository layout
 
 ```
 config/            what is tracked (files, not a UI): labs, people, sources_*, exposure map, materiality rules
 src/fli/
-  db/              SQLAlchemy schema (portable SQLite/Postgres) - DDL in docs/schema.sql
+  db/              SQLAlchemy schema (portable SQLite/Postgres); DDL in docs/schema.sql
   ingest/          collector contract, runner (idempotent upserts, dedup, job ledger), collectors/
   register/        YAML loader, entity resolution, contributor score
   extract/         triage and extraction (LLM), quote verification (code)
@@ -85,42 +178,36 @@ src/fli/
   ops/             health checks, scheduler, snapshot export/import
   web/             FastAPI + server-rendered pages + JSON API
   eval/            evaluation harness
-data/eval/         ground truth (known events, ER pairs), labels, metrics, the evaluation report
+data/eval/         ground truth (known events, entity-resolution pairs), labels, metrics, the evaluation report
 data/snapshot/     the committed real-data snapshot
 deploy/aws/        one-command EC2 deployment (Docker Compose + Caddy TLS) and teardown
-tests/             479 tests, no network and no LLM calls
+deploy/vercel/     read-only web deployment on Vercel's free tier
+tests/             482 tests, no network and no LLM calls
 ```
-
-## Access control
-
-- Writes (labels, alert acks) need `FLI_BASIC_AUTH=user:password` in `.env` unless the request comes
-  from a loopback client; labels are then recorded as `human:<user>`. The local `docker compose` stack
-  counts as non-local (Docker NAT), so set `FLI_BASIC_AUTH` there if you want to label.
-- `FLI_AUTH_ALL=1` puts every page and API read behind the same login (`/healthz` stays public).
 
 ## Deployment
 
-`deploy/aws/deploy.sh` provisions one EC2 instance (eu-central-1, t4g.small, encrypted disk, IMDSv2,
-SSH only from your current IP), ships the code and `.env`, and starts Postgres + web behind Caddy with
-an automatic TLS certificate on `<ip>.sslip.io`. It refuses to run unless `.env` has `FLI_BASIC_AUTH`
-with a password of at least 12 characters (`FLI_DEPLOY_CHECK_ONLY=1` checks that), and the AWS overlay
-sets `FLI_AUTH_ALL=1`. The scheduler worker (continuous ingestion) starts only with `FLI_WORKER=1`.
-`deploy/aws/teardown.sh` removes everything it created.
+- **AWS** (`deploy/aws/deploy.sh`):
+  - provisions one EC2 instance (eu-central-1, t4g.small, encrypted disk, IMDSv2, SSH only from your
+    current IP);
+  - ships the code and `.env`, and starts Postgres and the web app behind Caddy, with an automatic
+    TLS certificate on `<ip>.sslip.io`;
+  - refuses to run unless `.env` has `FLI_BASIC_AUTH` with a password of at least 12 characters, and
+    puts every page behind that login (`FLI_AUTH_ALL=1`);
+  - starts the scheduler worker only with `FLI_WORKER=1`;
+  - `FLI_RESET_DB=1` re-seeds the database from the snapshot, and `deploy/aws/teardown.sh` removes
+    everything it created.
+- **Vercel** (`deploy/vercel/deploy.sh`, needs `VERCEL_TOKEN`):
+  - publishes a 6 MB bundle with only the web dependencies, serving the snapshot from `/tmp`;
+  - uses the same login;
+  - sets `FLI_READ_ONLY=1`, because that database does not survive a cold start.
 
-`deploy/vercel/deploy.sh` (needs `VERCEL_TOKEN`) publishes the web UI to Vercel's free tier: a 6 MB
-bundle with only the web dependencies, serving the committed snapshot from `/tmp` behind the same
-`FLI_BASIC_AUTH` login. Writes there do not survive a cold start, so it is a viewing copy.
+## Access control
 
-## Results at a glance (full detail in docs/DESIGN.md and data/eval/report.md)
-
-| | |
-|---|---|
-| Corpus | 1,008 documents (incl. 6 curated talent moves), Aug 1 - Nov 4 2026; 689 insights; 477 developments |
-| Citations | 99.8% of 1,255 evidence quotes verified verbatim in the stored source |
-| Scoring (time-split hold-out) | AUC 0.87 investment / 0.82 AI team vs 0.80 / 0.75 for the policy prior |
-| Alerts | 29 investment pushes (2.1/week), 56 AI-team pushes (4.1/week); P1 reserved for material items |
-| Known events | 12/18 recalled (incl. the Discovery Loop founding and the DeepMind reshuffle via the curated register); 11 alerted their primary audience |
-| Cost | $14.40 of LLM spend for the whole window incl. all re-runs and debugging; ~$0.60/week steady state |
+- **Writes** (labels, alert acks) need `FLI_BASIC_AUTH=user:password` unless the request comes from
+  a loopback client. Labels are then recorded as `human:<user>`.
+- **`FLI_AUTH_ALL=1`** puts every page and API read behind the same login; `/healthz` stays public.
+- **`FLI_READ_ONLY=1`** refuses all writes and hides the forms.
 
 ## Tests
 

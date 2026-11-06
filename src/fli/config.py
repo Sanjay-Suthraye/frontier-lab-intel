@@ -46,6 +46,7 @@ class Settings(BaseSettings):
     public_base_url: str | None = None  # used for deep links in Slack alerts
     fli_basic_auth: str | None = Field(default=None, repr=False)  # "user:pass" protects write endpoints
     fli_auth_all: bool = False  # also protect every page and API read
+    fli_read_only: bool = False  # refuse every write (labels, acks): a viewing copy (deploy/vercel)
 
     # --- model routing (see docs/DESIGN.md "Model choices") ------------------------------------
     model_triage: str = "claude-haiku-5-5"

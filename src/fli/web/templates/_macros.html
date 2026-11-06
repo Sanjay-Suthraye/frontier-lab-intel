@@ -65,8 +65,9 @@
 {%- if h %}<a href="{{ h }}" rel="noopener noreferrer" target="_blank" class="ext">{{ label or url }}</a>{% else %}{{ label or url }}{% endif -%}
 {%- endmacro %}
 
-{% macro ack_form(a, next) -%}
-{% if a.status == 'open' %}
+{% macro ack_form(a, next, read_only=false) -%}
+{% if a.status == 'open' and read_only %}<span class="muted small">open</span>
+{% elif a.status == 'open' %}
 <form method="post" action="/api/alerts/{{ a.id }}/ack" class="inline">
   <input type="hidden" name="next" value="{{ next }}">
   <button type="submit" class="btn small" title="Mark as seen">Ack</button>

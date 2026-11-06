@@ -42,6 +42,8 @@ PROXY_HEADERS = frozenset({"forwarded", "x-forwarded-for", "x-forwarded-host", "
 NO_CREDENTIALS = ("Writes from this address need authentication, but the server has no credentials: "
                   "set FLI_BASIC_AUTH=user:password (without it only a local client may write)")
 LOCKED = "FLI_AUTH_ALL=1 is set but FLI_BASIC_AUTH is not: refusing non-local requests"
+READ_ONLY = ("This deployment is a read-only copy (FLI_READ_ONLY=1): labels and alert acks are switched "
+             "off because its database is reset on every cold start")
 
 
 def _settings():
@@ -62,6 +64,15 @@ def auth_all() -> bool:
     if env is not None:
         return env.strip().lower() in {"1", "true", "yes", "on"}
     return bool(_settings().fli_auth_all)
+
+
+def read_only() -> bool:
+    """FLI_READ_ONLY=1: a viewing copy whose database does not persist (deploy/vercel serves the
+    snapshot from /tmp), so a write would seem to succeed and then vanish. Refuse writes instead."""
+    env = os.environ.get("FLI_READ_ONLY")
+    if env is not None:
+        return env.strip().lower() in {"1", "true", "yes", "on"}
+    return bool(_settings().fli_read_only)
 
 
 def check_basic(header: str | None, creds: tuple[str, str]) -> str | None:
@@ -121,6 +132,8 @@ def _check_same_origin(request: Request) -> None:
 def require_writer(request: Request) -> str | None:
     """FastAPI dependency for write endpoints. Returns the authenticated user name, or None for a
     local client when no credentials are configured; any other unauthenticated write is refused."""
+    if read_only():
+        raise HTTPException(403, READ_ONLY)
     _check_same_origin(request)
     creds = configured_credentials()
     if creds is None:

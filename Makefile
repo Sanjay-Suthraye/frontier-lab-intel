@@ -24,7 +24,7 @@ schema:           ## regenerate docs/schema.sql from the models
 register:         ## load config/*.yaml into the database
 	uv run fli db init && uv run fli register
 
-backfill: register ## ingest + process the 3-month window from scratch (needs API keys; costs ~$25-40)
+backfill: register ## ingest + process the 3-month window from scratch (needs API keys; ~$10-15 of LLM spend)
 	uv run fli ingest --since 2026-08-01 --force
 	uv run fli resolve-entities
 	uv run fli pipeline

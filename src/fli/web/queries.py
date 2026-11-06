@@ -330,6 +330,23 @@ class FeedFilters:
     offset: int = 0
 
 
+STALE_AFTER = timedelta(days=2)  # newest development older than this: collection is paused
+
+
+def data_clock(s: Session, now: datetime | None = None) -> tuple[datetime, datetime | None]:
+    """(anchor, newest) for rolling windows such as "last 7 days".
+
+    While collection is live the anchor is `now` and `newest` is None. When the newest development
+    is older than STALE_AFTER (a frozen snapshot, a stopped worker) the anchor moves to just after it
+    and `newest` is returned, so default views show the latest week of data instead of an empty
+    page, and the UI can say so. Freshness and health keep reading the real clock."""
+    now = now or utcnow()
+    newest = s.scalar(select(func.max(Development.first_seen_at)).where(_visible()))
+    if newest is None or newest >= now - STALE_AFTER:
+        return now, None
+    return newest + timedelta(seconds=1), newest
+
+
 def window_bounds(week: str, now: datetime) -> tuple[datetime | None, datetime | None]:
     """'Nd' rolling window, 'all', or one calendar week starting on the given Monday."""
     if week == "all":
@@ -369,6 +386,8 @@ def feed(s: Session, f: FeedFilters, now: datetime | None = None) -> Row:
 
     `dismissed` counts what hide_dismissed left out, so the page can say so instead of hiding it."""
     now = now or utcnow()
+    if not (f.since or f.until) and f.week != "all":  # rolling windows follow the data clock
+        now = data_clock(s, now)[0]
     lo, hi = (f.since, f.until) if (f.since or f.until) else window_bounds(f.week, now)
     live = live_versions(s)
     lens = aliased(Lens, name="feed_lens")  # unique per (development, audience): at most one row
@@ -660,16 +679,12 @@ def _doc_row(doc: Document, kind: str | None = None) -> Row:
 
 # ------------------------------------------------------------------------------------ overview
 def overview(s: Session, now: datetime | None = None, per_audience: int = 8) -> Row:
-    """'This week' is a rolling 7 days; an idle week falls back to the latest week with data."""
+    """'This week' is a rolling 7 days on the data clock: when collection is paused it is the
+    latest week with data."""
     now = now or utcnow()
-    since, until, note = now - timedelta(days=7), None, None
-    recent = select(func.count(Development.id)).where(Development.first_seen_at >= since, _visible())
-    if not s.scalar(recent):
-        latest = s.scalar(select(func.max(Development.first_seen_at)).where(_visible()))
-        if latest is not None:
-            since, until = latest - timedelta(days=7), latest + timedelta(seconds=1)
-            note = ("Nothing new in the last 7 days; showing the latest week with data "
-                    f"(to {latest:%d %b %Y}).")
+    anchor, newest = data_clock(s, now)
+    since, until = anchor - timedelta(days=7), (anchor if newest is not None else None)
+    note = (f"Nothing new since {newest:%d %b %Y}: showing the 7 days to then." if newest is not None else None)
     # same defaults as the feed pages: what the lens dismissed stays off the front page
     top = {aud: feed(s, FeedFilters(audience=aud, since=since, until=until, limit=per_audience,
                                     min_p=DEFAULT_MIN_P.get(aud, 0.0), hide_dismissed=True, order="triage"),
@@ -1099,7 +1114,7 @@ def labs_overview(s: Session, now: datetime) -> list[Row]:
         .where(_visible()).group_by(Development.lab_id))}
     recent = dict(s.execute(
         select(Development.lab_id, func.count())
-        .where(_visible(), Development.first_seen_at >= now - timedelta(days=30))
+        .where(_visible(), Development.first_seen_at >= data_clock(s, now)[0] - timedelta(days=30))
         .group_by(Development.lab_id)).all())
     states: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     lab_sources = list(s.scalars(select(Source).where(Source.lab_id.is_not(None))))

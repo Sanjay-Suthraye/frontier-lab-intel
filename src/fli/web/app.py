@@ -35,11 +35,11 @@ from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from fli.config import get_settings
-from fli.db.session import get_session, init_db
+from fli.db.session import get_session, init_db, session_scope
 from fli.taxonomy import AUDIENCES, EVENT_TYPES
 from fli.timeutil import to_naive_utc, utcnow
 from fli.web import queries as q
-from fli.web.auth import BasicAuthMiddleware, configured_credentials, current_user, require_writer
+from fli.web.auth import BasicAuthMiddleware, configured_credentials, current_user, read_only, require_writer
 
 log = logging.getLogger("fli.web")
 WEB_DIR = Path(__file__).resolve().parent
@@ -188,6 +188,15 @@ for _name, _fn in {"dt": fmt_dt, "day": lambda v: fmt_dt(v, "%d %b"), "date": la
     templates.env.filters[_name] = _fn
 
 
+def _snapshot_as_of() -> datetime | None:
+    """Newest data time when collection is paused (q.data_clock), for the site-wide banner."""
+    try:
+        with session_scope() as s:
+            return q.data_clock(s)[1]
+    except SQLAlchemyError:  # an error page must still render
+        return None
+
+
 def render(request: Request, template: str, /, status_code: int = 200, headers: dict | None = None,
            **ctx: Any) -> Response:
     # with auth on, labels are filed under the login, so the forms show it instead of a name field
@@ -196,7 +205,8 @@ def render(request: Request, template: str, /, status_code: int = 200, headers: 
     base = {"now": utcnow(), "tz": get_settings().timezone, "audiences": AUDIENCES, "nav": NAV,
             "audience_labels": AUDIENCE_LABELS, "event_types": EVENT_TYPES, "static_v": STATIC_V,
             "annotator": request.cookies.get(COOKIE, ""), "active": "", "auth_on": auth_on,
-            "login": login_annotator(login) if login else None}
+            "login": login_annotator(login) if login else None, "read_only": read_only(),
+            "snapshot_as_of": _snapshot_as_of()}
     return templates.TemplateResponse(request, template, {**base, **ctx}, status_code=status_code,
                                       headers=headers)
 
@@ -508,10 +518,11 @@ def api_developments(request: Request, s: DB, audience: str | None = None, since
                      min_p: Annotated[float, Query(ge=0.0, le=1.0)] = 0.0, lab: str | None = None,
                      event_type: str | None = None, updated_since: str | None = None,
                      limit: Annotated[int, Query(ge=1, le=500)] = 100):
-    """Ranked developments. `since` filters on first_seen_at (default: last 7 days unless
-    `updated_since` is given); `updated_since` lets a poller pick up re-scored or grown items."""
+    """Ranked developments. `since` filters on first_seen_at (default: the last 7 days of data, see
+    queries.data_clock, unless `updated_since` is given); `updated_since` lets a poller pick up
+    re-scored or grown items."""
     aud, updated = _api_audience(audience), _api_dt(updated_since, "updated_since")
-    lo = _api_dt(since, "since") or (None if updated else utcnow() - timedelta(days=7))
+    lo = _api_dt(since, "since") or (None if updated else q.data_clock(s)[0] - timedelta(days=7))
     f = q.FeedFilters(audience=aud or AUDIENCES[0], week="all", since=lo, lab=lab, event_type=event_type,
                       min_p=min_p, updated_since=updated, limit=limit)
     if aud:
@@ -548,7 +559,7 @@ def api_alerts(request: Request, s: DB, audience: str | None = None, since: str 
     (context only) and why_flagged (the decision for the alert's audience, evaluated now)."""
     if status not in (*ALERT_STATUSES, "all"):
         raise HTTPException(422, "status must be open, acked, suppressed or all")
-    lo = _api_dt(since, "since") or utcnow() - timedelta(days=7)
+    lo = _api_dt(since, "since") or q.data_clock(s)[0] - timedelta(days=7)
     rows = q.alert_signals(s, q.alert_rows(s, audience=_api_audience(audience), severity=severity,
                                            status=status, since=lo, limit=limit))
     base = _base(request)

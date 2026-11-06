@@ -75,6 +75,7 @@
     {% endif %}
 
     <h3>Label for {{ aud|audl }}</h3>
+    {% if read_only %}<p class="small muted">Labelling is switched off on this read-only copy.</p>{% else %}
     <form method="post" action="/api/labels" class="labelform">
       <input type="hidden" name="development_id" value="{{ d.id }}">
       <input type="hidden" name="audience" value="{{ aud }}">
@@ -84,7 +85,7 @@
       <button class="btn lbl0" name="label" value="0" title="noise">0 noise</button>
       <button class="btn lbl1" name="label" value="1" title="worth knowing">1 worth knowing</button>
       <button class="btn lbl2" name="label" value="2" title="material, alert-worthy">2 material</button>
-    </form>
+    </form>{% endif %}
   </section>
 {% endfor %}
 </div>
@@ -102,7 +103,7 @@
         <td>{{ a.title }}<div class="small muted">{{ a.created_at|dt }}</div></td>
         <td>{% for r in a.rules %}<div{% if r.description %} title="{{ r.description }}"{% endif %}><code>{{ r.name }}</code>{% if r.detail %} <span class="small muted">{{ r.detail }}</span>{% endif %}</div>{% else %}–{% endfor %}</td>
         <td class="small">{{ m.delivery(a) }}</td>
-        <td>{{ m.ack_form(a, '/developments/' ~ d.id) }}</td>
+        <td>{{ m.ack_form(a, '/developments/' ~ d.id, read_only) }}</td>
       </tr>
     {% endfor %}
     </tbody>

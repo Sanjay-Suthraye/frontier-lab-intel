@@ -21,7 +21,7 @@
     {{ m.sev(a.severity) }}
     <a href="/developments/{{ a.development_id }}" class="alert-title">{{ a.title }}</a>
     <span class="grow"></span>
-    {{ m.ack_form(a, here) }}
+    {{ m.ack_form(a, here, read_only) }}
   </header>
   <div class="meta">{{ a.audience|audl }}<span class="sep">·</span>{% if a.lab_id %}<a href="/register/labs/{{ a.lab_id }}">{{ a.lab_name }}</a><span class="sep">·</span>{% endif %}<span title="{{ a.created_at|dt }}">{{ a.created_at|dt }}</span><span class="sep">·</span><span{% if a.acked_by %} title="by {{ a.acked_by }}"{% endif %}>{{ a.status }}</span>
     {{ m.delivery(a) }}</div>

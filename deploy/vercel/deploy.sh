@@ -7,7 +7,8 @@
 # The bundle is assembled in a temp directory so that only what the web process needs is uploaded:
 # deploy/vercel/{app.py,requirements.txt,vercel.json}, src/fli, config/, the snapshot and the scoring
 # model metadata. .env is never copied; FLI_BASIC_AUTH (from .env) is passed as a runtime variable and
-# FLI_AUTH_ALL=1 puts every page behind the login, as on AWS.
+# FLI_AUTH_ALL=1 puts every page behind the login, as on AWS. FLI_READ_ONLY=1 switches labelling and
+# alert acks off: the database is a per-instance /tmp copy, so a write would vanish on a cold start.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -37,7 +38,7 @@ esac
 
 cd "$STAGE"
 OUT="$(npx --yes "$VERCEL_CLI" deploy --prod --yes --token "$VERCEL_TOKEN" \
-  --env FLI_AUTH_ALL=1 --env "FLI_BASIC_AUTH=$AUTH" 2>&1)"
+  --env FLI_AUTH_ALL=1 --env FLI_READ_ONLY=1 --env "FLI_BASIC_AUTH=$AUTH" 2>&1)"
 URL="$(grep -o 'https://[a-z0-9.-]*\.vercel\.app' <<<"$OUT" | tail -1)"  # the production alias is printed last
 mkdir -p "$HERE/.vercel" && cp "$STAGE/.vercel/project.json" "$HERE/.vercel/"
 log "deployed: $URL"

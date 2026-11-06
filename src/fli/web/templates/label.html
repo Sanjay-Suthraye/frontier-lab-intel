@@ -38,6 +38,7 @@
       </details>
     </article>
 
+    {% if read_only %}<p class="card note">Labelling is switched off on this read-only copy: the queue is shown so you can see how labels are collected.</p>{% else %}
     <form method="post" action="/api/labels" class="card label-form" data-label-form>
       <input type="hidden" name="development_id" value="{{ d.id }}">
       <input type="hidden" name="audience" value="{{ audience }}">
@@ -54,7 +55,7 @@
         <a class="btn big ghost" href="/label?audience={{ audience|slug }}&pos={{ data.pos + 1 }}{{ '&others=1' if others }}" data-skip><kbd>s</kbd> skip</a>
       </div>
       <p class="small muted">Saved as <code>human:{{ name or ('&lt;login&gt;' if auth_on else '&lt;name&gt;')|safe }}</code>, rubric {{ rubric }}. Item {{ data.pos + 1 }} of {{ data.remaining }}; the queue mixes high, low and uncertain scores.</p>
-    </form>
+    </form>{% endif %}
   {% else %}
     <p class="empty card">Nothing left to label for {{ audience|audl }}{{ ' that you have not labelled' if others }}. Nice work.</p>
   {% endif %}

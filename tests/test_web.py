@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 import yaml
 from fastapi.testclient import TestClient
-from sqlalchemy import update
+from sqlalchemy import select, update
 
 from fli.db.models import (
     Affiliation,
@@ -1290,3 +1290,64 @@ def test_deploy_scripts_harden_the_public_instance():
     example = (REPO / ".env.example").read_text()
     assert "FLI_BASIC_AUTH=" in example and "FLI_AUTH_ALL=1" in example
     assert "\nFLI_AUTH_ALL=\n" not in example  # an empty bool would break Settings()
+
+
+# ------------------------------------------------------------------------------------ data clock
+def _age_everything(db, days: int) -> None:
+    """Move every development back in time, as a committed snapshot ages after collection stops."""
+    with db() as s:
+        for dev in s.scalars(select(Development)):
+            dev.first_seen_at -= timedelta(days=days)
+            dev.last_seen_at -= timedelta(days=days)
+        s.commit()
+
+
+def _dev_links(page: str) -> set[str]:
+    import re
+
+    return set(re.findall(r'href="/developments/(\d+)"', page))
+
+
+def test_frozen_snapshot_keeps_rolling_windows_populated(client, db, ids):
+    """Seen live: the snapshot ends 2026-11-04, so 'last 7 days' counted from the wall clock went
+    empty a week later. Rolling windows follow the data clock, and a banner says so."""
+    urls = ("/", "/feed/investment", "/feed/ai-team")
+    live = {u: client.get(u).text for u in urls}
+    assert all("Snapshot:" not in page for page in live.values())  # live collection: real clock
+    api_live = {i["id"] for i in client.get("/api/developments").json()["items"]}
+    assert ids["dev1"] in api_live
+    _age_everything(db, 30)
+    for url in urls:
+        page = client.get(url).text
+        assert "Snapshot:" in page, url
+        assert _dev_links(page) == _dev_links(live[url]) and _dev_links(page), url
+    assert {i["id"] for i in client.get("/api/developments").json()["items"]} == api_live
+    assert client.get("/feed/investment?week=all").status_code == 200
+
+
+def test_data_clock_moves_only_when_collection_is_paused(db, ids):
+    from fli.web import queries as q
+
+    now = utcnow()
+    with db() as s:
+        assert q.data_clock(s, now) == (now, None)
+        newest = s.scalar(select(Development.first_seen_at).order_by(Development.first_seen_at.desc()))
+        later = newest + q.STALE_AFTER + timedelta(hours=1)
+        anchor, seen = q.data_clock(s, later)
+        assert seen == newest and anchor == newest + timedelta(seconds=1)
+
+
+# ------------------------------------------------------------------------------------ read-only copy
+def test_read_only_copy_refuses_writes_and_hides_the_forms(client, ids, monkeypatch):
+    monkeypatch.setenv("FLI_READ_ONLY", "1")
+    body = {"development_id": ids["dev1"], "audience": "investment", "label": 1, "annotator": "pm"}
+    r = client.post("/api/labels", json=body)
+    assert r.status_code == 403 and "read-only" in r.json()["detail"]
+    assert client.post(f"/api/alerts/{ids['a1']}/ack", json={}).status_code == 403
+    monkeypatch.setenv("FLI_BASIC_AUTH", "pm:s3cret")  # credentials do not re-enable writes
+    assert client.post("/api/labels", json=body, headers=_basic("pm", "s3cret")).status_code == 403
+    dev = client.get(f"/developments/{ids['dev1']}", headers=_basic("pm", "s3cret")).text
+    assert 'action="/api/labels"' not in dev and "Read-only copy" in dev
+    assert 'action="/api/labels"' not in client.get("/label?audience=ai-team").text
+    for url in ("/", "/alerts?status=all", f"/developments/{ids['dev1']}"):
+        assert "/ack" not in client.get(url).text, url

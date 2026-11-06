@@ -19,6 +19,10 @@
   </div>
 </header>
 <main>
+{% if snapshot_as_of or read_only %}<p class="note site-note" role="status">
+  {%- if snapshot_as_of %}<b>Snapshot:</b> collection is paused on this deployment; the newest data is from {{ snapshot_as_of|dt }}, so "last 7 days" views count back from then (Status shows real-time source freshness).{% endif %}
+  {%- if read_only %} <b>Read-only copy:</b> labelling and alert acks are switched off here.{% endif -%}
+</p>{% endif %}
 {% block content %}{% endblock %}
 </main>
 <footer>

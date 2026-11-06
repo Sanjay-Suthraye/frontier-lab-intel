@@ -4,8 +4,9 @@ Vercel Functions can only write to /tmp, so a cold start unpacks the bundled sna
 (data/snapshot/fli_snapshot.sqlite.gz) to /tmp and serves it from there. The bundle carries only
 the web dependencies (requirements.txt): the web process never imports the pipeline's ML stack.
 
-Writes (labels, alert acks) land in that per-instance copy and are lost on the next cold start, so
-this deployment is a read-mostly demo; the AWS deployment (deploy/aws) is the persistent one.
+That copy is per instance and lost on the next cold start, so deploy.sh sets FLI_READ_ONLY=1:
+labelling and alert acks are switched off (a write would seem to work, then vanish). The AWS
+deployment (deploy/aws) is the persistent one.
 """
 
 from __future__ import annotations
