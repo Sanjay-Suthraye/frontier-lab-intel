@@ -3,26 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
 <title>{% block title %}Overview{% endblock %} · Frontier Lab Intelligence</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231f5fd1'/%3E%3Cpath d='M4 12V4h7M4 8h5' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1.5' y='1.5' width='13' height='13' rx='4' fill='%23161826' stroke='%239184d9' stroke-width='1.5'/%3E%3C/svg%3E">
+<link rel="preload" href="/static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/static/style.css?v={{ static_v }}">
-<script>try{var t=localStorage.getItem("fli-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <header class="site-header">
-  <div class="top-inner">
-    <a class="brand" href="/" title="Frontier Lab Intelligence">FLI<span>Frontier Lab Intelligence</span></a>
-    <nav aria-label="Main">
-      {% for href, label, key in nav %}<a href="{{ href }}"{% if active == key %} class="on" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
-    </nav>
-    <button class="theme" type="button" data-theme-toggle title="Toggle light / dark" aria-label="Toggle light or dark theme">&#9680;</button>
-  </div>
+  <a class="brand" href="/" title="Frontier Lab Intelligence"><span class="brand-mark" aria-hidden="true"></span>FLI</a>
+  <nav class="site-nav" aria-label="Main">
+    {% for href, label, key in nav %}<a href="{{ href }}"{% if active == key %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+  </nav>
+  {% set state = sys.status if sys else 'unknown' %}
+  <a href="/status" class="sysdot {{ 'paused' if snapshot_as_of else state }}" title="{% if snapshot_as_of %}Collection paused{% else %}System {{ state }}{% endif %}{% if sys %} · {{ sys.failing }} failing · {{ sys.stale }} stale{% if sys.reasons %} · {{ sys.reasons|join('; ') }}{% endif %}{% endif %}"><i aria-hidden="true"></i>Status</a>
 </header>
+{% if snapshot_as_of or read_only %}
+<div class="snapline" role="status">
+  {% if snapshot_as_of %}<span title="'Last 7 days' views count back from the newest data; Status shows real-time source freshness">Snapshot · data frozen at {{ snapshot_as_of|day }} {{ snapshot_as_of.year }}, collection paused</span>{% endif %}
+  {% if read_only %}<span title="labelling and alert acks are switched off on this copy">Read-only copy</span>{% endif %}
+</div>
+{% endif %}
 <main>
-{% if snapshot_as_of or read_only %}<p class="note site-note" role="status">
-  {%- if snapshot_as_of %}<b>Snapshot:</b> collection is paused on this deployment; the newest data is from {{ snapshot_as_of|dt }}, so "last 7 days" views count back from then (Status shows real-time source freshness).{% endif %}
-  {%- if read_only %} <b>Read-only copy:</b> labelling and alert acks are switched off here.{% endif -%}
-</p>{% endif %}
 {% block content %}{% endblock %}
 </main>
 <footer>

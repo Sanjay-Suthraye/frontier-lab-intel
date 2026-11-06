@@ -1,22 +1,24 @@
-{# Shared badges and cards. Pure formatting: every value arrives precomputed from queries.py. #}
+{# Shared components (Nocturne). Pure formatting: every value arrives precomputed from queries.py. #}
 
-{# relevance = the scorer's estimate that the audience would call it worth knowing (label >= 1), not P(material) #}
+{# relevance = the scorer's estimate that the audience would call it worth knowing (label >= 1): a neutral meter #}
 {% macro score(p, extra='', prior=False) -%}
-{%- if p is none -%}<span class="score s-none" title="not scored yet">–</span>
-{%- else -%}<span class="score {{ 's-hi' if p >= 0.7 else ('s-mid' if p >= 0.4 else 's-lo') }}" title="relevance = {{ '%.3f'|format(p) }} (estimated probability the audience calls it worth knowing){{ extra }}{{ ' · unvalidated prior' if prior }}">{{ (p * 100)|round|int }}</span>
+{%- if p is none -%}<span class="meter" title="not scored yet"><span class="bar"></span><span class="val">–</span></span>
+{%- else -%}<span class="meter" title="relevance = {{ '%.3f'|format(p) }} (estimated probability the audience calls it worth knowing){{ extra }}{{ ' · unvalidated prior' if prior }}"><span class="bar"><span style="width: {{ (p * 100)|round|int }}%"></span></span><span class="val">{{ '%.2f'|format(p) }}</span></span>
 {%- endif -%}
 {%- endmacro %}
 
 {% macro prior_badge(on) -%}{% if on %}<span class="badge prior" title="scored by prior-v0: hand-set weights, not fitted to labels yet (fli train deploys a validated model)">unvalidated prior</span>{% endif %}{%- endmacro %}
 
+{# direction: an arrow and a word, never colour alone #}
 {% macro arrow(direction) -%}
-{%- if direction == 'positive' %}<span class="dir pos" title="positive">&#9650;</span>
-{%- elif direction == 'negative' %}<span class="dir neg" title="negative">&#9660;</span>
-{%- elif direction == 'mixed' %}<span class="dir mix" title="mixed">&#9670;</span>{% endif -%}
+{%- if direction == 'positive' %}<span class="dir pos" title="positive">&uarr; Positive</span>
+{%- elif direction == 'negative' %}<span class="dir neg" title="negative">&darr; Negative</span>
+{%- elif direction == 'mixed' %}<span class="dir mix" title="mixed">&#8597; Mixed</span>
+{%- elif direction == 'unclear' %}<span class="dir unc" title="unclear">? Unclear</span>{% endif -%}
 {%- endmacro %}
 
 {% macro ticker(t) -%}
-<span class="tk{{ ' bit' if t.bit_weight is not none }}" title="{{ t.company or t.symbol }}{% if t.bit_weight is not none %} · BIT Global Technology Leaders weight {{ '%.1f'|format(t.bit_weight) }}%{% endif %}{% if t.basis == 'lens' %} · committed by the investment lens{% elif t.basis == 'event' %} · event-specific exposure link{% endif %}{% if t.theme %} · theme: {{ t.theme }}{% endif %}{% if t.why %} · {{ t.why }}{% endif %}">{{ arrow(t.direction) }}{{ t.symbol }}{% if t.bit_weight is not none %}<b>{{ '%.1f'|format(t.bit_weight) }}%</b>{% endif %}</span>
+<span class="tk{{ ' bit' if t.bit_weight is not none }}" title="{{ t.company or t.symbol }}{% if t.bit_weight is not none %} · BIT Global Technology Leaders weight {{ '%.1f'|format(t.bit_weight) }}%{% endif %}{% if t.basis == 'lens' %} · committed by the investment lens{% elif t.basis == 'event' %} · event-specific exposure link{% endif %}{% if t.theme %} · theme: {{ t.theme }}{% endif %}{% if t.why %} · {{ t.why }}{% endif %}"><span class="sym">{{ t.symbol }}</span>{{ arrow(t.direction) }}{% if t.bit_weight is not none %}<span class="w">BIT {{ '%.1f'|format(t.bit_weight) }}%</span>{% endif %}</span>
 {%- endmacro %}
 
 {# lab relations (config/labs.yaml, e.g. OpenAI -> MSFT) are true of every development at the lab: context only, never exposure #}
@@ -35,29 +37,40 @@
 {%- else %}<span class="badge curated" title="{{ tip }}">curated register entry</span>{% endif -%}
 {%- endmacro %}
 
-{# a document's class: the curated badge for register entries, else the plain class chip #}
 {% macro source_badge(doc) -%}
 {%- if doc.curated %}{{ curated_badge(doc.cited_url) }}{% else %}{{ chip(doc.source_class) }}{% endif -%}
 {%- endmacro %}
 
-{# a development's source classes; 'curated' links to the first register entry's cited source #}
-{% macro class_chips(c) -%}
-{%- for cl in c.source_classes -%}
+{# skip_official: on cards the "Official source" trust mark already says it #}
+{% macro class_chips(c, skip_official=False) -%}
+{%- for cl in c.source_classes if not (skip_official and cl == 'official' and c.has_official) -%}
 {%- if cl == 'curated' %}{{ curated_badge(c.curated_sources[0].cited_url if c.curated_sources else none) }}{% else %}{{ chip(cl) }}{% endif -%}
 {%- endfor -%}
 {%- endmacro %}
 
-{% macro sev(s) -%}<span class="sev sev-{{ s }}">{{ s }}</span>{%- endmacro %}
+{# alert severity, the only amber in the interface #}
+{% macro sev(s, long=False) -%}<span class="sev sev-{{ s }}" title="{{ {'P1': 'landmark, pushed now', 'P2': 'alert-worthy today, pushed now', 'P3': 'digest only, never pushed'}.get(s, '') }}">{{ {'P1': 'P1 · Landmark', 'P2': 'P2 · Alert', 'P3': 'P3 · Digest'}.get(s, s) if long else s }}</span>{%- endmacro %}
 
 {% macro state(st, why='') -%}<span class="st st-{{ st }}"{% if why %} title="{{ why }}"{% endif %}>{{ st }}</span>{%- endmacro %}
 
-{% macro action(a) -%}{% if a %}<span class="act act-{{ a }}" title="recommended action">{{ a|replace('_', ' ') }}</span>{% endif %}{%- endmacro %}
+{# the lens verdict: an investment action (blurple) or an AI radar ring (teal) #}
+{% macro action(a, big=False) -%}{% if a %}<span class="act act-{{ a }}{{ ' big' if big }}" title="the lens's recommended action">{{ a|replace('_', ' ') }}</span>{% endif %}{%- endmacro %}
 
 {% macro unconfirmed(c) -%}{% if c.unconfirmed %}<span class="badge unconf" title="{{ c.unconfirmed_reason }}">unconfirmed</span>{% endif %}{%- endmacro %}
 
 {% macro verified(ok) -%}
 {%- if ok %}<span class="mark ok" title="quote found verbatim in the source">&#10003; verified</span>
 {%- else %}<span class="mark bad" title="quote not found in the source text">&#10007; unverified</span>{% endif -%}
+{%- endmacro %}
+
+{# trust at a glance: unconfirmed, how much evidence verified, official source #}
+{% macro trust(c) -%}
+{%- if c.unconfirmed %}<span class="trust unconf" title="{{ c.unconfirmed_reason }}">Unconfirmed</span>{% endif -%}
+{%- if c.quotes_total -%}
+{%- if c.quotes_ok == c.quotes_total %}<span class="trust ok" title="every evidence quote was found word for word in the stored source">&#10003; {{ c.quotes_ok }} of {{ c.quotes_total }} quote{{ '' if c.quotes_total == 1 else 's' }} verified</span>
+{%- else %}<span class="trust bad" title="some evidence quotes were not found in the stored source">&#10007; {{ c.quotes_total - c.quotes_ok }} of {{ c.quotes_total }} quote{{ '' if c.quotes_total == 1 else 's' }} unverified</span>{% endif -%}
+{%- endif -%}
+{%- if c.has_official %}<span class="trust">Official source</span>{% endif -%}
 {%- endmacro %}
 
 {% macro ext(url, label=None) -%}
@@ -84,38 +97,84 @@
 {%- endmacro %}
 
 {% macro dev_meta(c, audience=None, prior=False) -%}
-<div class="meta">
-  {% if c.lab_id %}<a href="/register/labs/{{ c.lab_id }}">{{ c.lab_name }}</a><span class="sep">·</span>{% endif %}
-  <span>{{ c.event_type|replace('_', ' ') }}</span><span class="sep">·</span>
-  <time title="{{ c.first_seen_at|dt }}">{{ c.first_seen_at|day }}</time><span class="sep">·</span>
+<div class="metarow">
+  {% if c.lab_id %}<a class="lab" href="/register/labs/{{ c.lab_id }}">{{ c.lab_name }}</a>{% else %}<span>unattributed</span>{% endif %}
+  <span>{{ c.event_type|replace('_', ' ')|capitalize }}</span>
+  <time title="{{ c.first_seen_at|dt }}">{{ c.first_seen_at|day }}</time>
   <span>{{ c.source_count }} source{{ '' if c.source_count == 1 else 's' }}</span>
-  {{ class_chips(c) }}
-  {{ unconfirmed(c) }}
+  {{ class_chips(c, skip_official=True) }}
+  {{ trust(c) }}
   {{ prior_badge(prior) }}
-  {% for a in c.alerts if a.status == 'open' and (audience is none or a.audience == audience) %}{{ sev(a.severity) }}{% endfor %}
 </div>
 {%- endmacro %}
 
+{# feed card: a verdict rail (verdict, horizon, alert, relevance) beside the body (exposure, headline, so what) #}
 {% macro dev_card(c, audience) %}
-<article class="card dev{{ ' dismissed' if c.lens and c.lens.dismissed }}">
-  <div class="dev-score">{{ score(c.p, prior=c.p_prior) }}</div>
-  <div class="dev-body">
-    <h3><a href="/developments/{{ c.id }}">{{ c.title }}</a></h3>
-    {{ dev_meta(c, audience, prior=c.p_prior) }}
-    {% if c.lens %}
-    <p class="headline">{{ c.lens.headline }}</p>
-    <dl class="lens">
-      <dt>So what</dt><dd>{{ c.lens.so_what }}</dd>
-      <dt>What to do</dt><dd>{{ c.lens.what_to_do }} {{ action(c.lens.action) }}{% if c.lens.horizon %} <span class="muted">· {{ c.lens.horizon|replace('_', ' ') }}</span>{% endif %}</dd>
-    </dl>
-    {% else %}
-    <p class="muted">{{ c.summary or 'Lens not generated yet.' }}</p>
-    {% endif %}
-    {% if audience == 'investment' and (c.tickers or c.lab_relations) %}<div class="tickers">{% for t in c.tickers[:8] %}{{ ticker(t) }}{% endfor %}{{ lab_relations(c.lab_relations, c.lab_name) }}</div>{% endif %}
-    {% if audience == 'ai_team' and c.artifacts %}<div class="tickers">{% for a in c.artifacts %}<span class="art">{{ a }}</span>{% endfor %}</div>{% endif %}
+{%- set lens = c.lens -%}
+{%- set ai = audience == 'ai_team' -%}
+{%- set alert = c.alerts|selectattr('audience', 'equalto', audience)|rejectattr('status', 'equalto', 'suppressed')|first -%}
+<article class="fcard{{ ' ai' if ai }}{{ ' dismissed' if lens and lens.dismissed }}{{ ' unconfirmed' if c.unconfirmed }}">
+  <div class="rail">
+    <div class="rk">{{ 'Radar ring' if ai else 'Verdict' }}</div>
+    <div class="rv act-{{ lens.action if lens else 'none' }}">{{ lens.action|replace('_', ' ') if lens and lens.action else 'no lens yet' }}</div>
+    {% if lens and lens.horizon %}<div class="rh">Horizon · {{ lens.horizon|replace('_', ' ')|capitalize }}</div>{% endif %}
+    {% if alert or (lens and lens.dismissed) or c.p_prior %}<div class="chips">
+      {% if alert %}{{ sev(alert.severity, long=True) }}{% endif %}
+      {% if lens and lens.dismissed %}<span class="chip">Dismissed</span>{% endif %}
+      {{ prior_badge(c.p_prior) }}
+    </div>{% endif %}
+    <div class="rel" title="{% if c.p is not none %}relevance = {{ '%.3f'|format(c.p) }} (estimated probability the {{ audience|audl }} team calls it worth knowing){% else %}not scored yet{% endif %}">
+      <div class="row"><span>Relevance</span><b>{{ '%.2f'|format(c.p) if c.p is not none else '–' }}</b></div>
+      <span class="bar"><span style="width: {{ ((c.p or 0) * 100)|round|int }}%"></span></span>
+    </div>
+  </div>
+  <div class="fbody">
+    {% if not ai and (c.tickers or c.lab_relations) %}<div class="chips">{% for t in c.tickers[:6] %}{{ ticker(t) }}{% endfor %}{{ lab_relations(c.lab_relations, c.lab_name) }}</div>{% endif %}
+    {% if ai and c.artifacts %}<div class="chips">{% for a in c.artifacts[:6] %}<span class="art" title="artifact">{{ a }}</span>{% endfor %}</div>{% endif %}
+    {% if ai and lens and lens.what_to_do %}<div class="step"><span>First step · </span>{{ lens.what_to_do.split('. ')[0].rstrip('.') }}.</div>{% endif %}
+    <div>
+      <h3><a href="/developments/{{ c.id }}">{{ lens.headline if lens else c.title }}</a></h3>
+      {% if lens %}<div class="dtitle">{{ c.title }}</div>{% endif %}
+      {% if lens %}
+      <p class="clamp">{{ lens.so_what }}</p>
+      <details class="more"><summary><span class="more-l">More · what to do</span><span class="less">Show less</span></summary>
+        <p class="todo"><span>What to do · </span>{{ lens.what_to_do }}</p>
+      </details>
+      {% else %}<p class="clamp">{{ c.summary or 'Lens not generated yet.' }}</p>{% endif %}
+    </div>
+    {{ dev_meta(c) }}
   </div>
 </article>
 {% endmacro %}
+
+{# overview row: verdict, alert and relevance over the headline and the exposure it carries #}
+{% macro ov_row(c, audience) %}
+{%- set lens = c.lens -%}
+{%- set alert = c.alerts|selectattr('audience', 'equalto', audience)|rejectattr('status', 'equalto', 'suppressed')|first -%}
+<a class="ov-row" href="/developments/{{ c.id }}">
+  <div class="top">
+    {{ action(lens.action if lens else none) }}
+    {% if alert %}{{ sev(alert.severity) }}{% endif %}
+    {{ unconfirmed(c) }}
+    {{ score(c.p, prior=c.p_prior) }}
+  </div>
+  <div class="hl">{{ lens.headline if lens else c.title }}</div>
+  <div class="marks">
+    {% if audience == 'investment' %}{% for t in c.tickers[:5] %}<span class="dir {{ {'positive': 'pos', 'negative': 'neg', 'mixed': 'mix'}.get(t.direction, 'unc') }}">{{ t.symbol }} {{ {'positive': '↑', 'negative': '↓', 'mixed': '↕'}.get(t.direction, '') }}{% if t.bit_weight is not none %} · {{ '%.1f'|format(t.bit_weight) }}%{% endif %}</span>{% endfor %}
+    {% else %}{% for a in c.artifacts[:3] %}<span>{{ a }}</span>{% endfor %}{% endif %}
+    <span>{{ c.lab_name or 'unattributed' }} · {{ c.first_seen_at|day }}</span>
+  </div>
+</a>
+{% endmacro %}
+
+{# "why flagged" in one line of plain words; the rule detail lives under "How this was scored" #}
+{% macro why_line(w) -%}
+{%- if not w %}Not evaluated.
+{%- elif w.error %}Materiality policy unavailable.
+{%- elif w.severity %}{{ ('Pushed as ' ~ w.severity) if w.severity in ('P1', 'P2') else 'Digest only' }}: {{ (w.fired|first).description if w.fired else 'a materiality rule fired' }}{% if w.rule_severity != w.severity %} (capped from {{ w.rule_severity }}){% endif %}
+{%- elif w.rule_severity %}Held back: {{ (w.guards|first).description if w.guards else 'a guard stops the alert' }}
+{%- else %}Not alerted: no materiality rule fires{% endif -%}
+{%- endmacro %}
 
 {% macro dev_table(cards) %}
 <div class="scroll"><table class="tbl">
@@ -150,8 +209,8 @@
   {% else %}
   <td class="nowrap" colspan="2" title="no run recorded in this database; newest document fetched {{ x.imported_at|dt }}">{{ x.imported_at|ago }} <span class="small muted">· imported</span></td>
   {% endif %}
-  <td class="nowrap">{{ ((x.slo_hours or 0) / 24)|round(1) }} d</td>
-  <td class="{{ 'bad' if x.failures }}">{{ x.failures }}</td>
+  <td class="nowrap num">{{ ((x.slo_hours or 0) / 24)|round(1) }} d</td>
+  <td class="{{ 'bad' if x.failures }} num">{{ x.failures }}</td>
   <td class="small">{% if x.last_error %}<span title="{{ x.last_error }}">{{ x.last_error|truncate(80) }}</span>{% else %}–{% endif %}</td>
 </tr>
 {% else %}<tr><td colspan="{{ 9 if show_lab else 8 }}" class="empty">No sources registered.</td></tr>{% endfor %}

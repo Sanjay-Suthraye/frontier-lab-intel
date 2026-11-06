@@ -594,6 +594,19 @@ def _curated_sources(s: Session, dev_ids: list[int]) -> dict[int, list[Row]]:
     return dict(out)
 
 
+def quote_counts(s: Session, dev_ids: list[int]) -> dict[int, tuple[int, int]]:
+    """(verified, total) evidence quotes per development, counted as the development page marks them."""
+    out: dict[int, list[int]] = defaultdict(lambda: [0, 0])
+    if not dev_ids:
+        return {}
+    for ins in s.scalars(select(Insight).options(defer(Insight.embedding))
+                         .where(_chunked_in(Insight.development_id, list(dev_ids)))):
+        for qt in quote_rows(ins):
+            out[ins.development_id][1] += 1
+            out[ins.development_id][0] += int(qt["verified"])
+    return {k: (v[0], v[1]) for k, v in out.items()}
+
+
 def build_cards(s: Session, dev_ids: list[int], audience: str | None = None,
                 live: dict[str, str] | None = None) -> list[Row]:
     """Card / API view of developments, in the given order."""
@@ -617,6 +630,7 @@ def build_cards(s: Session, dev_ids: list[int], audience: str | None = None,
                                          "status": a.status})
     flags = _insight_flags(s, dev_ids)
     curated = _curated_sources(s, dev_ids)
+    quotes = quote_counts(s, dev_ids)
     policy = materiality_policy()[0]
     out = []
     for i in dev_ids:
@@ -648,6 +662,7 @@ def build_cards(s: Session, dev_ids: list[int], audience: str | None = None,
             "tickers": chips, "held_tickers": exp.held, "lab_relations": lab_relations,
             "curated_sources": curated.get(i, []),
             "unconfirmed": unconfirmed, "unconfirmed_reason": why, "alerts": alerts.get(i, []),
+            "quotes_ok": quotes.get(i, (0, 0))[0], "quotes_total": quotes.get(i, (0, 0))[1],
         })
     return out
 
@@ -678,7 +693,7 @@ def _doc_row(doc: Document, kind: str | None = None) -> Row:
 
 
 # ------------------------------------------------------------------------------------ overview
-def overview(s: Session, now: datetime | None = None, per_audience: int = 8) -> Row:
+def overview(s: Session, now: datetime | None = None, per_audience: int = 5) -> Row:
     """'This week' is a rolling 7 days on the data clock: when collection is paused it is the
     latest week with data."""
     now = now or utcnow()
@@ -687,12 +702,16 @@ def overview(s: Session, now: datetime | None = None, per_audience: int = 8) -> 
     note = (f"Nothing new since {newest:%d %b %Y}: showing the 7 days to then." if newest is not None else None)
     # same defaults as the feed pages: what the lens dismissed stays off the front page
     top = {aud: feed(s, FeedFilters(audience=aud, since=since, until=until, limit=per_audience,
-                                    min_p=DEFAULT_MIN_P.get(aud, 0.0), hide_dismissed=True, order="triage"),
+                                    min_p=DEFAULT_MIN_P.get(aud, 0.0), hide_dismissed=True,
+                                    order="relevance"),
                      now)
            for aud in AUDIENCES}
-    return {"since": since, "until": until, "note": note, "top": top,
-            "alerts": alert_rows(s, status="open", severities=("P1", "P2"), limit=12),
-            "reports": report_rows(s, limit=6), "health": health_summary(s, now),
+    pushed = alert_rows(s, status="all", severities=PUSH_SEVERITIES, since=since, limit=500)
+    pushed = [a for a in pushed if a["status"] != "suppressed"]
+    cleared = {aud: len({a["development_id"] for a in pushed if a["audience"] == aud}) for aud in AUDIENCES}
+    return {"since": since, "until": until, "note": note, "top": top, "alerts": pushed[:6],
+            "alerts_total": len(pushed), "cleared": cleared,
+            "reports": report_rows(s, limit=4), "health": health_summary(s, now),
             "holdings": holdings_radar(s, since, until)}
 
 
@@ -715,13 +734,17 @@ def holdings_radar(s: Session, since: datetime, until: datetime | None) -> list[
     ids = sorted({i for t in holds for i in hits.get(t.symbol, ())})
     p = {k[0]: v.p_material for k, v in latest_scores(s, ids).items() if k[1] == "investment"} if ids else {}
     titles = dev_titles(s, ids)
+    tops = {t.symbol: sorted(hits.get(t.symbol, ()), key=lambda i: (-(p.get(i) or 0.0), -i)) for t in holds}
+    top_ids = sorted({devs[0] for devs in tops.values() if devs})
+    chips = {c["id"]: c["tickers"] for c in build_cards(s, top_ids, "investment")} if top_ids else {}
     out = []
     for t in holds:
-        devs = sorted(hits.get(t.symbol, ()), key=lambda i: (-(p.get(i) or 0.0), -i))
+        devs = tops[t.symbol]
         top = devs[0] if devs else None
+        direction = next((x.get("direction") for x in chips.get(top, []) if x.get("symbol") == t.symbol), None)
         out.append({"symbol": t.symbol, "company": t.company, "weight": t.bit_weight, "count": len(devs),
                     "lab_only": len(lab_only.get(t.symbol, ())), "max_p": p.get(top) if top else None,
-                    "top_id": top, "top_title": titles.get(top)})
+                    "top_id": top, "top_title": titles.get(top), "direction": direction})
     return out
 
 
@@ -1357,7 +1380,7 @@ def health_summary(s: Session, now: datetime | None = None) -> Row:
             "last_ingest_basis": basis, "last_ingest_age_hours": age,
             "last_document_at": s.scalar(select(func.max(Document.fetched_at))),
             "open_ops_events": ops, "budgets": budgets,
-            "counts": {"developments": s.scalar(select(func.count(Development.id))) or 0,
+            "counts": {"developments": s.scalar(select(func.count(Development.id)).where(_visible())) or 0,
                        "documents": s.scalar(select(func.count(Document.id))) or 0,
                        "insights": s.scalar(select(func.count(Insight.id))) or 0,
                        "open_alerts": s.scalar(open_alerts) or 0}}

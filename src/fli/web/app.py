@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
+import time
 from collections.abc import Iterator
 from contextlib import asynccontextmanager
 from dataclasses import replace
@@ -188,6 +189,27 @@ for _name, _fn in {"dt": fmt_dt, "day": lambda v: fmt_dt(v, "%d %b"), "date": la
     templates.env.filters[_name] = _fn
 
 
+_HEADER_STATUS: dict[str, tuple[float, dict]] = {}
+HEADER_STATUS_TTL = 60.0  # seconds: the header dot is a glance, Status is the source of truth
+
+
+def _header_status() -> dict | None:
+    """System state for the header dot (q.health_summary, cached briefly per database)."""
+    key = get_settings().database_url
+    hit = _HEADER_STATUS.get(key)
+    if hit and time.monotonic() - hit[0] < HEADER_STATUS_TTL:
+        return hit[1]
+    try:
+        with session_scope() as s:
+            h = q.health_summary(s)
+    except SQLAlchemyError:
+        return None
+    value = {"status": h["status"], "reasons": h["reasons"], "failing": h["sources"].get("failing", 0),
+             "stale": h["sources"].get("stale", 0)}
+    _HEADER_STATUS[key] = (time.monotonic(), value)
+    return value
+
+
 def _snapshot_as_of() -> datetime | None:
     """Newest data time when collection is paused (q.data_clock), for the site-wide banner."""
     try:
@@ -206,7 +228,7 @@ def render(request: Request, template: str, /, status_code: int = 200, headers: 
             "audience_labels": AUDIENCE_LABELS, "event_types": EVENT_TYPES, "static_v": STATIC_V,
             "annotator": request.cookies.get(COOKIE, ""), "active": "", "auth_on": auth_on,
             "login": login_annotator(login) if login else None, "read_only": read_only(),
-            "snapshot_as_of": _snapshot_as_of()}
+            "snapshot_as_of": _snapshot_as_of(), "sys": _header_status()}
     return templates.TemplateResponse(request, template, {**base, **ctx}, status_code=status_code,
                                       headers=headers)
 
@@ -253,17 +275,20 @@ def overview_page(request: Request, s: DB):
 
 @app.get("/feed/{slug}", include_in_schema=False)
 def feed_page(request: Request, slug: str, s: DB):
-    """Pushed alerts first, then the lens's recommended action, then relevance. What the lens
-    dismissed (investment no_action, AI-team hold) is hidden unless ?dismissed=1, and counted."""
+    """Sorted by relevance (?sort=alerts: pushed alerts first, then the lens's recommended action,
+    then relevance). What the lens dismissed (investment no_action, AI-team hold) is hidden unless
+    ?dismissed=1, and counted."""
     audience, p = _audience(slug), request.query_params
     page = max(1, _int(p.get("page"), 1))
     show_dismissed = p.get("dismissed") in TRUE
-    f = q.FeedFilters(audience=audience, week=p.get("week") or "7d", lab=p.get("lab") or None,
+    # the window: a calendar week (cw) wins over the rolling choice (week: 7d, 30d or all)
+    f = q.FeedFilters(audience=audience, week=p.get("cw") or p.get("week") or "7d", lab=p.get("lab") or None,
                       event_type=p.get("event_type") if p.get("event_type") in EVENT_TYPES else None,
                       ticker=(p.get("ticker") or "").strip().upper() or None,
                       text=(p.get("q") or "").strip()[:80] or None,
                       min_p=_float(p.get("min_p"), q.DEFAULT_MIN_P.get(audience, 0.0)),
-                      bit_only=p.get("bit") in TRUE, hide_dismissed=not show_dismissed, order="triage",
+                      bit_only=p.get("bit") in TRUE, hide_dismissed=not show_dismissed,
+                      order="triage" if p.get("sort") == "alerts" else "relevance",
                       limit=PAGE_SIZE, offset=(page - 1) * PAGE_SIZE)
     keep = {k: v for k, v in p.items() if k != "page" and v}
     no_ticker = urlencode({k: v for k, v in keep.items() if k != "ticker"})
@@ -273,6 +298,7 @@ def feed_page(request: Request, slug: str, s: DB):
                   labs=q.lab_choices(s), weeks=q.week_options(utcnow()), page_size=PAGE_SIZE,
                   base_qs=urlencode(keep), no_ticker_qs=no_ticker, with_dismissed_qs=with_dismissed,
                   show_dismissed=show_dismissed, default_min_p=q.DEFAULT_MIN_P.get(audience, 0.0),
+                  sort="alerts" if p.get("sort") == "alerts" else "relevance",
                   dismissed_actions=q.DISMISSED.get(audience, ()),
                   prior_live=data["live_versions"].get(audience) == q.PRIOR_VERSION)
 

@@ -2,22 +2,17 @@
 (function () {
   "use strict";
 
-  // light / dark toggle (the head script applies the saved choice before first paint)
-  var toggle = document.querySelector("[data-theme-toggle]");
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      var root = document.documentElement;
-      var dark = root.dataset.theme ? root.dataset.theme === "dark"
-        : window.matchMedia("(prefers-color-scheme: dark)").matches;
-      root.dataset.theme = dark ? "light" : "dark";
-      try { localStorage.setItem("fli-theme", root.dataset.theme); } catch (e) { /* private mode */ }
-    });
-  }
-
-  // filter forms submit as soon as a select or checkbox changes
+  // filter forms submit as soon as a select, checkbox or window button changes; choosing a rolling
+  // window (7 days / 30 days / whole window) clears the calendar-week choice, which would win
   document.querySelectorAll("form[data-autosubmit]").forEach(function (form) {
-    form.querySelectorAll("select, input[type=checkbox]").forEach(function (el) {
-      el.addEventListener("change", function () { form.submit(); });
+    form.querySelectorAll("select, input[type=checkbox], input[type=radio]").forEach(function (el) {
+      el.addEventListener("change", function () {
+        if (el.type === "radio" && el.name === "week") {
+          var cw = form.querySelector("select[name=cw]");
+          if (cw) cw.value = "";
+        }
+        form.submit();
+      });
     });
   });
 

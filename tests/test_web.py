@@ -341,8 +341,8 @@ def test_feed_text_search(client, ids):
 
 def test_feed_card_badges(client, ids):
     page = client.get("/feed/investment").text
-    assert page.count('class="badge unconf"') == 1  # the personal-only rumour, not the official release
-    assert "AMZN<b>9.6%</b>" in page and "NVDA<b>8.0%</b>" in page  # BIT-weight badges
+    assert page.count('class="trust unconf"') == 1  # the personal-only rumour, not the official release
+    assert '<span class="sym">AMZN</span>' in page and "BIT 9.6%" in page and "BIT 8.0%" in page  # BIT weights
     assert "Review AMZN position sizing." in page and "review position" in page
     ai = client.get("/feed/ai-team").text
     assert "Trial Claude X for extraction" in ai and "claude-x" in ai
@@ -369,7 +369,8 @@ def _dev(s, now: datetime, title: str, p: float | None, action: str | None = Non
 
 
 def _order(page: str, titles: list[str]) -> list[str]:
-    found = [(page.find(f">{t}</a>"), t) for t in titles]
+    """Titles in page order; a card shows the title as its link or (under the lens headline) its subtitle."""
+    found = [(page.find(f">{t}<"), t) for t in titles]
     return [t for pos, t in sorted(found) if pos >= 0]
 
 
@@ -385,16 +386,18 @@ def test_feed_triage_order_and_dismissed_toggle(client, db, ids):
         s.commit()
     titles = ["Anthropic releases Claude X", "Mistral reportedly raising", "Pushed no lens", "Thesis item",
               "Suppressed P1", "Watch item", "Below default", "Dismissed item"]
-    page = client.get("/feed/investment").text
-    # pushed (P1/P2, acked counts, suppressed does not) -> lens action rank -> relevance
+    page = client.get("/feed/investment?sort=alerts").text
+    # sort=alerts: pushed (P1/P2, acked counts, suppressed does not) -> lens action rank -> relevance
     assert _order(page, titles) == ["Anthropic releases Claude X", "Mistral reportedly raising", "Pushed no lens",
                                     "Thesis item", "Suppressed P1", "Watch item"]
     assert "data-dismissed-note" in page and "1 development the lens marked <b>no action</b> is hidden" in page
-    assert '<option value="0.35" selected>35 (default)</option>' in page
-    every = client.get("/feed/investment?dismissed=1&min_p=0").text
+    assert '<option value="0.35" selected>Relevance ≥ 0.35 (default)</option>' in page
+    by_relevance = _order(client.get("/feed/investment").text, titles)  # the default sort
+    assert by_relevance[:2] == ["Watch item", "Anthropic releases Claude X"]
+    every = client.get("/feed/investment?sort=alerts&dismissed=1&min_p=0").text
     # rank 4 (thesis/position) by relevance, then watch, then what the lens dismissed
     assert _order(every, titles)[-3:] == ["Below default", "Watch item", "Dismissed item"]
-    assert "data-dismissed-note" not in every and 'card dev dismissed' in every
+    assert "data-dismissed-note" not in every and 'fcard dismissed' in every
     assert 'name="dismissed" value="1" checked' in every
     # the overview's top list uses the same defaults
     top = client.get("/").text
@@ -926,9 +929,8 @@ def test_health_uses_imported_documents_when_no_source_ran(client, db, monkeypat
         assert h["reasons"] == ["1 stale source(s)"] and h["last_ingest_basis"] == "documents"
         assert h["last_ingest_at"] == now - timedelta(hours=5)
         assert h["sources"] == {"ok": 1, "stale": 1, "failing": 0, "pending": 2, "disabled": 0}
-        strip = client.get("/").text.split("Last ingest")[1][:400]
-        assert "5 h ago" in strip and "· imported" in strip and "never" not in strip
         status = client.get("/status").text
+        assert "5 h ago" in status
         assert "No ingest has run in this database (imported data)" in status and "· imported" in status
         rows = {r["id"]: r for r in q.source_rows(s, now)}
         assert rows["b:news"]["state"] == "stale" and "newest imported document is 4d 4h old" in rows["b:news"]["reason"]
@@ -969,7 +971,7 @@ def test_api_alerts_reports_health(client, ids):
 # ------------------------------------------------------------------------------------ register / status
 def test_register_pages(client, ids):
     labs = client.get("/register/labs").text
-    assert "Anthropic" in labs and "AMZN<b>9.6%</b>" in labs
+    assert "Anthropic" in labs and '<span class="sym">AMZN</span>' in labs and "BIT 9.6%" in labs
     jane = client.get("/register/people/jane-doe").text
     assert "Leads pretraining" in jane and "seed_founder" in jane and "same display name" in jane
     assert "OldCo" in jane and "citations velocity" in jane and "Anthropic launches Claude X" in jane
@@ -1169,7 +1171,7 @@ def test_holding_exposure_has_one_definition_everywhere(client, db, ids, policy)
     assert 'href="/feed/investment?ticker=NVDA&amp;week=7d&amp;min_p=0&amp;dismissed=1"' in client.get("/").text
     assert "1 development:" in client.get("/feed/investment?ticker=NVDA&week=7d&min_p=0&dismissed=1").text
     feed = client.get("/feed/investment").text
-    assert "AMZN<b>9.6%</b>" in feed and "NVDA<b>8.0%</b>" in feed and "MSFT<b>4.4%</b>" not in feed
+    assert "BIT 9.6%" in feed and "BIT 8.0%" in feed and "BIT 4.4%" not in feed  # MSFT: lab relation only
     assert "lab relation · MSFT" in feed
     dev1 = client.get(f"/developments/{ids['dev1']}").text
     assert "lab relation (context)" in dev1 and "committed tickers): <b>AMZN, NVDA</b>" in dev1
@@ -1313,13 +1315,13 @@ def test_frozen_snapshot_keeps_rolling_windows_populated(client, db, ids):
     empty a week later. Rolling windows follow the data clock, and a banner says so."""
     urls = ("/", "/feed/investment", "/feed/ai-team")
     live = {u: client.get(u).text for u in urls}
-    assert all("Snapshot:" not in page for page in live.values())  # live collection: real clock
+    assert all("Snapshot ·" not in page for page in live.values())  # live collection: real clock
     api_live = {i["id"] for i in client.get("/api/developments").json()["items"]}
     assert ids["dev1"] in api_live
     _age_everything(db, 30)
     for url in urls:
         page = client.get(url).text
-        assert "Snapshot:" in page, url
+        assert "Snapshot ·" in page, url
         assert _dev_links(page) == _dev_links(live[url]) and _dev_links(page), url
     assert {i["id"] for i in client.get("/api/developments").json()["items"]} == api_live
     assert client.get("/feed/investment?week=all").status_code == 200
@@ -1351,3 +1353,12 @@ def test_read_only_copy_refuses_writes_and_hides_the_forms(client, ids, monkeypa
     assert 'action="/api/labels"' not in client.get("/label?audience=ai-team").text
     for url in ("/", "/alerts?status=all", f"/developments/{ids['dev1']}"):
         assert "/ack" not in client.get(url).text, url
+
+
+def test_corpus_counts_leave_out_merged_developments(client, db, ids):
+    """Seen live: the overview counted 482 developments, 6 of them merged duplicates (476 visible)."""
+    before = client.get("/api/health").json()["counts"]["developments"]
+    with db() as s:
+        s.get(Development, ids["dev3"]).status = "merged"
+        s.commit()
+    assert client.get("/api/health").json()["counts"]["developments"] == before - 1

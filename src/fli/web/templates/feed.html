@@ -1,50 +1,60 @@
 {% extends "base.html" %}
 {% import "_macros.html" as m %}
+{% set ai = audience == 'ai_team' %}
 {% block title %}{{ audience|audl }} feed{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>{{ audience|audl }} feed</h1>
-  <p class="muted">{{ data.total }} development{{ '' if data.total == 1 else 's' }}: pushed P1/P2 alerts first, then what the lens recommends, then relevance (the estimated chance the {{ audience|audl }} team calls it worth knowing)
-    {{ '— what it means for positions, tickers and theses.' if audience == 'investment' else '— what to adopt, trial or investigate.' }}</p>
-  {% if prior_live %}<p class="note small">Relevance comes from the unvalidated prior (prior-v0: hand-set weights, not fitted to labels) until <code>fli train</code> deploys a validated model.</p>{% endif %}
-  {% if data.dismissed %}<p class="small muted" data-dismissed-note>{{ data.dismissed }} development{{ '' if data.dismissed == 1 else 's' }} the lens marked <b>{{ dismissed_actions|join(' / ')|replace('_', ' ') }}</b> {{ 'is' if data.dismissed == 1 else 'are' }} hidden · <a href="?{{ with_dismissed_qs }}">show dismissed</a></p>{% endif %}
-</div>
+<section class="band{{ ' ai' if ai }}">
+  <div class="kicker"><i class="dash{{ ' ai' if ai }}" style="width:14px"></i>{{ 'AI team mode' if ai else 'Investment mode' }}</div>
+  <h1>{{ 'AI-team feed' if ai else 'Investment feed' }}</h1>
+  <span class="sub">{{ 'What to adopt, trial, assess or hold for our LLM platform' if ai else 'What lab developments mean for BIT positions and theses' }}</span>
+</section>
 
-<form class="filters card" method="get" action="/feed/{{ audience|slug }}" data-autosubmit>
-  <label>Search <input type="search" name="q" value="{{ f.text or '' }}" placeholder="title or summary"></label>
-  <label>Window
-    <select name="week">{% for v, l in weeks %}<option value="{{ v }}"{{ ' selected' if f.week == v }}>{{ l }}</option>{% endfor %}</select>
-  </label>
-  <label>Lab
-    <select name="lab"><option value="">All labs</option>{% for id, name in labs %}<option value="{{ id }}"{{ ' selected' if f.lab == id }}>{{ name }}</option>{% endfor %}</select>
-  </label>
-  <label>Event type
-    <select name="event_type"><option value="">All types</option>{% for k in event_types %}<option value="{{ k }}"{{ ' selected' if f.event_type == k }}>{{ k|replace('_', ' ') }}</option>{% endfor %}</select>
-  </label>
+{% set rolling = [('7d', '7 days'), ('30d', '30 days'), ('all', 'Whole window')] %}
+<form class="filterbar" method="get" action="/feed/{{ audience|slug }}" data-autosubmit>
+  <input type="search" name="q" value="{{ f.text or '' }}" placeholder="Search titles and summaries" aria-label="Search">
+  <div class="seg" role="radiogroup" aria-label="Window">
+    {% for v, l in rolling %}<label class="seg-opt"><input type="radio" name="week" value="{{ v }}"{{ ' checked' if f.week == v }}>{{ l }}</label>{% endfor %}
+  </div>
+  <select name="cw" aria-label="Calendar week" title="a single calendar week">
+    <option value="">Calendar week</option>
+    {% for v, l in weeks if v not in ('7d', '30d', 'all') %}<option value="{{ v }}"{{ ' selected' if f.week == v }}>{{ l }}</option>{% endfor %}
+  </select>
+  <select name="lab" aria-label="Lab"><option value="">All labs</option>{% for id, name in labs %}<option value="{{ id }}"{{ ' selected' if f.lab == id }}>{{ name }}</option>{% endfor %}</select>
+  <select name="event_type" aria-label="Event type"><option value="">All event types</option>{% for k in event_types %}<option value="{{ k }}"{{ ' selected' if f.event_type == k }}>{{ k|replace('_', ' ')|capitalize }}</option>{% endfor %}</select>
   {% set thresholds = [0.0, 0.2, 0.35, 0.5, 0.7, 0.9] %}
-  <label title="relevance = estimated probability the audience calls it worth knowing{{ '; default %d'|format((default_min_p * 100)|round|int) if default_min_p }}">Min relevance
-    <select name="min_p">
-      {% if f.min_p not in thresholds %}<option value="{{ f.min_p }}" selected>{{ (f.min_p * 100)|round|int }}</option>{% endif %}
-      {% for v in thresholds %}<option value="{{ v }}"{{ ' selected' if f.min_p == v }}>{{ (v * 100)|round|int if v else 'any' }}{{ ' (default)' if v == default_min_p and default_min_p }}</option>{% endfor %}
-    </select>
-  </label>
-  {% if audience == 'investment' %}
-  <label class="check" title="developments exposing a BIT holding as the alert rules count exposure: an event-specific exposure link or a direction the investment lens commits to (a lab's curated relations do not count)"><input type="checkbox" name="bit" value="1"{{ ' checked' if f.bit_only }}> BIT holdings only</label>
-  {% endif %}
-  <label class="check" title="include what the lens marked {{ dismissed_actions|join(' / ')|replace('_', ' ') }}"><input type="checkbox" name="dismissed" value="1"{{ ' checked' if show_dismissed }}> show dismissed</label>
+  <select name="min_p" aria-label="Minimum relevance" title="relevance = estimated probability the audience calls it worth knowing">
+    {% if f.min_p not in thresholds %}<option value="{{ f.min_p }}" selected>Relevance ≥ {{ '%.2f'|format(f.min_p) }}</option>{% endif %}
+    {% for v in thresholds %}<option value="{{ v }}"{{ ' selected' if f.min_p == v }}>{{ ('Relevance ≥ %.2f'|format(v)) if v else 'Any relevance' }}{{ ' (default)' if v == default_min_p and default_min_p }}</option>{% endfor %}
+  </select>
+  <select name="sort" aria-label="Sort">
+    <option value="relevance"{{ ' selected' if sort == 'relevance' }}>Sort: relevance</option>
+    <option value="alerts"{{ ' selected' if sort == 'alerts' }}>Sort: alerts first</option>
+  </select>
+  {% if not ai %}<label class="check" title="developments exposing a BIT holding as the alert rules count exposure: an event-specific exposure link or a direction the investment lens commits to (a lab's curated relations do not count)"><input type="checkbox" name="bit" value="1"{{ ' checked' if f.bit_only }}>BIT holdings only</label>{% endif %}
+  <label class="check" title="include what the lens marked {{ dismissed_actions|join(' / ')|replace('_', ' ') }}"><input type="checkbox" name="dismissed" value="1"{{ ' checked' if show_dismissed }}>Show dismissed</label>
   {% if f.ticker %}
   <input type="hidden" name="ticker" value="{{ f.ticker }}">
-  <span class="chip on">ticker {{ f.ticker }} <a href="/feed/{{ audience|slug }}?{{ no_ticker_qs }}" title="clear ticker filter">&times;</a></span>
+  <span class="chip on">ticker {{ f.ticker }}&nbsp;<a href="/feed/{{ audience|slug }}?{{ no_ticker_qs }}" title="clear ticker filter">&times;</a></span>
   {% endif %}
   <noscript><button type="submit" class="btn">Apply</button></noscript>
-  <a href="/feed/{{ audience|slug }}" class="reset">reset</a>
+  <a href="/feed/{{ audience|slug }}" class="reset">Reset</a>
 </form>
 
+<div class="legend">
+  <span>{{ data.total }} development{{ '' if data.total == 1 else 's' }}: {{ 'pushed alerts first, then the lens verdict, then relevance' if sort == 'alerts' else 'sorted by relevance' }}</span>
+  <span>Relevance: probability this matters to the team, from a validated model (0–1)</span>
+  <span>{{ 'Rings: Adopt · Trial · Assess · Hold' if ai else 'Direction: ↑ Positive · ↓ Negative · ↕ Mixed · ? Unclear · dashed chip = lab relation, context only' }}</span>
+</div>
+{% if prior_live %}<p class="note">Relevance comes from the unvalidated prior (prior-v0: hand-set weights, not fitted to labels) until <code>fli train</code> deploys a validated model.</p>{% endif %}
+
+<div class="feed">
 {% for c in data["items"] %}
   {{ m.dev_card(c, audience) }}
 {% else %}
   <p class="empty card">No developments match these filters{{ ' in this window' if f.week != 'all' }}. Try a wider window, a lower minimum relevance{{ ' or show dismissed' if not show_dismissed }}.</p>
 {% endfor %}
+</div>
+{% if data.dismissed %}<p class="hidden-note" data-dismissed-note>{{ data.dismissed }} development{{ '' if data.dismissed == 1 else 's' }} the lens marked <b>{{ dismissed_actions|join(' / ')|replace('_', ' ') }}</b> {{ 'is' if data.dismissed == 1 else 'are' }} hidden · <a href="?{{ with_dismissed_qs }}">Show dismissed</a></p>{% endif %}
 
 {% if page > 1 or page * page_size < data.total %}
 <nav class="pager">

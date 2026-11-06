@@ -2,198 +2,220 @@
 {% import "_macros.html" as m %}
 {% block title %}{{ d.title|truncate(60) }}{% endblock %}
 {% block content %}
-<div class="page-head">
-  <p class="crumbs"><a href="/feed/investment">Investment</a> · <a href="/feed/ai-team">AI team</a> · development #{{ d.id }}</p>
-  <h1>{{ d.title }}</h1>
-  {{ m.dev_meta(d) }}
-  <p class="small muted">first seen {{ d.first_seen_at|dt }} · last seen {{ d.last_seen_at|dt }} · {{ d.insight_count }} insight{{ '' if d.insight_count == 1 else 's' }} · status {{ d.status }}
-    {% if d.has_verified %}· {{ m.verified(true) }} evidence{% endif %}</p>
-  {% if d.summary %}<p class="summary">{{ d.summary }}</p>{% endif %}
-  {% if d.people %}<p class="small">People: {% for pid, pname in d.people %}<a href="/register/people/{{ pid }}">{{ pname }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>{% endif %}
-</div>
+{% set weights = {} %}{% for t in d.tickers %}{% set _ = weights.update({t.symbol: t.bit_weight}) %}{% endfor %}
 
-<div class="grid2">
+{% macro label_row(aud) -%}
+{% if read_only %}<p class="small muted">Labelling is switched off on this read-only copy.</p>
+{% else %}
+<form method="post" action="/api/labels" class="labelform labelrow">
+  <input type="hidden" name="development_id" value="{{ d.id }}">
+  <input type="hidden" name="audience" value="{{ aud }}">
+  <input type="hidden" name="next" value="/developments/{{ d.id }}#labels">
+  <span class="l">Label</span>
+  {% if auth_on %}<span class="small muted" title="labels are recorded under the authenticated login">as {{ 'human:' ~ login if login else 'your login' }}</span>
+  {% else %}<input type="text" name="annotator" value="{{ annotator }}" placeholder="your name" required maxlength="40" aria-label="annotator name">{% endif %}
+  <button class="btn lbl0" name="label" value="0" title="noise">0 Noise</button>
+  <button class="btn lbl1" name="label" value="1" title="worth knowing">1 Worth knowing</button>
+  <button class="btn lbl2" name="label" value="2" title="material, alert-worthy">2 Material</button>
+</form>
+{% endif %}
+{%- endmacro %}
+
+<section class="band">
+  <div class="crumbs"><a href="/feed/investment">Investment feed</a> · <a href="/feed/ai-team">AI-team feed</a> · Development #{{ d.id }}</div>
+  <h1 class="title">{{ d.title }}</h1>
+  <div class="metarow">
+    {% if d.lab_id %}<a class="lab" href="/register/labs/{{ d.lab_id }}">{{ d.lab_name }}</a>{% else %}<span class="lab">unattributed</span>{% endif %}
+    <span>{{ d.event_type|replace('_', ' ')|capitalize }}</span>
+    <span title="first seen {{ d.first_seen_at|dt }} · last seen {{ d.last_seen_at|dt }}">{{ d.first_seen_at|day }} {{ d.first_seen_at.year }}</span>
+    <span>{{ d.source_count }} source{{ '' if d.source_count == 1 else 's' }} · {{ d.insight_count }} insight{{ '' if d.insight_count == 1 else 's' }}</span>
+    {{ m.class_chips(d) }}
+    {{ m.trust(d) }}
+  </div>
+  {% if d.summary %}<span class="sub">{{ d.summary }}</span>{% endif %}
+  {% if d.people %}<span class="sub small">People: {% for pid, pname in d.people %}<a href="/register/people/{{ pid }}">{{ pname }}</a>{{ ', ' if not loop.last }}{% endfor %}</span>{% endif %}
+</section>
+
+<div class="panels">
 {% for aud in audiences %}
   {% set lens = d.lenses[aud] %}
   {% set sc = d.score_detail.get(aud) %}
-  <section class="card lens-card">
-    <header class="sec-head">
+  {% set w = d.why_flagged.get(aud) if d.why_flagged else none %}
+  {% set ai = aud == 'ai_team' %}
+  {% if lens %}
+  <section class="panel{{ ' ai' if ai }}">
+    <div class="ph">
       <h2>{{ aud|audl }}</h2>
-      <span>{{ m.prior_badge(sc.prior if sc else False) }} {{ m.score(sc.p_material if sc else none, ' · ' ~ (sc.model_version if sc else ''), prior=sc.prior if sc else False) }}</span>
-    </header>
-    {% if lens %}
-      {% for w in lens.warnings %}<p class="note small lens-warn" role="note">&#9888; {{ w }}</p>{% endfor %}
-      <p class="headline">{{ lens.headline }}</p>
-      <dl class="lens">
-        <dt>So what</dt><dd>{{ lens.so_what }}</dd>
-        <dt>What to do</dt><dd>{{ lens.what_to_do }}</dd>
-      </dl>
-      <p class="tickers">
-        {{ m.action(lens.action) }}
-        {% if lens.direction %}<span class="chip">direction: {{ lens.direction }}</span>{% endif %}
-        {% if lens.horizon %}<span class="chip">horizon: {{ lens.horizon|replace('_', ' ') }}</span>{% endif %}
-        <span class="chip" title="lens confidence">conf {{ '%.2f'|format(lens.confidence or 0) }}</span>
-      </p>
-      {% if lens.tickers %}
-      <ul class="tk-why">
-        {% for t in lens.tickers %}<li{% if t.not_counted %} class="dim"{% endif %}><b>{{ m.arrow(t.direction) }}{{ t.symbol }}</b> {{ t.why or '' }}{% if t.not_counted %} <span class="small muted" title="the alert rules count a lens ticker only when the lens commits to a positive, negative or mixed direction and did not abstain">· not counted as exposure: {{ t.not_counted }}</span>{% endif %}</li>{% endfor %}
-      </ul>
-      {% endif %}
-      <p class="small muted">lens: {{ lens.model }} · prompt {{ lens.prompt_version }}</p>
-    {% else %}
-      <p class="muted">No {{ aud|audl }} lens yet.</p>
+      {{ m.prior_badge(sc.prior if sc else False) }}
+      <span class="meter lg" title="{% if sc %}relevance = {{ '%.3f'|format(sc.p_material) }} · {{ sc.model_version }}{% else %}not scored yet{% endif %}"><span class="muted">Relevance</span><span class="bar"><span style="width: {{ ((sc.p_material if sc else 0) * 100)|round|int }}%"></span></span><span class="val">{{ '%.2f'|format(sc.p_material) if sc else '–' }}</span></span>
+    </div>
+    <div class="vrow">
+      {{ m.action(lens.action, big=True) }}
+      <span>{% if lens.horizon %}{{ lens.horizon|replace('_', ' ')|capitalize }} · {% endif %}confidence {{ '%.2f'|format(lens.confidence or 0) }}</span>
+      {% for a in d.alerts if a.audience == aud and a.status != 'suppressed' %}{{ m.sev(a.severity, long=True) }}{% endfor %}
+    </div>
+    {% for wmsg in lens.warnings %}<p class="note small lens-warn" role="note">&#9888; {{ wmsg }}</p>{% endfor %}
+    {% if not ai and lens.tickers %}
+    <div class="tkrows">
+      {% for t in lens.tickers %}
+      <div class="tkrow{{ ' dim' if t.not_counted }}">
+        <span class="tk"><span class="sym">{{ t.symbol }}</span>{{ m.arrow(t.direction) }}{% if weights.get(t.symbol) is not none %}<span class="w">BIT {{ '%.1f'|format(weights[t.symbol]) }}%</span>{% endif %}</span>
+        <span class="why">{{ t.why or '' }}{% if t.not_counted %} <span title="the alert rules count a lens ticker only when the lens commits to a positive, negative or mixed direction and did not abstain">· not counted as exposure: {{ t.not_counted }}</span>{% endif %}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% elif ai and d.artifacts %}
+    <div class="chips">{% for a in d.artifacts %}<span class="art" title="artifact">{{ a }}</span>{% endfor %}</div>
     {% endif %}
+    <div style="display:grid;gap:8px">
+      <div class="hl">{{ lens.headline }}</div>
+      <p class="sw">{{ lens.so_what }}</p>
+      <div class="todo-box"><div class="l">What to do</div><p>{{ lens.what_to_do }}</p></div>
+    </div>
+    <div class="why-line"><span class="l">Why flagged</span><span>{{ m.why_line(w) }}</span></div>
+    {{ label_row(aud) }}
+  </section>
+  {% endif %}
+{% endfor %}
+</div>
+{% for aud in audiences if not d.lenses[aud] %}
+<div class="nolens">
+  <p>No {{ aud|audl }} lens yet for this development.{% set w = d.why_flagged.get(aud) if d.why_flagged else none %} {{ m.why_line(w) }}.</p>
+  {% if not read_only %}{{ label_row(aud) }}{% endif %}
+</div>
+{% endfor %}
 
-    <h3>Why flagged</h3>
-    {% set w = d.why_flagged.get(aud) if d.why_flagged else none %}
-    {{ m.why_flagged(w, show_score=False) }}
-    {% if w and w.facts %}
-    <details class="why-facts-all"><summary>Facts the rules read ({{ w.facts|length }})</summary>
-      <table class="tbl compact">{% for k, v in w.facts|dictsort %}<tr><td title="{{ fact_help.get(k, '') }}">{{ k }}</td><td class="num">{{ v|num }}</td></tr>{% endfor %}</table>
-    </details>
-    {% endif %}
-    <h4 class="why-sub">Score contributions{% if sc %} <span class="small muted">· {{ sc.model_version }}</span>{% endif %}</h4>
-    {% if sc and sc.contributions %}
-    <div class="scroll"><table class="tbl contrib">
-      <thead><tr><th>Feature</th><th>Value</th><th>Contribution</th></tr></thead>
+<section class="evidence">
+  <h2>Evidence <span>{% if d.quotes_total %}{{ d.quotes_ok }} of {{ d.quotes_total }} quote{{ '' if d.quotes_total == 1 else 's' }} verified word for word against the stored source{% else %}no evidence quotes{% endif %}</span></h2>
+  {% for i in d.insights %}
+    {% for qt in i.quotes %}
+    <figure class="quote">
+      <div class="ins">{{ i.title }}{% if i.is_rumor %} · <span class="badge unconf">rumour</span>{% endif %}</div>
+      <blockquote class="{{ 'ok' if qt.verified else 'bad' }}">{{ qt.text }}</blockquote>
+      <figcaption>
+        {{ m.verified(qt.verified) }}
+        {{ m.source_badge(i.doc) }}
+        {{ m.ext(i.doc.url, i.doc.title|truncate(90)) }}
+        <span>{{ i.published_at|day }}</span>
+      </figcaption>
+    </figure>
+    {% else %}
+    <figure class="quote">
+      <div class="ins">{{ i.title }}</div>
+      <p class="sw" style="margin:0">{{ i.claim }}</p>
+      <figcaption><span>No evidence quotes</span>{{ m.source_badge(i.doc) }}{{ m.ext(i.doc.url, i.doc.title|truncate(90)) }}<span>{{ i.published_at|day }}</span></figcaption>
+    </figure>
+    {% endfor %}
+  {% else %}<p class="muted">No insights attached.</p>{% endfor %}
+</section>
+
+<div class="disclosures">
+  <details class="disc">
+    <summary>Exposure links <span>· {{ d.exposure|length }} ticker{{ '' if d.exposure|length == 1 else 's' }}</span></summary>
+    {% if d.exposure %}
+    <p class="small muted">Only event-specific links at confidence {{ '%.2f'|format(d.exposure_min_confidence) }} or more count as exposure (alert rules, the BIT-holdings filter, the holdings ribbon); the lab's curated relations are context.{% if d.held_tickers %} BIT holdings the rules count as exposed (counted links below plus the investment lens's committed tickers): <b>{{ d.held_tickers|join(', ') }}</b>.{% endif %}</p>
+    <div class="scroll"><table class="tbl">
+      <thead><tr><th>Ticker</th><th>Company</th><th>Theme</th><th>Direction</th><th>Rationale</th><th>Method</th><th>Conf</th><th title="how the alert rules treat the link">Counts as</th></tr></thead>
       <tbody>
-      {% for r in sc.contributions[:14] %}
-        <tr>
-          <td>{{ r.feature|replace('_', ' ') }}</td>
-          <td class="num">{{ r.value|num if r.value is not none else '–' }}</td>
-          <td class="contrib-cell"><span class="cbar {{ 'pos' if r.contribution >= 0 else 'neg' }}" style="width: {{ r.width }}%"></span><span class="num">{{ r.contribution|signed }}</span></td>
+      {% for e in d.exposure %}
+        <tr class="{{ '' if e.counts else 'dim' }}">
+          <td>{{ m.ticker({'symbol': e.ticker, 'bit_weight': e.bit_weight, 'company': e.company, 'direction': none, 'theme': e.theme, 'why': none}) }}</td>
+          <td>{{ e.company or '–' }}</td><td>{{ (e.theme or '–')|replace('_', ' ') }}</td>
+          <td class="nowrap">{{ m.arrow(e.direction) or e.direction }}</td><td>{{ e.rationale or '–' }}</td>
+          <td>{{ e.method }}</td><td class="num">{{ '%.2f'|format(e.confidence or 0) }}</td>
+          <td class="small nowrap">{% if e.basis == 'event' %}exposure{% elif e.basis == 'lab_relation' %}lab relation (context){% else %}not counted (below {{ '%.2f'|format(d.exposure_min_confidence) }}){% endif %}</td>
         </tr>
       {% endfor %}
       </tbody>
     </table></div>
-    {% elif sc %}<p class="muted small">Score has no contribution breakdown.</p>
-    {% else %}<p class="muted small">Not scored for this audience yet.</p>{% endif %}
-    {% if sc and sc.features %}
-    <details><summary>All {{ sc.features|length }} features</summary>
-      <table class="tbl compact">{% for k, v in sc.features %}<tr><td>{{ k }}</td><td class="num">{{ v|num }}</td></tr>{% endfor %}</table>
-    </details>
-    {% endif %}
+    {% else %}<p class="muted small">No public-equity exposure mapped.</p>{% endif %}
+  </details>
 
-    <h3>Label for {{ aud|audl }}</h3>
-    {% if read_only %}<p class="small muted">Labelling is switched off on this read-only copy.</p>{% else %}
-    <form method="post" action="/api/labels" class="labelform">
-      <input type="hidden" name="development_id" value="{{ d.id }}">
-      <input type="hidden" name="audience" value="{{ aud }}">
-      <input type="hidden" name="next" value="/developments/{{ d.id }}#labels">
-      {% if auth_on %}<span class="small muted" title="labels are recorded under the authenticated login">as {{ 'human:' ~ login if login else 'your login' }}</span>
-      {% else %}<input type="text" name="annotator" value="{{ annotator }}" placeholder="your name" required maxlength="40" aria-label="annotator name">{% endif %}
-      <button class="btn lbl0" name="label" value="0" title="noise">0 noise</button>
-      <button class="btn lbl1" name="label" value="1" title="worth knowing">1 worth knowing</button>
-      <button class="btn lbl2" name="label" value="2" title="material, alert-worthy">2 material</button>
-    </form>{% endif %}
-  </section>
-{% endfor %}
-</div>
+  <details class="disc">
+    <summary>Sources <span>· {{ d.documents|length }} document{{ '' if d.documents|length == 1 else 's' }}</span></summary>
+    <div class="scroll"><table class="tbl">
+      <thead><tr><th>Published</th><th>Title</th><th>Class</th><th>Source</th><th>Author</th></tr></thead>
+      <tbody>
+      {% for doc in d.documents %}
+        <tr>
+          <td class="nowrap">{{ doc.published_at|dt }}</td><td>{{ m.ext(doc.url, doc.title|truncate(100)) }}</td>
+          <td>{{ m.source_badge(doc) }}</td><td class="small">{{ doc.source_id }}{% if doc.source_kind %} ({{ doc.source_kind|replace('_', ' ') }}){% endif %}</td>
+          <td class="small">{{ doc.author or '–' }}</td>
+        </tr>
+      {% else %}<tr><td colspan="5" class="empty">No documents.</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+  </details>
 
-{% if d.alerts_full %}
-<section class="card">
-  <h2>Alerts and fired materiality rules</h2>
-  <p class="small muted">Rules as recorded when each alert was raised; "why flagged" above re-evaluates them on today's facts.</p>
-  <div class="scroll"><table class="tbl">
-    <thead><tr><th>Severity</th><th>Audience</th><th>Alert</th><th>Rules fired</th><th>Delivered</th><th>Status</th></tr></thead>
-    <tbody>
-    {% for a in d.alerts_full %}
-      <tr>
-        <td>{{ m.sev(a.severity) }}</td><td>{{ a.audience|audl }}</td>
-        <td>{{ a.title }}<div class="small muted">{{ a.created_at|dt }}</div></td>
-        <td>{% for r in a.rules %}<div{% if r.description %} title="{{ r.description }}"{% endif %}><code>{{ r.name }}</code>{% if r.detail %} <span class="small muted">{{ r.detail }}</span>{% endif %}</div>{% else %}–{% endfor %}</td>
-        <td class="small">{{ m.delivery(a) }}</td>
-        <td>{{ m.ack_form(a, '/developments/' ~ d.id, read_only) }}</td>
-      </tr>
+  {% if d.alerts_full %}
+  <details class="disc">
+    <summary>Alerts <span>· {{ d.alerts_full|length }} · rules as recorded when each alert was raised</span></summary>
+    <div class="scroll"><table class="tbl">
+      <thead><tr><th>Severity</th><th>Audience</th><th>Alert</th><th>Rules fired</th><th>Delivered</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for a in d.alerts_full %}
+        <tr>
+          <td>{{ m.sev(a.severity) }}</td><td>{{ a.audience|audl }}</td>
+          <td>{{ a.title }}<div class="small muted">{{ a.created_at|dt }}</div></td>
+          <td>{% for r in a.rules %}<div{% if r.description %} title="{{ r.description }}"{% endif %}><code>{{ r.name }}</code>{% if r.detail %} <span class="small muted">{{ r.detail }}</span>{% endif %}</div>{% else %}–{% endfor %}</td>
+          <td class="small">{{ m.delivery(a) }}</td>
+          <td>{{ m.ack_form(a, '/developments/' ~ d.id, read_only) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  </details>
+  {% endif %}
+
+  <details class="disc">
+    <summary>How this was scored <span>· rules, model, features, history</span></summary>
+    {% for aud in audiences %}
+      {% set lens = d.lenses[aud] %}
+      {% set sc = d.score_detail.get(aud) %}
+      {% set w = d.why_flagged.get(aud) if d.why_flagged else none %}
+      <h4 style="margin-top:14px">{{ aud|audl }} {{ m.score(sc.p_material if sc else none, ' · ' ~ (sc.model_version if sc else ''), prior=sc.prior if sc else False) }}
+        <span class="small muted">{% if sc %}{{ sc.model_version }} · {{ 'unvalidated prior' if sc.prior else 'validated' }} · scored {{ sc.scored_at|dt }}{% endif %}{% if lens %} · lens {{ lens.model }} · prompt {{ lens.prompt_version }}{% endif %}</span></h4>
+      <h3>Why flagged</h3>
+      {{ m.why_flagged(w, show_score=False) }}
+      {% if w and w.facts %}
+      <details class="why-facts-all"><summary>Facts the rules read ({{ w.facts|length }})</summary>
+        <table class="tbl compact">{% for k, v in w.facts|dictsort %}<tr><td title="{{ fact_help.get(k, '') }}">{{ k }}</td><td class="num">{{ v|num }}</td></tr>{% endfor %}</table>
+      </details>
+      {% endif %}
+      <h3 class="why-sub">Score contributions{% if sc %} <span class="small muted">· {{ sc.model_version }}</span>{% endif %}</h3>
+      {% if sc and sc.contributions %}
+      {% for r in sc.contributions[:14] %}
+      <div class="feat" title="value {{ r.value|num if r.value is not none else '–' }}">
+        <span class="n">{{ r.feature|replace('_', ' ') }}</span>
+        <span class="b"><span class="neg"><span style="width: {{ r.width if r.contribution < 0 else 0 }}%"></span></span><span class="pos"><span style="width: {{ r.width if r.contribution >= 0 else 0 }}%"></span></span></span>
+        <span class="v">{{ r.contribution|signed }}</span>
+      </div>
+      {% endfor %}
+      {% elif sc %}<p class="muted small">Score has no contribution breakdown.</p>
+      {% else %}<p class="muted small">Not scored for this audience yet.</p>{% endif %}
+      {% if sc and sc.features %}
+      <details><summary>All {{ sc.features|length }} features</summary>
+        <table class="tbl compact">{% for k, v in sc.features %}<tr><td>{{ k }}</td><td class="num">{{ v|num }}</td></tr>{% endfor %}</table>
+      </details>
+      {% endif %}
     {% endfor %}
-    </tbody>
-  </table></div>
-</section>
-{% endif %}
-
-<section class="card">
-  <h2>Exposure links</h2>
-  {% if d.exposure %}
-  <p class="small muted">Only event-specific links at confidence {{ '%.2f'|format(d.exposure_min_confidence) }} or more count as exposure (alert rules, the BIT-holdings filter, the holdings tiles); the lab's curated relations are context.{% if d.held_tickers %} BIT holdings the rules count as exposed (counted links below plus the investment lens's committed tickers): <b>{{ d.held_tickers|join(', ') }}</b>.{% endif %}</p>
-  <div class="scroll"><table class="tbl">
-    <thead><tr><th>Ticker</th><th>Company</th><th>Theme</th><th>Direction</th><th>Rationale</th><th>Method</th><th>Conf</th><th title="how the alert rules treat the link">Counts as</th></tr></thead>
-    <tbody>
-    {% for e in d.exposure %}
-      <tr class="{{ '' if e.counts else 'dim' }}">
-        <td>{{ m.ticker({'symbol': e.ticker, 'bit_weight': e.bit_weight, 'company': e.company, 'direction': e.direction, 'theme': e.theme, 'why': none}) }}</td>
-        <td>{{ e.company or '–' }}</td><td>{{ (e.theme or '–')|replace('_', ' ') }}</td>
-        <td>{{ m.arrow(e.direction) }} {{ e.direction }}</td><td>{{ e.rationale or '–' }}</td>
-        <td>{{ e.method }}</td><td class="num">{{ '%.2f'|format(e.confidence or 0) }}</td>
-        <td class="small nowrap">{% if e.basis == 'event' %}exposure{% elif e.basis == 'lab_relation' %}lab relation (context){% else %}not counted (below {{ '%.2f'|format(d.exposure_min_confidence) }}){% endif %}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table></div>
-  {% else %}<p class="muted">No public-equity exposure mapped.</p>{% endif %}
-</section>
-
-<section class="card">
-  <h2>Insights and evidence ({{ d.insights|length }})</h2>
-  {% for i in d.insights %}
-  <article class="insight">
-    <header>
-      <b>{{ i.title }}</b>
-      <span class="chip">{{ i.event_type|replace('_', ' ') }}</span>
-      {% if i.is_official %}<span class="chip c-official">official</span>{% endif %}
-      {% if i.doc.curated %}{{ m.curated_badge(i.doc.cited_url) }}{% endif %}
-      {% if i.is_rumor %}<span class="badge unconf">rumour</span>{% endif %}
-      {% if i.magnitude %}<span class="chip" title="extractor's 1-5 magnitude judgement">mag {{ i.magnitude }}</span>{% endif %}
-      <span class="chip" title="extraction confidence">conf {{ '%.2f'|format(i.confidence or 0) }}</span>
-      {% if i.novelty_global is not none %}<span class="chip" title="novelty vs everything seen before">novelty {{ '%.2f'|format(i.novelty_global) }}</span>{% endif %}
-    </header>
-    <p>{{ i.claim }}</p>
-    {% for qt in i.quotes %}
-      <blockquote class="{{ 'ok' if qt.verified else 'bad' }}">&ldquo;{{ qt.text }}&rdquo; {{ m.verified(qt.verified) }}</blockquote>
-    {% else %}<p class="small muted">No evidence quotes.</p>{% endfor %}
-    <p class="small muted">
-      Source: {{ m.ext(i.doc.url, i.doc.title|truncate(90)) }} {{ m.source_badge(i.doc) }} · {{ i.published_at|dt }}
-      {% if i.people %}· {% for pid, pname in i.people %}<a href="/register/people/{{ pid }}">{{ pname }}</a>{{ ', ' if not loop.last }}{% endfor %}{% endif %}
-      {% if i.first_seen_artifacts %}· first seen: {{ i.first_seen_artifacts|join(', ') }}{% elif i.artifacts %}· {{ i.artifacts|join(', ') }}{% endif %}
-      · {{ i.model }} / {{ i.prompt_version }}
-    </p>
-  </article>
-  {% else %}<p class="muted">No insights attached.</p>{% endfor %}
-</section>
-
-<section class="card">
-  <h2>All sources ({{ d.documents|length }})</h2>
-  <div class="scroll"><table class="tbl">
-    <thead><tr><th>Published</th><th>Title</th><th>Class</th><th>Source</th><th>Author</th></tr></thead>
-    <tbody>
-    {% for doc in d.documents %}
-      <tr>
-        <td class="nowrap">{{ doc.published_at|dt }}</td><td>{{ m.ext(doc.url, doc.title|truncate(100)) }}</td>
-        <td>{{ m.source_badge(doc) }}</td><td class="small">{{ doc.source_id }}{% if doc.source_kind %} ({{ doc.source_kind|replace('_', ' ') }}){% endif %}</td>
-        <td class="small">{{ doc.author or '–' }}</td>
-      </tr>
-    {% else %}<tr><td colspan="5" class="empty">No documents.</td></tr>{% endfor %}
-    </tbody>
-  </table></div>
-</section>
-
-<div class="grid2">
-  <section class="card" id="labels">
-    <h2>Labels</h2>
-    {% if d.labels %}
-    <table class="tbl compact">
-      <thead><tr><th>Audience</th><th>Label</th><th>Annotator</th><th>Reason</th><th>When</th></tr></thead>
-      <tbody>{% for l in d.labels %}<tr><td>{{ l.audience|audl }}</td><td><span class="lblv lbl{{ l.label }}">{{ l.label }}</span></td><td>{{ l.annotator }}</td><td class="small">{{ l.reason or '–' }}</td><td class="small nowrap">{{ l.created_at|dt }}</td></tr>{% endfor %}</tbody>
-    </table>
-    {% else %}<p class="muted">No labels yet. Use the buttons above or the <a href="/label">labelling queue</a>.</p>{% endif %}
-  </section>
-  <section class="card">
-    <h2>Score history</h2>
+    <h3>Score history</h3>
     {% if d.score_history %}
-    <table class="tbl compact">
+    <div class="scroll"><table class="tbl compact">
       <thead><tr><th>Audience</th><th title="estimated probability the audience calls it worth knowing">Relevance</th><th>Model</th><th>Scored</th></tr></thead>
       <tbody>{% for x in d.score_history %}<tr class="{{ '' if x.shown else 'dim' }}"><td>{{ x.audience|audl }}</td><td>{{ m.score(x.p_material, prior=x.prior) }}</td><td class="small">{{ x.model_version }} {% if x.shown %}<span class="chip on" title="the row shown on this page: the live scoring model's (else the newest)">shown</span>{% endif %}{{ m.prior_badge(x.prior) }}</td><td class="small nowrap">{{ x.created_at|dt }}</td></tr>{% endfor %}</tbody>
-    </table>
-    {% else %}<p class="muted">Not scored yet.</p>{% endif %}
-  </section>
+    </table></div>
+    {% else %}<p class="muted small">Not scored yet.</p>{% endif %}
+  </details>
+
+  <details class="disc" id="labels">
+    <summary>Labels <span>· {{ d.labels|length if d.labels else 'none yet' }}</span></summary>
+    {% if d.labels %}
+    <div class="scroll"><table class="tbl compact">
+      <thead><tr><th>Audience</th><th>Label</th><th>Annotator</th><th>Reason</th><th>When</th></tr></thead>
+      <tbody>{% for l in d.labels %}<tr><td>{{ l.audience|audl }}</td><td><span class="lblv lbl{{ l.label }}">{{ l.label }}</span></td><td>{{ l.annotator }}</td><td class="small">{{ l.reason or '–' }}</td><td class="small nowrap">{{ l.created_at|dt }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}<p class="muted small">No human or model labels for this development. Use the buttons above or the <a href="/label">labelling queue</a>.</p>{% endif %}
+  </details>
 </div>
 {% endblock %}
