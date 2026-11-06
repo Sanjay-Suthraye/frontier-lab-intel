@@ -36,8 +36,9 @@ case "$AUTH" in
 esac
 
 cd "$STAGE"
-URL="$(npx --yes "$VERCEL_CLI" deploy --prod --yes --token "$VERCEL_TOKEN" \
-  --env FLI_AUTH_ALL=1 --env "FLI_BASIC_AUTH=$AUTH" | tail -1)"
+OUT="$(npx --yes "$VERCEL_CLI" deploy --prod --yes --token "$VERCEL_TOKEN" \
+  --env FLI_AUTH_ALL=1 --env "FLI_BASIC_AUTH=$AUTH" 2>&1)"
+URL="$(grep -o 'https://[a-z0-9.-]*\.vercel\.app' <<<"$OUT" | tail -1)"  # the production alias is printed last
 mkdir -p "$HERE/.vercel" && cp "$STAGE/.vercel/project.json" "$HERE/.vercel/"
 log "deployed: $URL"
 code="$(curl -s -o /dev/null -w '%{http_code}' "$URL/healthz" || true)"

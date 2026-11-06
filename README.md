@@ -24,6 +24,11 @@ uv run fli db init && uv run fli snapshot import && uv run fli serve
 
 Open http://127.0.0.1:8000 . `make demo` does the same.
 
+Hosted copies (same login for both; credentials are shared with the submission):
+
+- https://63-186-176-99.sslip.io - AWS (Postgres, persistent: labels and alert acks are kept)
+- https://frontier-lab-intel.vercel.app - Vercel free tier, read-only view of the same snapshot
+
 Production-like stack (Postgres + web + scheduler worker), seeded from the same snapshot:
 
 ```bash
@@ -101,6 +106,10 @@ an automatic TLS certificate on `<ip>.sslip.io`. It refuses to run unless `.env`
 with a password of at least 12 characters (`FLI_DEPLOY_CHECK_ONLY=1` checks that), and the AWS overlay
 sets `FLI_AUTH_ALL=1`. The scheduler worker (continuous ingestion) starts only with `FLI_WORKER=1`.
 `deploy/aws/teardown.sh` removes everything it created.
+
+`deploy/vercel/deploy.sh` (needs `VERCEL_TOKEN`) publishes the web UI to Vercel's free tier: a 6 MB
+bundle with only the web dependencies, serving the committed snapshot from `/tmp` behind the same
+`FLI_BASIC_AUTH` login. Writes there do not survive a cold start, so it is a viewing copy.
 
 ## Results at a glance (full detail in docs/DESIGN.md and data/eval/report.md)
 
